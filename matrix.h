@@ -11,5 +11,6 @@ public :
 
 	//example function
 	void doNull();
+	int** create_matrix(int rows, int columns);
 
 }
