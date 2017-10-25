@@ -1,4 +1,4 @@
-int** fill_matrix(int** A, int rows, int columns)
+double** fill_matrix(double** A, int rows, int columns)
 {
 	cout << "Please fill the matrix with its elements" << endl;
 	for (int i = 0; i < rows; i++)
