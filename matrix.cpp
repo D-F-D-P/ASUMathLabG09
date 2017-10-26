@@ -67,6 +67,29 @@ void matrix::set_name(string name)
     this -> name = name;
 }
 
+//resize matrix
+void matrix::resize(int rows, int columns)
+{
+	double** newElements = new double*[rows];
+    for(int i=0;i<rows;i++){
+        newElements[i] = new double[columns];
+        if((i+1)<=this->rows)
+        {
+        	for(int k=0; k<this->columns; k++)
+	        {
+	        	if((k+1)<=this->columns)
+        		{
+        			newElements[i][k] = this->elements[i][k];
+        		}
+	        }
+        }
+    }
+	this->destroy_matrix();
+	this->rows = rows;
+	this->columns = columns;
+	this->elements = newElements;
+}
+
 
 //destroy matrix (like destructor but we are using dynamic allocation)
 void matrix::destroy_matrix()
@@ -112,10 +135,10 @@ void matrix::empty_matrix()
 
 }
 
-matrix matrix::operator=(matrix &p)
+/*matrix matrix::operator=(matrix &p)
 {
     // to be implemented..
-}
+}*/
 
 void matrix::print_matrix()
 {
