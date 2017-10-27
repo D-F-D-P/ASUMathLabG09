@@ -1,21 +1,22 @@
 #include "matrix.h"
+#include <iostream>
 
-double** fill_matrix(double** A, int rows, int columns)
+using namespace std;
+
+int main()
 {
-	cout << "Please fill the matrix with its elements" << endl;
-	for (int i = 0; i < rows; i++)
-	{
-		for (int j = 0; j < columns; j++)
-		{
-			cin >> A[i][j];
-			cout << "\t";
-		}
-		cout << endl;
-	}
+    //Test Code
+    matrix m1(2,4); //rows = 2, columns =4
+    m1.fill_matrix_cl();
 
-	return A;
-}
+    cout << "I am in the main now!" << endl;
+    int columns = m1.get_columns();
+    cout << "number of columns = " << columns <<endl;
+    m1.print_matrix();
+    m1.empty_matrix();
+    m1.print_matrix();
+    m1.destroy_matrix();
 
-int main(){
+
 	return 0;
 }
