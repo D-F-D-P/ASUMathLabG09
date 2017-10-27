@@ -1,4 +1,4 @@
-void destroy_matrix(int** matrix, int rows)
+void destroy_matrix(double** matrix, int rows)
 {
 	for (int i = 0; i < rows; i++)
 	{
