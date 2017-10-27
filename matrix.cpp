@@ -92,6 +92,13 @@ void matrix::resize_matrix(int rows, int columns)
 }
 
 
+//destructor
+matrix::~matrix()
+{
+    if(elements)
+        delete []elements;
+}
+
 //destroy matrix (like destructor but we are using dynamic allocation)
 void matrix::destroy_matrix()
 {
@@ -136,15 +143,15 @@ void matrix::empty_matrix()
 
 }
 
-/*matrix matrix::operator=(matrix &p)
+matrix matrix::operator=(matrix &p)
 {
-    // to be implemented..
-}*/
+
+}
 
 void matrix::print_matrix()
 {
     if(this->elements == nullptr) //to prevent crash
-        cout << "this matrix is not created yet" <<endl;
+        cout << "this matrix is not created" <<endl;
     else
 	for(int i=0;i<rows;i++){
 		for(int j=0;j<columns;j++){

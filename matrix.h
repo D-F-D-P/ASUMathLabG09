@@ -17,7 +17,9 @@ public:
 
 	matrix(); //default constructor does not create a matrix
     matrix(int rows, int columns); //constructor create a matrix (rows*columns) leave it with it's rubbish data
-    void destroy_matrix();//like destructor but we are using dynamic allocation
+    ~matrix(); //destructor
+    void destroy_matrix();
+
 
     //gets
     int get_rows();
