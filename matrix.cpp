@@ -155,7 +155,7 @@ void matrix::empty_matrix()
 void matrix::copy_matrix(matrix& p)
 {
     if(elements) // if it was filled
-        delete[] elements;
+        destroy_matrix();
 
    this -> rows = p.rows;
    this -> columns = p.columns;
