@@ -35,6 +35,14 @@ matrix::matrix(int rows, int columns)
     }
 }
 
+//copy constructor
+matrix::matrix(matrix& p)
+{
+    elements = nullptr;
+    copy_matrix(p);
+}
+
+
 //gets
 int matrix::get_rows()
 {
@@ -99,7 +107,7 @@ matrix::~matrix()
         delete []elements;
 }
 
-//destroy matrix (like destructor but we are using dynamic allocation)
+//destroy matrix
 void matrix::destroy_matrix()
 {
 	for (int i = 0; i < rows; i++)
@@ -132,6 +140,7 @@ void matrix::fill_matrix(string inputString)
 
 }
 
+//empty matrix used in result to make it initialed with zero
 void matrix::empty_matrix()
 {
 
@@ -143,10 +152,31 @@ void matrix::empty_matrix()
 
 }
 
-matrix matrix::operator=(matrix &p)
+void matrix::copy_matrix(matrix& p)
 {
+    if(elements) // if it was filled
+        delete[] elements;
+
+   this -> rows = p.rows;
+   this -> columns = p.columns;
+
+   //create the matrix
+    elements = new double*[rows];
+    for(int i=0;i<rows;i++)
+    {
+        elements[i] = new double[columns];
+    }
+
+    //copy the values
+    for (int i = 0; i < rows; i++)
+	{
+		for (int j = 0 ; j < columns ; j++)
+           elements[i][j] = p.elements[i][j];
+	}
 
 }
+
+
 
 void matrix::print_matrix()
 {
@@ -160,6 +190,14 @@ void matrix::print_matrix()
 		cout<<endl;
 	}
 }
+
+
+ matrix matrix :: operator = (matrix &p)
+ {
+     copy_matrix(p);
+     return *this;
+
+ }
 
 /*matrix matrix::create_matrix(int rows, int columns){
     matrix newMatrix;

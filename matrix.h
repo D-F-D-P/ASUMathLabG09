@@ -18,6 +18,7 @@ public:
 	matrix(); //default constructor does not create a matrix
     matrix(int rows, int columns); //constructor create a matrix (rows*columns) leave it with it's rubbish data
     ~matrix(); //destructor
+    matrix(matrix &p);// copy operator ( matrix A = B )
     void destroy_matrix();
 
 
@@ -37,8 +38,9 @@ public:
     void fill_matrix_cl();//fill matrix with cin to test your function add , sub ,..
     void fill_matrix(std::string inputString); //fill from a string
     void empty_matrix(); // make all the elements of the array = 0;
-    matrix operator = (matrix &p); // copy operator ( A = B )
+    void copy_matrix(matrix &p);
     void print_matrix();
+    matrix operator = (matrix &p); // A = B = C
 
     //static matrix create_matrix(int rows, int columns);
 
