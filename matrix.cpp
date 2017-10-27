@@ -22,6 +22,7 @@ matrix::matrix()
     name = "";
 }
 
+
 //constructor
 matrix::matrix(int rows, int columns)
 {
@@ -68,7 +69,7 @@ void matrix::set_name(string name)
 }
 
 //resize matrix
-void matrix::resize(int rows, int columns)
+void matrix::resize_matrix(int rows, int columns)
 {
 	double** newElements = new double*[rows];
     for(int i=0;i<rows;i++){
@@ -142,6 +143,9 @@ void matrix::empty_matrix()
 
 void matrix::print_matrix()
 {
+    if(this->elements == nullptr) //to prevent crash
+        cout << "this matrix is not created yet" <<endl;
+    else
 	for(int i=0;i<rows;i++){
 		for(int j=0;j<columns;j++){
 			cout<<elements[i][j]<<"\t";

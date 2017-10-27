@@ -17,6 +17,10 @@ int main()
     m1.print_matrix();
     m1.destroy_matrix();
 
+    matrix m2;
+    m2.print_matrix();
+
+
 
 	return 0;
 }

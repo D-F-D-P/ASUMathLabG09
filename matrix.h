@@ -29,7 +29,7 @@ public:
     void set_columns(int columns);
     void set_name(std::string name);
 
-    void resize(int rows, int columns);//updates num of rows and coulmns and updates the elements array
+    void resize_matrix(int rows, int columns);//updates num of rows and coulmns and updates the elements array
 
     //algorithms and functions
     void fill_matrix_cl();//fill matrix with cin to test your function add , sub ,..
