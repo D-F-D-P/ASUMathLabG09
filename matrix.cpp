@@ -1,5 +1,5 @@
 #include "matrix.h"
-#include <iostream>
+
 using namespace std;
 /*attach your libraries here*/
 
@@ -61,12 +61,12 @@ string matrix::get_name()
 
 
 //sets
-void matrix::set_rows(int rows)
+void matrix::set_rows(int rows)//there is abug
 {
     this -> rows = rows;
 }
 
-void matrix::set_columns(int columns)
+void matrix::set_columns(int columns)//there is abug
 {
     this -> columns = columns;
 }
