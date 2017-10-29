@@ -13,6 +13,26 @@ using namespace std;
 */
 
 //example function
+//<<<<<<< HEAD
+//void matrix::doNull();
+int**  matrix::create_matrix(int rows, int columns)
+{
+	/*
+	A dynamic 2D array is basically an array of pointers to arrays.
+	First, we will allocate memory for an array which contains a set of pointers.
+	Next, we will allocate memory for each array which is pointed by the pointers.
+	The deallocation of memory is done in the reverse order of memory allocation.
+	*/
+	int** matrix = new int* [rows];
+	
+	for (int i = 0; i < rows; i++)
+	{
+		matrix[i] = new int[columns];
+	}
+
+	return matrix;
+}
+//=======
 //void matrix::doNull();
 
 //default constructor
@@ -59,7 +79,6 @@ string matrix::get_name()
 {
  return name;
 }
-
 
 
 void matrix::set_name(string name)
@@ -308,4 +327,3 @@ matrix matrix::operator * (matrix& m){
     }
     return r;
 }
-
