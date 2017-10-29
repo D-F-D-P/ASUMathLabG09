@@ -1,5 +1,5 @@
 
-static matrix operator * (matrix& m){
+matrix matrix::operator * (matrix& m){
     if (this->columns!=m.rows)
       //Or whatever the doctor says
 	    cout << "error columns of first is not equal rows of the second" << endl;
