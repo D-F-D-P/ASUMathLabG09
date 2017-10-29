@@ -1,32 +1,17 @@
 #include "matrix.h"
 #include <iostream>
+#include <string>
+
+
 
 using namespace std;
 
 int main()
 {
-    //Test Code
-    matrix m1(2,4); //rows = 2, columns =4
-    m1.fill_matrix_cl();
-
-    cout << "I am in the main now!" << endl;
-    int columns = m1.get_columns();
-    cout << "number of columns = " << columns <<endl;
-    m1.print_matrix();
-
-    matrix m2;
-    m2.print_matrix();
-
-    matrix m3;
-    m3 = m1;
-
-    m1.destroy_matrix();
-
-    cout << "test the copy function" << endl;
-
-    m3.print_matrix();
-
-
-
-	return 0;
+   //Test code
+   string testString = "    A = [  1.4 2 333 2; 4.4 7 10 5; 9 45 21 7];";
+   matrix m;
+   m.fill_matrix(testString);
+   m.print_matrix();
+	 return 0;
 }
