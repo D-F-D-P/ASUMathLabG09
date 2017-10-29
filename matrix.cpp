@@ -61,6 +61,7 @@ string matrix::get_name()
 }
 
 
+
 void matrix::set_name(string name)
 {
     this -> name = name;

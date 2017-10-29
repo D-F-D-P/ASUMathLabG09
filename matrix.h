@@ -27,7 +27,7 @@ public:
     int get_columns();
     std::string get_name();
 
-    //sets
+
     void set_name(std::string name);
 
     void resize_matrix(int rows, int columns);//updates num of rows and coulmns and updates the elements array
@@ -41,8 +41,8 @@ public:
     void reset_matrix(int rows, int columns);
     matrix operator = (matrix &p); // A = B = C
 
-    //static matrix create_matrix(int rows, int columns);
-
+    //functions for calculations
+    matrix operator * (matrix& m); //C=A*B 
 
 };
 
