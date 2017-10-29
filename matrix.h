@@ -41,8 +41,13 @@ public:
     void copy_matrix(matrix &p);
     void print_matrix();
     matrix operator = (matrix &p); // A = B = C
-
+    
+	
     //static matrix create_matrix(int rows, int columns);
+    
+//functions for calculations
+matrix operator * (matrix& m); //C=A*B 
+
 
 
 };
