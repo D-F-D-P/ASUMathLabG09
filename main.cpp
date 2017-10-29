@@ -1,15 +1,17 @@
-double** fill_matrix(double** A, int rows, int columns)
-{
-	cout << "Please fill the matrix with its elements" << endl;
-	for (int i = 0; i < rows; i++)
-	{
-		for (int j = 0; j < columns; j++)
-		{
-			cin >> A[i][j];
-			cout << "\t";
-		}
-		cout << endl;
-	}
+#include "matrix.h"
+#include <iostream>
+#include <string>
 
-	return A;
+
+using namespace std;
+
+int main()
+{
+    //Test code
+   string testString = "    A = [  1.4 2 333 2; 4.4 7 10 5; 9 45 21 7];";
+   matrix m;
+   m.fill_matrix(testString);
+   m.print_matrix();
+
+	return 0;
 }
