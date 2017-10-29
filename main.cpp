@@ -1,19 +1,32 @@
+<<<<<<< HEAD
 
 
 //there is no need to include <iostream> or "matrix.h" we did it in "dynamic_matrix.h"
 #include "dynamic_matrix.h"
 
 
+=======
+//there is no need to include <iostream> or "matrix.h" we did it in "dynamic_matrix.h"
+#include "dynamic_array_matrix.h"
+
+
+>>>>>>> ff0add0c8d0899f854a7e39fdf857a885fa02626
 // .get_matrix() returns the main pointer of the dynamic_matrix 
 #define MATRIX matrix_array.get_matrix() //so this #define make it easy to access any matrix in the array
 using namespace std;
 
 int main()
 {
+<<<<<<< HEAD
 
 //test code for the dynamic_matrix
 
 	dynamic_matrix matrix_array(1);
+=======
+//test code for the dynamic_matrix
+
+	dynamic_array_matrix matrix_array(1);
+>>>>>>> ff0add0c8d0899f854a7e39fdf857a885fa02626
 
 	MATRIX[0].resize_matrix(3,3);//set the size 
 
@@ -56,4 +69,8 @@ int main()
 
     cout << "test the copy function" << endl;
 
+<<<<<<< HEAD
     m3.print_matrix();*/
+=======
+    m3.print_matrix();*/
+>>>>>>> ff0add0c8d0899f854a7e39fdf857a885fa02626
