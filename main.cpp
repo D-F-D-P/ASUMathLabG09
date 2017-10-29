@@ -1,5 +1,3 @@
-
-
 //there is no need to include <iostream> or "matrix.h" we did it in "dynamic_matrix.h"
 #include "dynamic_array_matrix.h"
 
@@ -10,7 +8,6 @@ using namespace std;
 
 int main()
 {
-
 //test code for the dynamic_matrix
 
 	dynamic_array_matrix matrix_array(1);
