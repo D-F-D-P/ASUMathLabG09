@@ -15,11 +15,11 @@ public:
 
 	/*attach your header function here*/
 
-//<<<<<<< HEAD
+
 	//example function
 	void doNull();
 	int** create_matrix(int rows, int columns);
-//=======
+
 	matrix(); //default constructor does not create a matrix
     matrix(int rows, int columns); //constructor create a matrix (rows*columns) leave it with it's rubbish data
     ~matrix(); //destructor
@@ -45,7 +45,7 @@ public:
     void print_matrix();
     void reset_matrix(int rows, int columns);
     matrix operator = (matrix &p); // A = B = C
-<<<<<<< HEAD
+
     
 	
     //static matrix create_matrix(int rows, int columns);
@@ -54,21 +54,19 @@ public:
 matrix operator * (matrix& m); //C=A*B 
 
 
-=======
+
 
     //functions for calculations
     matrix operator * (matrix& m); //C=A*B 
->>>>>>> ff0add0c8d0899f854a7e39fdf857a885fa02626
 
 };
-//>>>>>>> master
-<<<<<<< HEAD
-=======
+
+
 
 //global functions
 std::string space_trimer(std::string text); // remove extra spaces from beginning of a text
 int number_of(int e, std::string s,std::string c); // count the number of special char in a text
 
->>>>>>> master
+
 
 #endif // MATRIX_H

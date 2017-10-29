@@ -1,9 +1,9 @@
 #include "matrix.h"
-<<<<<<< HEAD
-=======
+
+
 #include <iostream>
 #include <cstdlib>
->>>>>>> ff0add0c8d0899f854a7e39fdf857a885fa02626
+
 
 using namespace std;
 /*attach your libraries here*/
@@ -16,7 +16,7 @@ using namespace std;
 */
 
 //example function
-//<<<<<<< HEAD
+
 //void matrix::doNull();
 int**  matrix::create_matrix(int rows, int columns)
 {
@@ -35,7 +35,7 @@ int**  matrix::create_matrix(int rows, int columns)
 
 	return matrix;
 }
-//=======
+
 //void matrix::doNull();
 
 //default constructor
@@ -84,20 +84,9 @@ string matrix::get_name()
 }
 
 
-<<<<<<< HEAD
-//sets
-void matrix::set_rows(int rows)//there is abug
-{
-    this -> rows = rows;
-}
 
-void matrix::set_columns(int columns)//there is abug
-{
-    this -> columns = columns;
-}
 
-=======
->>>>>>> ff0add0c8d0899f854a7e39fdf857a885fa02626
+
 void matrix::set_name(string name)
 {
     this -> name = name;
@@ -334,9 +323,7 @@ matrix matrix::operator * (matrix& m){
         }
     }
 
-<<<<<<< HEAD
-//>>>>>>> master
-=======
+
     // Multiplying and store in r
      for (int i=0;i<this->rows;i++){
         for (int j=0;j<m.columns;j++){
@@ -347,4 +334,4 @@ matrix matrix::operator * (matrix& m){
     }
     return r;
 }
->>>>>>> master
+
