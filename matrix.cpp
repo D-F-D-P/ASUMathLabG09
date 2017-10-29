@@ -40,7 +40,6 @@ matrix::matrix(int rows, int columns)
 //copy constructor
 matrix::matrix(matrix& p)
 {
-    elements = nullptr;
     copy_matrix(p);
 }
 
@@ -61,22 +60,6 @@ string matrix::get_name()
  return name;
 }
 
-
-//sets
-/*
-void matrix::set_rows(int rows)
-{
-
-    this -> rows = rows;
-}
-*/
-
-/*
-void matrix::set_columns(int columns)
-{
-    this -> columns = columns;
-}
-*/
 
 void matrix::set_name(string name)
 {
@@ -171,7 +154,7 @@ for(int i = 0 ; i < rows ; i ++)
     if(i == 0)// to create the matrix once since i now can get number of columns
     {
     columns = number_of(newRow.length(),newRow," ") + 1;
-    (*this).create_matrix(rows,columns);
+    this -> reset_matrix(rows,columns);
     }
 
     // substring the row into elements
@@ -190,6 +173,8 @@ for(int i = 0 ; i < rows ; i ++)
     }
 
 }
+
+   this -> name = name;
 
 }
 
@@ -230,7 +215,7 @@ void matrix::copy_matrix(matrix& p)
 }
 
 
-void matrix::create_matrix(int rows, int columns)
+void matrix::reset_matrix(int rows, int columns)
 {
     this -> rows = rows;
     this -> columns = columns;
@@ -249,6 +234,7 @@ void matrix::print_matrix()
     if(this->elements == nullptr) //to prevent crash
         cout << "this matrix is not created" <<endl;
     else
+    cout << this->name << " = " << endl;
 	for(int i=0;i<rows;i++){
 		for(int j=0;j<columns;j++){
 			cout<<elements[i][j]<<"\t";

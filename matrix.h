@@ -28,8 +28,6 @@ public:
     std::string get_name();
 
     //sets
-   // void set_rows(int rows);
-   // void set_columns(int columns);
     void set_name(std::string name);
 
     void resize_matrix(int rows, int columns);//updates num of rows and coulmns and updates the elements array
@@ -40,7 +38,7 @@ public:
     void empty_matrix(); // make all the elements of the array = 0;
     void copy_matrix(matrix &p);
     void print_matrix();
-    void create_matrix(int rows, int columns);
+    void reset_matrix(int rows, int columns);
     matrix operator = (matrix &p); // A = B = C
 
     //static matrix create_matrix(int rows, int columns);
