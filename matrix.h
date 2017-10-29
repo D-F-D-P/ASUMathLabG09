@@ -1,7 +1,7 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 #include<string>
-
+#include <iostream>
 
 class matrix
 {
@@ -15,6 +15,11 @@ public:
 
 	/*attach your header function here*/
 
+//<<<<<<< HEAD
+	//example function
+	void doNull();
+	int** create_matrix(int rows, int columns);
+//=======
 	matrix(); //default constructor does not create a matrix
     matrix(int rows, int columns); //constructor create a matrix (rows*columns) leave it with it's rubbish data
     ~matrix(); //destructor
@@ -45,6 +50,7 @@ public:
     matrix operator * (matrix& m); //C=A*B 
 
 };
+//>>>>>>> master
 
 //global functions
 std::string space_trimer(std::string text); // remove extra spaces from beginning of a text
