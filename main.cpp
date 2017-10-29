@@ -1,7 +1,7 @@
 
 
 //there is no need to include <iostream> or "matrix.h" we did it in "dynamic_matrix.h"
-#include "dynamic_matrix.h"
+#include "dynamic_array_matrix.h"
 
 
 // .get_matrix() returns the main pointer of the dynamic_matrix 
@@ -13,7 +13,7 @@ int main()
 
 //test code for the dynamic_matrix
 
-	dynamic_matrix matrix_array(1);
+	dynamic_array_matrix matrix_array(1);
 
 	MATRIX[0].resize_matrix(3,3);//set the size 
 

@@ -1,20 +1,21 @@
-#ifndef DYNAMIC_MATRIX_H
-#define DYNAMIC_MATRIX_H
+
+#ifndef DYNAMIC_ARRAY_MATRIX_H
+#define DYNAMIC_ARRAY_MATRIX_H
 
 #include "matrix.h"
 
 
-class dynamic_matrix//this class is to provide a dynamic array of our matrix class
+class dynamic_array_matrix//this class is to provide a dynamic array of our matrix class
 {
 	//private members
 	matrix* pointer;
 	 int size;
 public:
 	//constructor
-	  dynamic_matrix(int size);
+	  dynamic_array_matrix(int size);
 
 	//distructor
-	  ~dynamic_matrix(); 
+	  ~dynamic_array_matrix(); 
 
 	//gets
 	  int get_size();

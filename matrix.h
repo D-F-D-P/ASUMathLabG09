@@ -15,11 +15,11 @@ public:
 
 	/*attach your header function here*/
 
-<<<<<<< HEAD
+//<<<<<<< HEAD
 	//example function
 	void doNull();
 	int** create_matrix(int rows, int columns);
-=======
+//=======
 	matrix(); //default constructor does not create a matrix
     matrix(int rows, int columns); //constructor create a matrix (rows*columns) leave it with it's rubbish data
     ~matrix(); //destructor
@@ -51,6 +51,6 @@ public:
 
 
 };
->>>>>>> master
+//>>>>>>> master
 
 #endif // MATRIX_H

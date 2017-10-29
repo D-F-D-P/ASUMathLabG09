@@ -11,8 +11,8 @@ using namespace std;
 */
 
 //example function
-<<<<<<< HEAD
-void matrix::doNull();
+//<<<<<<< HEAD
+//void matrix::doNull();
 int**  matrix::create_matrix(int rows, int columns)
 {
 	/*
@@ -30,7 +30,7 @@ int**  matrix::create_matrix(int rows, int columns)
 
 	return matrix;
 }
-=======
+//=======
 //void matrix::doNull();
 
 //default constructor
@@ -230,4 +230,4 @@ void matrix::print_matrix()
     return newMatrix;
 }*/
 
->>>>>>> master
+//>>>>>>> master
