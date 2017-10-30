@@ -27,7 +27,6 @@ public:
     int get_columns();
     std::string get_name();
 
-
     void set_name(std::string name);
 
     void resize_matrix(int rows, int columns);//updates num of rows and coulmns and updates the elements array
@@ -38,6 +37,21 @@ public:
     void empty_matrix(); // make all the elements of the array = 0;
     void copy_matrix(matrix &p);
     void print_matrix();
+    matrix operator = (matrix & p); // A = B = C
+	matrix operator + (matrix & p);// A + B = C
+	matrix operator - (matrix & p);// A - B = C
+	matrix operator + (int p);// A + number = C
+	friend matrix operator + (int a, matrix &p);// number + A = C
+	matrix operator - (int p);// A - number = C
+	friend matrix operator - (int a, matrix &p);// number - A = C
+	friend matrix sum_matrix(matrix &A, matrix &B); //friend matrix to sum two matrix
+	friend matrix sub_matrix(matrix &A, matrix &B); //friend matrix to sub two matrix
+	friend matrix sum_num(matrix &A, int B); //friend matrix to sum matix and number
+	friend matrix sub_num(matrix &A, int B); //friend matrix to sum matix and number
+    //static matrix create_matrix(int rows, int columns);
+
+
+};
     void reset_matrix(int rows, int columns);
     matrix operator = (matrix &p); // A = B = C
 
