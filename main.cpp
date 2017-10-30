@@ -1,14 +1,18 @@
-int** sum_matrix(int** A, int** B, int rows, int columns)
+#include "matrix.h"
+#include <iostream>
+
+using namespace std;
+
+int main()
 {
-	int** result = createEmptyMatrix(rows, columns);
+    //Test Code
+	matrix m1(2, 4); //rows = 2, columns =4
+	m1.fill_matrix_cl();
 
-	for (int i = 0; i < rows; i++)
-	{
-		for (int j = 0; j < columns; j++)
-		{
-			result[i][j] = A[i][j] + B[i][j];
-		}
-	}
 
-	return result;
+	matrix m3 = m1 - 2;
+
+	m3.print_matrix();
+
+	return 0;
 }
