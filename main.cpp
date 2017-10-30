@@ -1,18 +1,17 @@
 #include "matrix.h"
 #include <iostream>
+#include <string>
+
+
 
 using namespace std;
 
 int main()
 {
-    //Test Code
-	matrix m1(2, 4); //rows = 2, columns =4
-	m1.fill_matrix_cl();
-
-
-	matrix m3 = m1 - 2;
-
-	m3.print_matrix();
-
-	return 0;
+   //Test code
+   string testString = "    A = [  1.4 2 333 2; 4.4 7 10 5; 9 45 21 7];";
+   matrix m;
+   m.fill_matrix(testString);
+   m.print_matrix();
+	 return 0;
 }

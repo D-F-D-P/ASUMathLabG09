@@ -27,9 +27,6 @@ public:
     int get_columns();
     std::string get_name();
 
-    //sets
-    void set_rows(int rows);
-    void set_columns(int columns);
     void set_name(std::string name);
 
     void resize_matrix(int rows, int columns);//updates num of rows and coulmns and updates the elements array
@@ -55,5 +52,17 @@ public:
 
 
 };
+    void reset_matrix(int rows, int columns);
+    matrix operator = (matrix &p); // A = B = C
+
+    //functions for calculations
+    matrix operator * (matrix& m); //C=A*B 
+
+};
+
+//global functions
+std::string space_trimer(std::string text); // remove extra spaces from beginning of a text
+int number_of(int e, std::string s,std::string c); // count the number of special char in a text
+
 
 #endif // MATRIX_H

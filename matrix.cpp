@@ -1,5 +1,7 @@
 #include "matrix.h"
 #include <iostream>
+#include <cstdlib>
+
 using namespace std;
 /*attach your libraries here*/
 
@@ -38,7 +40,6 @@ matrix::matrix(int rows, int columns)
 //copy constructor
 matrix::matrix(matrix& p)
 {
-    elements = nullptr;
     copy_matrix(p);
 }
 
@@ -57,18 +58,6 @@ int matrix::get_columns()
 string matrix::get_name()
 {
  return name;
-}
-
-
-//sets
-void matrix::set_rows(int rows)
-{
-    this -> rows = rows;
-}
-
-void matrix::set_columns(int columns)
-{
-    this -> columns = columns;
 }
 
 void matrix::set_name(string name)
@@ -103,8 +92,7 @@ void matrix::resize_matrix(int rows, int columns)
 //destructor
 matrix::~matrix()
 {
-    if(elements)
-        delete []elements;
+   destroy_matrix();
 }
 
 //destroy matrix
@@ -135,8 +123,56 @@ void matrix::fill_matrix_cl()
 
 void matrix::fill_matrix(string inputString)
 {
+string newString = space_trimer(inputString); // remove beginning spaces
 
-// to be implemented..
+// getting the name of the matrix
+string name = newString.substr(0,1);
+
+// to remove brackets
+int bracketFinder = newString.find("[",0);
+string newString2 = newString.substr(bracketFinder+1, newString.length()-bracketFinder-3);
+
+
+int rows;
+int columns;
+rows = number_of(newString2.length(),newString2, ";") + 1;
+
+// substring the string into row
+int beginRow = 0 ; // position of a row starting
+int endRow; // position of a row ending
+string row ;
+for(int i = 0 ; i < rows ; i ++)
+{
+    endRow = newString2.find(";",beginRow);
+    row = newString2.substr(beginRow , endRow - beginRow);
+    string newRow = space_trimer(row); // to remove beginning spaces
+    beginRow = endRow+1; // update the begin of next find
+
+    // now to get the number of columns
+    if(i == 0)// to create the matrix once since i now can get number of columns
+    {
+    columns = number_of(newRow.length(),newRow," ") + 1;
+    this -> reset_matrix(rows,columns);
+    }
+
+    // substring the row into elements
+    int beginElement = 0;
+    int endElement;
+    string elementString;
+    float elementFloat;
+    for(int j = 0 ; j < columns ; j++)
+    {
+       endElement = newRow.find(" " ,beginElement);
+       elementString = newRow.substr(beginElement, endElement - beginElement);
+       beginElement = endElement +1;
+       elementFloat = strtof((elementString).c_str(),0); // string to float
+       // save the element to the matrix
+       this -> elements[i][j] = elementFloat;
+    }
+
+}
+
+   this -> name = name;
 
 }
 
@@ -177,12 +213,26 @@ void matrix::copy_matrix(matrix& p)
 }
 
 
+void matrix::reset_matrix(int rows, int columns)
+{
+    this -> rows = rows;
+    this -> columns = columns;
+    this -> elements = new double*[rows];
+    for(int i=0;i<rows;i++)
+    {
+        this -> elements[i] = new double[columns];
+    }
+
+}
+
+
 
 void matrix::print_matrix()
 {
     if(this->elements == nullptr) //to prevent crash
         cout << "this matrix is not created" <<endl;
     else
+    cout << this->name << " = " << endl;
 	for(int i=0;i<rows;i++){
 		for(int j=0;j<columns;j++){
 			cout<<elements[i][j]<<"\t";
@@ -198,6 +248,7 @@ void matrix::print_matrix()
      return *this;
 
  }
+
  //sum of two matrix
  
   matrix sum_matrix(matrix &A, matrix &B)
@@ -300,14 +351,59 @@ void matrix::print_matrix()
 
 
 
-/*matrix matrix::create_matrix(int rows, int columns){
-    matrix newMatrix;
-    newMatrix.rows = rows;
-    newMatrix.columns = columns;
-    newMatrix.elements = new double*[rows];
-    for(int i=0;i<rows;i++){
-        newMatrix.elements[i] = new double[columns];
+// Global Functions
+int number_of(int e, string s,string c)
+{
+int N=0;
+
+for (int i=0;i<=e;i++)
+    {
+    if(s.substr(i,1)==c)
+    N++;
     }
-    return newMatrix;
-}*/
+    return N;
+
+}
+
+
+string space_trimer(string text)
+{
+        int spaceCounter = 0;
+
+        while(1)
+        {
+        if(text.substr(spaceCounter,1) == " ")
+        {
+            spaceCounter ++;
+        }
+        else break;
+        }
+
+   return text.substr(spaceCounter,text.length() - spaceCounter);
+
+}
+
+matrix matrix::operator * (matrix& m){
+    if (this->columns!=m.rows)
+      //Or whatever the doctor says
+        cout << "error columns of first is not equal rows of the second" << endl;
+    matrix r(this->rows,m.columns);
+
+    //initializing elements of matrix r=0
+    for (int i=0;i<this->rows;i++){
+        for (int j=0;j<m.columns;j++){
+            r.elements[rows][columns]=0;
+        }
+    }
+
+    // Multiplying and store in r
+     for (int i=0;i<this->rows;i++){
+        for (int j=0;j<m.columns;j++){
+            for (int k=0;k<this->columns;k++){
+                r.elements[rows][columns] += this->elements[rows][k]*m.elements[k][columns];
+            }
+        }
+    }
+    return r;
+}
 
