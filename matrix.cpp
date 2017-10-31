@@ -83,10 +83,18 @@ string matrix::get_name()
  return name;
 }
 
+<<<<<<< HEAD
 
 
 
+<<<<<<< HEAD
 
+=======
+=======
+>>>>>>> ff0add0c8d0899f854a7e39fdf857a885fa02626
+=======
+>>>>>>> e9824956a1983479e596b157291925597f82e665
+>>>>>>> master
 void matrix::set_name(string name)
 {
     this -> name = name;
@@ -150,7 +158,6 @@ void matrix::fill_matrix_cl()
 
 void matrix::fill_matrix(string inputString)
 {
-
 string newString = space_trimer(inputString); // remove beginning spaces
 
 // getting the name of the matrix
@@ -276,6 +283,107 @@ void matrix::print_matrix()
      return *this;
 
  }
+
+ //sum of two matrix
+ 
+  matrix sum_matrix(matrix &A, matrix &B)
+ {
+	 matrix result(A.rows, A.columns);
+	 if (A.rows != B.rows  && A.columns != B.columns)cout << "error sizing" << endl;
+	
+	 else {
+			 for (int i = 0; i < A.rows; i++)
+			 {
+				 for (int j = 0; j < A.columns; j++)
+					 result.elements[i][j] = A.elements[i][j] + B.elements[i][j];
+			 }
+	      }
+	 return result;
+ }
+
+  // sum_matrix operator
+  matrix matrix:: operator + (matrix & p) // A + B = C
+  {
+	 return sum_matrix(*this,p);
+  }
+
+
+
+
+// sub of two matrix
+  matrix sub_matrix(matrix &A, matrix &B)
+  {
+	  matrix result(A.rows, A.columns);
+	  if (A.rows != B.rows  && A.columns != B.columns)cout << "error sizing" << endl;
+	 
+	  else {
+		  for (int i = 0; i < A.rows; i++)
+		     {
+			  for (int j = 0; j < A.columns; j++)
+				  result.elements[i][j] = A.elements[i][j] - B.elements[i][j]; 
+		     }
+	       }
+	  return result;
+  }
+  matrix matrix:: operator - (matrix & p) // A - B = C
+  {
+	  return sub_matrix(*this, p);
+  }
+
+
+
+  //sum of matrix and number
+
+  matrix sum_num(matrix &A, int B)
+  {
+	  matrix result(A.rows, A.columns);
+
+	  for (int i = 0; i < A.rows; i++)
+	  {
+		  for (int j = 0; j < A.columns; j++)
+			  result.elements[i][j] = A.elements[i][j] + B;
+	  }
+
+	  return result;
+  }
+
+  // sum_num operator
+  matrix matrix:: operator + (int p) // A + B = C
+  {
+	  return sum_num(*this, p);
+  }
+ 
+  matrix operator + (int a , matrix &p) // A + B = C
+  {
+	  return sum_num(p,a);
+  }
+
+  //sub of matrix and number
+
+  matrix sub_num(matrix &A, int B)
+  {
+	  matrix result(A.rows, A.columns);
+
+	  for (int i = 0; i < A.rows; i++)
+	  {
+		  for (int j = 0; j < A.columns; j++)
+			  result.elements[i][j] = A.elements[i][j] - B;
+	  }
+
+	  return result;
+  }
+
+  // sub_num operator
+  matrix matrix:: operator - (int p) // A - number = C
+  {
+	  return sub_num(*this, p);
+  }
+
+  matrix operator - (int a, matrix &p) // number - A = C
+  {
+	  return sub_num(p, a);
+  }
+
 
 
 // Global Functions
