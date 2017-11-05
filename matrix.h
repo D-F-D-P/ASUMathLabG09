@@ -16,10 +16,10 @@ public:
 	/*attach your header function here*/
 
 	matrix(); //default constructor does not create a matrix
-    matrix(int rows, int columns); //constructor create a matrix (rows*columns) leave it with it's rubbish data
+	matrix(matrix &p);//( matrix A = B )
+    matrix(int rows, int columns); //constructor create a matrix (rows*columns) and initialize them with zeros
     ~matrix(); //destructor
-    matrix(matrix &p);// copy operator ( matrix A = B )
-    void destroy_matrix();
+
 
 
     //gets
@@ -27,36 +27,38 @@ public:
     int get_columns();
     std::string get_name();
 
+    //sets
     void set_name(std::string name);
-
-    void resize_matrix(int rows, int columns);//updates num of rows and coulmns and updates the elements array
+    void resize_matrix(int rows, int columns);//updates num of rows and columns and updates the elements array
 
     //algorithms and functions
-    void fill_matrix_cl();//fill matrix with cin to test your function add , sub ,..
+    void fill_matrix_cl();//fill matrix with cin
     void fill_matrix(std::string inputString); //fill from a string
     void empty_matrix(); // make all the elements of the array = 0;
-    void copy_matrix(matrix &p);
+    void destroy_matrix();
     void print_matrix();
+    void reset_matrix(int rows, int columns); //reset dimentions
+    void copy_matrix(matrix &p);
+
+	//Friend functions
+    friend void sum_matrix(matrix &A, matrix &B , matrix &C); // to sum two matrix C = A+B
+	friend void sub_matrix(matrix &A, matrix &B , matrix &C); // to sub two matrix C = A-B
+	friend void multiply_matrix(matrix &A, matrix &B , matrix &C); // to multiply two matrix C =  A*B
+	friend void sum_num(matrix &A, int B , matrix &C); // to sum matrix and number
+	friend void sub_num(matrix &A, int B , matrix &C); // to sub matrix and number
+	friend void multiply_num(matrix &A, int B , matrix &C); // to sub matrix and number
+
+    //Operators
     matrix operator = (matrix & p); // A = B = C
 	matrix operator + (matrix & p);// A + B = C
 	matrix operator - (matrix & p);// A - B = C
 	matrix operator + (int p);// A + number = C
 	friend matrix operator + (int a, matrix &p);// number + A = C
 	matrix operator - (int p);// A - number = C
-	friend matrix operator - (int a, matrix &p);// number - A = C
-	friend matrix sum_matrix(matrix &A, matrix &B); //friend matrix to sum two matrix
-	friend matrix sub_matrix(matrix &A, matrix &B); //friend matrix to sub two matrix
-	friend matrix sum_num(matrix &A, int B); //friend matrix to sum matix and number
-	friend matrix sub_num(matrix &A, int B); //friend matrix to sum matix and number
-    //static matrix create_matrix(int rows, int columns);
+	friend matrix operator - (int a, matrix &p);// number + A = C
+	matrix operator * (matrix& m); //C=A*B
 
-
-};
-    void reset_matrix(int rows, int columns);
-    matrix operator = (matrix &p); // A = B = C
-
-    //functions for calculations
-    matrix operator * (matrix& m); //C=A*B 
+    //matrix sum_matrix(matrix &A);
 
 };
 
