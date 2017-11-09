@@ -8,6 +8,7 @@ class matrix
 	double** elements;
     int rows,columns;
     std::string name;
+    //  bool valid; to be added..
 
 	/*attach any further variables here*/
 
@@ -16,7 +17,7 @@ public:
 	/*attach your header function here*/
 
 	matrix(); //default constructor does not create a matrix
-	matrix(matrix &p);//( matrix A = B )
+	matrix(const matrix &p);//( matrix A = B )
     matrix(int rows, int columns); //constructor create a matrix (rows*columns) and initialize them with zeros
     ~matrix(); //destructor
 
@@ -49,16 +50,19 @@ public:
 	friend void multiply_num(matrix &A, int B , matrix &C); // to sub matrix and number
 
     //Operators
-    matrix operator = (matrix & p); // A = B = C
-	matrix operator + (matrix & p);// A + B = C
-	matrix operator - (matrix & p);// A - B = C
+    matrix operator = (matrix  p); // A = B = C
+	matrix operator + (matrix  p);// A + B = C
+	matrix operator - (matrix  p);// A - B = C
 	matrix operator + (int p);// A + number = C
-	friend matrix operator + (int a, matrix &p);// number + A = C
+	friend matrix operator + (int a, matrix p);// number + A = C
 	matrix operator - (int p);// A - number = C
-	friend matrix operator - (int a, matrix &p);// number + A = C
-	matrix operator * (matrix& m); //C=A*B
+	friend matrix operator - (int a, matrix p);// number + A = C
+	matrix operator * (matrix p);
+	matrix operator * (int p); // C= A * number
+	friend matrix operator * (int a, matrix p); // A = number * A
+	friend matrix operator - (matrix p); // A = -A
 
-    //matrix sum_matrix(matrix &A);
+
 
 };
 

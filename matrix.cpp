@@ -15,6 +15,7 @@ using namespace std;
 //example function
 //void matrix::doNull();
 
+
 //default constructor
 matrix::matrix()
 {
@@ -45,10 +46,29 @@ matrix::matrix(int rows, int columns)
 }
 
 //copy constructor
-matrix::matrix(matrix& p)
+matrix::matrix(const matrix& p)
 {
-    elements = NULL;
-    copy_matrix(p);
+
+   this -> rows = p.rows;
+   this -> columns = p.columns;
+
+
+ if ((rows*columns) == 0) { elements = NULL; return; }
+
+
+   //create the matrix
+    elements = new double*[rows];
+    for(int i=0;i<rows;i++)
+    {
+        elements[i] = new double[columns];
+    }
+
+    //copy the values
+    for (int i = 0; i < rows; i++)
+	{
+		for (int j = 0 ; j < columns ; j++)
+           elements[i][j] = p.elements[i][j];
+	}
 }
 
 
@@ -146,7 +166,6 @@ void matrix::fill_matrix_cl()
 void matrix::fill_matrix(string inputString)
 {
 string newString = space_trimer(inputString); // remove beginning spaces
-
 // getting the name of the matrix
 string name = newString.substr(0,1);
 
@@ -195,6 +214,13 @@ for(int i = 0 ; i < rows ; i ++)
 }
 
    this -> name = name;
+
+
+   //To print or not
+
+
+ if( inputString[inputString.length()-1] != ';' )
+    print_matrix();
 
 }
 
@@ -401,7 +427,7 @@ void multiply_matrix(matrix &A, matrix &B , matrix &C)
 
 // ************************ Operators ************************* //
 //Copy
- matrix matrix :: operator = (matrix & p)
+ matrix matrix :: operator = (matrix  p)
  {
      copy_matrix(p);
      return *this; // this line calls the copy constructor
@@ -409,12 +435,97 @@ void multiply_matrix(matrix &A, matrix &B , matrix &C)
 
 
 // sum_matrix
-  matrix matrix:: operator + (matrix &p) // A + B = C
+  matrix matrix:: operator + (matrix p) // A + B = C
   {
      matrix result(this->rows,this -> columns);
      sum_matrix((*this),p , result);
 	 return result;
   }
+
+
+ matrix matrix:: operator - (matrix p) // A + B = C
+  {
+     matrix result(this->rows,this -> columns);
+     sub_matrix((*this),p , result);
+	 return result;
+  }
+
+matrix matrix :: operator + (int p)// A + number = C
+{
+     matrix result(this->rows,this -> columns);
+     sum_num((*this),p , result);
+	 return result;
+
+}
+
+
+
+matrix matrix :: operator - (int p)// A + number = C
+{
+     matrix result(this->rows,this -> columns);
+     sub_num((*this),p , result);
+	 return result;
+
+}
+
+
+
+matrix operator + (int a, matrix p)
+{
+
+     matrix result(p.rows, p.columns);
+     sum_num(p,a , result);
+	 return result;
+
+
+}
+
+
+matrix operator - (int a, matrix p)
+{
+
+     matrix result(p.rows, p.columns);
+     p=-p;
+     sum_num(p,a , result);
+	 return result;
+
+}
+
+matrix operator - (matrix p)
+{
+    matrix result(p.rows,p.columns);
+
+    multiply_num(p,-1,result);
+    return result;
+}
+
+
+matrix matrix :: operator * (matrix p) //C=A*B
+{
+    matrix result(this -> rows , p.columns);
+    multiply_matrix((*this),  p , result);
+
+    return result;
+
+}
+
+matrix matrix :: operator * (int p) //C=A*B
+{
+    matrix result(this->rows , this-> columns);
+    multiply_num(*this,p,result);
+    return result;
+}
+
+
+
+matrix operator * (int a, matrix p) // A = double * A
+{
+    matrix result(p.rows , p.columns);
+    multiply_num(p,a,result);
+    return result;
+}
+
+
 
 
 
