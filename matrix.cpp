@@ -1,6 +1,7 @@
 #include "matrix.h"
 #include <iostream>
 #include <cstdlib>
+#include <math.h>
 
 using namespace std;
 /*attach your libraries here*/
@@ -300,6 +301,87 @@ void matrix::print_matrix()
 	}
 }
 
+// generate a sub matrix, it won't crash
+matrix matrix::new_sub_matrix(int row)
+{
+  matrix *temp = new matrix((this->rows)-1,(this->columns)-1);
+  for(int i=0;i<(temp->rows);i++)
+  {
+    int flag = 0;
+    if(i >= row){
+      flag = 1;
+    }
+    for(int k=0;k<(temp->columns);k++)
+    {
+      temp->elements[i][k] = this->elements[i+flag][k+1];
+    }
+  }
+  return *temp;
+}
+
+// measure the determinant of the matrix, it will crash if the number of rows != num of colums
+double matrix::determinant()
+{
+  double result = 0.0;
+  if(this->rows == 2)
+  {
+    result = ((this->elements[0][0])*(this->elements[1][1]))
+            - ((this->elements[0][1])*(this->elements[1][0]));
+    return result;
+  }
+  for(int i=0;i<(this->rows);i++)
+  {
+    matrix temp = this->new_sub_matrix(i);
+    result += (temp.determinant())*pow(-1,i)*this->elements[i][0];
+  }
+  return result;
+}
+
+//flips the rows and columns , it won't crash
+void matrix::flip_matrix()
+{
+  matrix temp(this->columns, this->rows);
+  for(int i=0;i< temp.rows;i++)
+  {
+    for(int k=0;k< temp.columns;k++)
+    {
+      temp.elements[i][k] = this->elements[k][i];
+    }   
+  }
+  std::string name = this->name;
+  this->copy_matrix(temp);
+  this->name = name;
+}
+
+// divide matrix A over B , it won't crash if the rows != columns so make sure you operate with the right data
+matrix matrix::inverse()
+{
+  matrix *temp = new matrix;
+  temp->copy_matrix(*this);
+  double det = temp->determinant();
+  temp->flip_matrix();
+  for (int i = 0; i < temp->rows; i++)
+  {
+    temp->elements[i][i] = (temp->elements[i][i]) * -1;
+  }
+  multiply_num(*temp, (1/det), *temp);
+  return *temp;
+}
+
+// divide number B over matrix A , it will crash if the number of rows != num of colums
+void divide_num_over_matrix(matrix &A, double B , matrix &C)
+{
+  matrix a = A.inverse();
+  multiply_num(a, B , C);
+}
+
+// divide matrix A over B , it will crash if the number of rows != num of colums or if the 2 matrix don't match
+void divide_matrix(matrix &A, matrix &B , matrix &C)
+{
+  matrix b = B.inverse();
+  multiply_matrix(A, b , C);
+}
+
  //sum of two matrix
   void sum_matrix(matrix &A, matrix &B , matrix &C)
  {
@@ -348,7 +430,7 @@ void sub_matrix(matrix &A, matrix &B , matrix &C)
 
 
   //sum of matrix and number
-  void sum_num(matrix &A, int B, matrix &C)
+  void sum_num(matrix &A, double B, matrix &C)
   {
 	  matrix result(A.rows, A.columns);
 
@@ -365,23 +447,22 @@ void sub_matrix(matrix &A, matrix &B , matrix &C)
 
 
   //multiply of matrix and number
-  void multiply_num(matrix &A, int B, matrix &C)
+  void multiply_num(matrix &A, double B, matrix &C)
 {
 	  matrix result(A.rows, A.columns);
-
-	  C = result;
 
 	  for (int i = 0; i < A.rows; i++)
 	  {
 		  for (int j = 0; j < A.columns; j++)
-			  C.elements[i][j] = A.elements[i][j] * B;
+			  result.elements[i][j] = A.elements[i][j] * B;
 	  }
+    C = result;
 
 }
 
 
   //sub of matrix and number
-  void sub_num(matrix &A, int B, matrix &C)
+  void sub_num(matrix &A, double B, matrix &C)
   {
 	  matrix result(A.rows, A.columns);
 
@@ -450,7 +531,7 @@ void multiply_matrix(matrix &A, matrix &B , matrix &C)
 	 return result;
   }
 
-matrix matrix :: operator + (int p)// A + number = C
+matrix matrix :: operator + (double p)// A + number = C
 {
      matrix result(this->rows,this -> columns);
      sum_num((*this),p , result);
@@ -460,7 +541,7 @@ matrix matrix :: operator + (int p)// A + number = C
 
 
 
-matrix matrix :: operator - (int p)// A + number = C
+matrix matrix :: operator - (double p)// A + number = C
 {
      matrix result(this->rows,this -> columns);
      sub_num((*this),p , result);
@@ -470,7 +551,7 @@ matrix matrix :: operator - (int p)// A + number = C
 
 
 
-matrix operator + (int a, matrix p)
+matrix operator + (double a, matrix p)
 {
 
      matrix result(p.rows, p.columns);
@@ -481,7 +562,7 @@ matrix operator + (int a, matrix p)
 }
 
 
-matrix operator - (int a, matrix p)
+matrix operator - (double a, matrix p)
 {
 
      matrix result(p.rows, p.columns);
@@ -509,7 +590,7 @@ matrix matrix :: operator * (matrix p) //C=A*B
 
 }
 
-matrix matrix :: operator * (int p) //C=A*B
+matrix matrix :: operator * (double p) //C=A*B
 {
     matrix result(this->rows , this-> columns);
     multiply_num(*this,p,result);
@@ -518,14 +599,37 @@ matrix matrix :: operator * (int p) //C=A*B
 
 
 
-matrix operator * (int a, matrix p) // A = double * A
+matrix operator * (double a, matrix p) // A = double * A
 {
     matrix result(p.rows , p.columns);
     multiply_num(p,a,result);
     return result;
 }
 
+//C=A/B it will crash if the number of rows != num of colums or if the 2 matrix don't match
+matrix matrix :: operator / (matrix p) 
+{
+    matrix result(this -> rows , p.columns);
+    divide_matrix((*this),  p , result);
 
+    return result;
+
+}
+
+matrix matrix :: operator / (double p) //C=A/p
+{
+    matrix result(this->rows , this-> columns);
+    multiply_num(*this,(1/p),result);
+    return result;
+}
+
+//it will crash if the number of rows != num of colums
+matrix operator / (double a, matrix p) // C = a / p
+{
+    matrix result(p.rows , p.columns);
+    divide_num_over_matrix(p,a,result);
+    return result;
+}
 
 
 
