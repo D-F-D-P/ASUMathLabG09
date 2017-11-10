@@ -1,5 +1,6 @@
 
 #include "dynamic_array_matrix.h"
+#include <iostream>
 using namespace std;
 
 /*private members are
