@@ -40,27 +40,36 @@ public:
     void print_matrix();
     void reset_matrix(int rows, int columns); //reset dimentions
     void copy_matrix(matrix &p);
+    matrix new_sub_matrix(int row); // generate a sub matrix, it won't crash
+    double determinant(); // measure the determinant of the matrix, it will crash if the number of rows != num of colums
+    void flip_matrix(); //flips the rows and columns , it won't crash
+    matrix inverse(); // divide matrix A over B , it won't crash if the rows != columns so make sure you operate on the right data
 
 	//Friend functions
     friend void sum_matrix(matrix &A, matrix &B , matrix &C); // to sum two matrix C = A+B
 	friend void sub_matrix(matrix &A, matrix &B , matrix &C); // to sub two matrix C = A-B
 	friend void multiply_matrix(matrix &A, matrix &B , matrix &C); // to multiply two matrix C =  A*B
-	friend void sum_num(matrix &A, int B , matrix &C); // to sum matrix and number
-	friend void sub_num(matrix &A, int B , matrix &C); // to sub matrix and number
-	friend void multiply_num(matrix &A, int B , matrix &C); // to sub matrix and number
+	friend void divide_matrix(matrix &A, matrix &B , matrix &C); // divide matrix A over B , it will crash if the number of rows != num of colums or if the 2 matrix don't match
+    friend void sum_num(matrix &A, double B , matrix &C); // to sum matrix and number
+	friend void sub_num(matrix &A, double B , matrix &C); // to sub matrix and number
+	friend void multiply_num(matrix &A, double B , matrix &C); // to sub matrix and number
+    friend void divide_num_over_matrix(matrix &A, double B , matrix &C); // divide number B over matrix A , it will crash if the number of rows != num of colums
 
     //Operators
     matrix operator = (matrix  p); // A = B = C
 	matrix operator + (matrix  p);// A + B = C
 	matrix operator - (matrix  p);// A - B = C
-	matrix operator + (int p);// A + number = C
-	friend matrix operator + (int a, matrix p);// number + A = C
-	matrix operator - (int p);// A - number = C
-	friend matrix operator - (int a, matrix p);// number + A = C
+	matrix operator + (double p);// A + number = C
+	friend matrix operator + (double a, matrix p);// number + A = C
+	matrix operator - (double p);// A - number = C
+	friend matrix operator - (double a, matrix p);// number + A = C
 	matrix operator * (matrix p);
-	matrix operator * (int p); // C= A * number
-	friend matrix operator * (int a, matrix p); // A = number * A
+	matrix operator * (double p); // C= A * number
+	friend matrix operator * (double a, matrix p); // A = number * A
 	friend matrix operator - (matrix p); // A = -A
+    matrix operator / (matrix p); //C=A/B it will crash if the number of rows != num of colums or if the 2 matrix don't match
+    matrix operator / (double p); //C=A/p
+    friend matrix operator / (double a, matrix p); //it will crash if the number of rows != num of colums
 
 
 
