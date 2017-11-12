@@ -366,6 +366,7 @@ matrix matrix::inverse()
   int flag = 1;
   for (int i = 0; i < temp->columns; i++)
   {
+    flag = pow(-1,i);
     for (int k = 0; k < temp->rows; k++)
     {
       temp->elements[k][i] = (this->new_sub_matrix(k,i)).determinant() * flag;
