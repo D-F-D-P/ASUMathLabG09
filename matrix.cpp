@@ -302,18 +302,22 @@ void matrix::print_matrix()
 }
 
 // generate a sub matrix, it won't crash
-matrix matrix::new_sub_matrix(int row)
+matrix matrix::new_sub_matrix(int row, int column)
 {
   matrix *temp = new matrix((this->rows)-1,(this->columns)-1);
   for(int i=0;i<(temp->rows);i++)
   {
-    int flag = 0;
+    int flagRows = 0;
     if(i >= row){
-      flag = 1;
+      flagRows = 1;
     }
     for(int k=0;k<(temp->columns);k++)
     {
-      temp->elements[i][k] = this->elements[i+flag][k+1];
+      int flagColumns = 0;
+      if(k >= column){
+        flagColumns = 1;
+      }
+      temp->elements[i][k] = this->elements[i+flagRows][k+flagColumns];
     }
   }
   return *temp;
@@ -331,7 +335,7 @@ double matrix::determinant()
   }
   for(int i=0;i<(this->rows);i++)
   {
-    matrix temp = this->new_sub_matrix(i);
+    matrix temp = this->new_sub_matrix(i,0);
     result += (temp.determinant())*pow(-1,i)*this->elements[i][0];
   }
   return result;
@@ -359,11 +363,16 @@ matrix matrix::inverse()
   matrix *temp = new matrix;
   temp->copy_matrix(*this);
   double det = temp->determinant();
-  temp->flip_matrix();
-  for (int i = 0; i < temp->rows; i++)
+  int flag = 1;
+  for (int i = 0; i < temp->columns; i++)
   {
-    temp->elements[i][i] = (temp->elements[i][i]) * -1;
+    for (int k = 0; k < temp->rows; k++)
+    {
+      temp->elements[k][i] = (this->new_sub_matrix(k,i)).determinant() * flag;
+      flag *= -1;
+    }
   }
+  temp->flip_matrix();
   multiply_num(*temp, (1/det), *temp);
   return *temp;
 }
