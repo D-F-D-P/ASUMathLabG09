@@ -1,9 +1,7 @@
 #include "matrix.h"
-
-
 #include <iostream>
 #include <cstdlib>
-
+#include <math.h>
 
 using namespace std;
 /*attach your libraries here*/
@@ -16,32 +14,13 @@ using namespace std;
 */
 
 //example function
-
 //void matrix::doNull();
-int**  matrix::create_matrix(int rows, int columns)
-{
-	/*
-	A dynamic 2D array is basically an array of pointers to arrays.
-	First, we will allocate memory for an array which contains a set of pointers.
-	Next, we will allocate memory for each array which is pointed by the pointers.
-	The deallocation of memory is done in the reverse order of memory allocation.
-	*/
-	int** matrix = new int* [rows];
-	
-	for (int i = 0; i < rows; i++)
-	{
-		matrix[i] = new int[columns];
-	}
 
-	return matrix;
-}
-
-//void matrix::doNull();
 
 //default constructor
 matrix::matrix()
 {
-    elements = nullptr;
+    elements =NULL;
     rows = 0;
     columns =0;
     name = "";
@@ -51,20 +30,48 @@ matrix::matrix()
 //constructor
 matrix::matrix(int rows, int columns)
 {
+
     this->rows = rows;
     this->columns = columns;
+
+     if ((rows*columns) == 0) { elements = NULL; return; }
+
     elements = new double*[rows];
     for(int i=0;i<rows;i++)
     {
         elements[i] = new double[columns];
     }
+
+    empty_matrix();
+
 }
 
 //copy constructor
-matrix::matrix(matrix& p)
+matrix::matrix(const matrix& p)
 {
-    copy_matrix(p);
+
+   this -> rows = p.rows;
+   this -> columns = p.columns;
+
+
+ if ((rows*columns) == 0) { elements = NULL; return; }
+
+
+   //create the matrix
+    elements = new double*[rows];
+    for(int i=0;i<rows;i++)
+    {
+        elements[i] = new double[columns];
+    }
+
+    //copy the values
+    for (int i = 0; i < rows; i++)
+	{
+		for (int j = 0 ; j < columns ; j++)
+           elements[i][j] = p.elements[i][j];
+	}
 }
+
 
 
 //gets
@@ -83,18 +90,6 @@ string matrix::get_name()
  return name;
 }
 
-<<<<<<< HEAD
-
-
-
-<<<<<<< HEAD
-
-=======
-=======
->>>>>>> ff0add0c8d0899f854a7e39fdf857a885fa02626
-=======
->>>>>>> e9824956a1983479e596b157291925597f82e665
->>>>>>> master
 void matrix::set_name(string name)
 {
     this -> name = name;
@@ -103,6 +98,9 @@ void matrix::set_name(string name)
 //resize matrix
 void matrix::resize_matrix(int rows, int columns)
 {
+
+     if ((rows*columns) == 0) { rows = columns = 0; elements = NULL; return; }
+
 	double** newElements = new double*[rows];
     for(int i=0;i<rows;i++){
         newElements[i] = new double[columns];
@@ -133,15 +131,25 @@ matrix::~matrix()
 //destroy matrix
 void matrix::destroy_matrix()
 {
-	for (int i = 0; i < rows; i++)
-	{
-		delete[] elements [i]; //deletes an inner array of integer;
-	}
 
-	delete[] elements; //delete pointer holding array of pointers;
+ if(elements)
+ {
+
+
+        for (int i = 0; i < rows; i++)
+        {
+            delete[] elements [i]; //deletes an inner array of integer;
+        }
+        delete[] elements; //delete pointer holding array of pointers;
+
+
+    elements =NULL;
+    rows = 0;
+    columns =0;
+    name = "";
+ }
 }
-
-//to have a filled array quickly to test your functions algorithms
+//fill matrix from cin
 void matrix::fill_matrix_cl()
 {
     cout << "Please fill the matrix with its elements" << endl;
@@ -159,7 +167,6 @@ void matrix::fill_matrix_cl()
 void matrix::fill_matrix(string inputString)
 {
 string newString = space_trimer(inputString); // remove beginning spaces
-
 // getting the name of the matrix
 string name = newString.substr(0,1);
 
@@ -209,9 +216,16 @@ for(int i = 0 ; i < rows ; i ++)
 
    this -> name = name;
 
+
+   //To print or not
+
+
+ if( inputString[inputString.length()-1] != ';' )
+    print_matrix();
+
 }
 
-//empty matrix used in result to make it initialed with zero
+//empty matrix
 void matrix::empty_matrix()
 {
 
@@ -223,13 +237,17 @@ void matrix::empty_matrix()
 
 }
 
-void matrix::copy_matrix(matrix& p)
+void matrix::copy_matrix(matrix & p)
 {
-    if(elements) // if it was filled
-        destroy_matrix();
+   destroy_matrix();
+
 
    this -> rows = p.rows;
    this -> columns = p.columns;
+
+
+ if ((rows*columns) == 0) { elements = NULL; return; }
+
 
    //create the matrix
     elements = new double*[rows];
@@ -250,13 +268,20 @@ void matrix::copy_matrix(matrix& p)
 
 void matrix::reset_matrix(int rows, int columns)
 {
+    destroy_matrix();
+
     this -> rows = rows;
     this -> columns = columns;
+
+     if ((rows*columns) == 0) { elements = NULL; return; }
+
     this -> elements = new double*[rows];
     for(int i=0;i<rows;i++)
     {
         this -> elements[i] = new double[columns];
     }
+
+    empty_matrix();
 
 }
 
@@ -264,7 +289,7 @@ void matrix::reset_matrix(int rows, int columns)
 
 void matrix::print_matrix()
 {
-    if(this->elements == nullptr) //to prevent crash
+    if(this->elements == NULL) //to prevent crash
         cout << "this matrix is not created" <<endl;
     else
     cout << this->name << " = " << endl;
@@ -276,113 +301,337 @@ void matrix::print_matrix()
 	}
 }
 
+// generate a sub matrix, it won't crash
+matrix matrix::new_sub_matrix(int row)
+{
+  matrix *temp = new matrix((this->rows)-1,(this->columns)-1);
+  for(int i=0;i<(temp->rows);i++)
+  {
+    int flag = 0;
+    if(i >= row){
+      flag = 1;
+    }
+    for(int k=0;k<(temp->columns);k++)
+    {
+      temp->elements[i][k] = this->elements[i+flag][k+1];
+    }
+  }
+  return *temp;
+}
 
- matrix matrix :: operator = (matrix &p)
- {
-     copy_matrix(p);
-     return *this;
+// measure the determinant of the matrix, it will crash if the number of rows != num of colums
+double matrix::determinant()
+{
+  double result = 0.0;
+  if(this->rows == 2)
+  {
+    result = ((this->elements[0][0])*(this->elements[1][1]))
+            - ((this->elements[0][1])*(this->elements[1][0]));
+    return result;
+  }
+  for(int i=0;i<(this->rows);i++)
+  {
+    matrix temp = this->new_sub_matrix(i);
+    result += (temp.determinant())*pow(-1,i)*this->elements[i][0];
+  }
+  return result;
+}
 
- }
+//flips the rows and columns , it won't crash
+void matrix::flip_matrix()
+{
+  matrix temp(this->columns, this->rows);
+  for(int i=0;i< temp.rows;i++)
+  {
+    for(int k=0;k< temp.columns;k++)
+    {
+      temp.elements[i][k] = this->elements[k][i];
+    }   
+  }
+  std::string name = this->name;
+  this->copy_matrix(temp);
+  this->name = name;
+}
+
+// divide matrix A over B , it won't crash if the rows != columns so make sure you operate with the right data
+matrix matrix::inverse()
+{
+  matrix *temp = new matrix;
+  temp->copy_matrix(*this);
+  double det = temp->determinant();
+  temp->flip_matrix();
+  for (int i = 0; i < temp->rows; i++)
+  {
+    temp->elements[i][i] = (temp->elements[i][i]) * -1;
+  }
+  multiply_num(*temp, (1/det), *temp);
+  return *temp;
+}
+
+// divide number B over matrix A , it will crash if the number of rows != num of colums
+void divide_num_over_matrix(matrix &A, double B , matrix &C)
+{
+  matrix a = A.inverse();
+  multiply_num(a, B , C);
+}
+
+// divide matrix A over B , it will crash if the number of rows != num of colums or if the 2 matrix don't match
+void divide_matrix(matrix &A, matrix &B , matrix &C)
+{
+  matrix b = B.inverse();
+  multiply_matrix(A, b , C);
+}
 
  //sum of two matrix
- 
-  matrix sum_matrix(matrix &A, matrix &B)
+  void sum_matrix(matrix &A, matrix &B , matrix &C)
  {
-	 matrix result(A.rows, A.columns);
-	 if (A.rows != B.rows  && A.columns != B.columns)cout << "error sizing" << endl;
-	
+	 if (A.rows != B.rows ||  A.columns != B.columns)cout << "error sizing" << endl;
+
 	 else {
+            matrix result(A.rows,A.columns);
+            C = result;
 			 for (int i = 0; i < A.rows; i++)
 			 {
 				 for (int j = 0; j < A.columns; j++)
-					 result.elements[i][j] = A.elements[i][j] + B.elements[i][j];
+					 C.elements[i][j] = A.elements[i][j] + B.elements[i][j];
 			 }
 	      }
-	 return result;
+
  }
-
-  // sum_matrix operator
-  matrix matrix:: operator + (matrix & p) // A + B = C
-  {
-	 return sum_matrix(*this,p);
-  }
-
 
 
 
 // sub of two matrix
-  matrix sub_matrix(matrix &A, matrix &B)
-  {
-	  matrix result(A.rows, A.columns);
-	  if (A.rows != B.rows  && A.columns != B.columns)cout << "error sizing" << endl;
-	 
-	  else {
-		  for (int i = 0; i < A.rows; i++)
-		     {
-			  for (int j = 0; j < A.columns; j++)
-				  result.elements[i][j] = A.elements[i][j] - B.elements[i][j]; 
-		     }
-	       }
-	  return result;
-  }
-  matrix matrix:: operator - (matrix & p) // A - B = C
-  {
-	  return sub_matrix(*this, p);
-  }
+void sub_matrix(matrix &A, matrix &B , matrix &C)
+ {
+
+	 if (A.rows != B.rows  ||  A.columns != B.columns)cout << "error sizing" << endl;
+
+	 else {
+
+             matrix result(A.rows,A.columns);
+             C = result;
+			 for (int i = 0; i < A.rows; i++)
+			 {
+				 for (int j = 0; j < A.columns; j++)
+					 C.elements[i][j] = A.elements[i][j] - B.elements[i][j];
+			 }
+	      }
+
+ }
+
+
+
+ // matrix matrix:: operator - (matrix & p) // A - B = C
+  //{
+  //return sub_matrix(*this, p);
+  //}
 
 
 
   //sum of matrix and number
-
-  matrix sum_num(matrix &A, int B)
+  void sum_num(matrix &A, double B, matrix &C)
   {
+	  matrix result(A.rows, A.columns);
+
+	  C = result;
+
+	  for (int i = 0; i < A.rows; i++)
+	  {
+		  for (int j = 0; j < A.columns; j++)
+			  C.elements[i][j] = A.elements[i][j] + B;
+	  }
+
+  }
+
+
+
+  //multiply of matrix and number
+  void multiply_num(matrix &A, double B, matrix &C)
+{
 	  matrix result(A.rows, A.columns);
 
 	  for (int i = 0; i < A.rows; i++)
 	  {
 		  for (int j = 0; j < A.columns; j++)
-			  result.elements[i][j] = A.elements[i][j] + B;
+			  result.elements[i][j] = A.elements[i][j] * B;
 	  }
+    C = result;
 
-	  return result;
-  }
+}
 
-  // sum_num operator
-  matrix matrix:: operator + (int p) // A + B = C
-  {
-	  return sum_num(*this, p);
-  }
- 
-  matrix operator + (int a , matrix &p) // A + B = C
-  {
-	  return sum_num(p,a);
-  }
 
   //sub of matrix and number
-
-  matrix sub_num(matrix &A, int B)
+  void sub_num(matrix &A, double B, matrix &C)
   {
 	  matrix result(A.rows, A.columns);
+
+	  C = result;
 
 	  for (int i = 0; i < A.rows; i++)
 	  {
 		  for (int j = 0; j < A.columns; j++)
-			  result.elements[i][j] = A.elements[i][j] - B;
+			  C.elements[i][j] = A.elements[i][j] - B;
 	  }
 
-	  return result;
   }
 
-  // sub_num operator
-  matrix matrix:: operator - (int p) // A - number = C
+
+
+void multiply_matrix(matrix &A, matrix &B , matrix &C)
+{
+
+    if (A.columns!=B.rows)
+        cout << "error columns of first is not equal rows of the second" << endl;
+        //Or whatever the doctor says
+
+     else
+     {
+
+     matrix result(A.rows,B.columns);
+     C = result;
+
+    // Multiplying and store in r
+     for (int i=0;i<A.rows;i++){
+        for (int j=0;j<B.columns;j++){
+            for (int k=0;k<A.columns;k++){
+                C.elements[i][j] += A.elements[i][k]*B.elements[k][j];
+            }
+        }
+    }
+
+     }
+}
+
+
+
+
+// ************************ Operators ************************* //
+//Copy
+ matrix matrix :: operator = (matrix  p)
+ {
+     copy_matrix(p);
+     return *this; // this line calls the copy constructor
+ }
+
+
+// sum_matrix
+  matrix matrix:: operator + (matrix p) // A + B = C
   {
-	  return sub_num(*this, p);
+     matrix result(this->rows,this -> columns);
+     sum_matrix((*this),p , result);
+	 return result;
   }
 
-  matrix operator - (int a, matrix &p) // number - A = C
+
+ matrix matrix:: operator - (matrix p) // A + B = C
   {
-	  return sub_num(p, a);
+     matrix result(this->rows,this -> columns);
+     sub_matrix((*this),p , result);
+	 return result;
   }
+
+matrix matrix :: operator + (double p)// A + number = C
+{
+     matrix result(this->rows,this -> columns);
+     sum_num((*this),p , result);
+	 return result;
+
+}
+
+
+
+matrix matrix :: operator - (double p)// A + number = C
+{
+     matrix result(this->rows,this -> columns);
+     sub_num((*this),p , result);
+	 return result;
+
+}
+
+
+
+matrix operator + (double a, matrix p)
+{
+
+     matrix result(p.rows, p.columns);
+     sum_num(p,a , result);
+	 return result;
+
+
+}
+
+
+matrix operator - (double a, matrix p)
+{
+
+     matrix result(p.rows, p.columns);
+     p=-p;
+     sum_num(p,a , result);
+	 return result;
+
+}
+
+matrix operator - (matrix p)
+{
+    matrix result(p.rows,p.columns);
+
+    multiply_num(p,-1,result);
+    return result;
+}
+
+
+matrix matrix :: operator * (matrix p) //C=A*B
+{
+    matrix result(this -> rows , p.columns);
+    multiply_matrix((*this),  p , result);
+
+    return result;
+
+}
+
+matrix matrix :: operator * (double p) //C=A*B
+{
+    matrix result(this->rows , this-> columns);
+    multiply_num(*this,p,result);
+    return result;
+}
+
+
+
+matrix operator * (double a, matrix p) // A = double * A
+{
+    matrix result(p.rows , p.columns);
+    multiply_num(p,a,result);
+    return result;
+}
+
+//C=A/B it will crash if the number of rows != num of colums or if the 2 matrix don't match
+matrix matrix :: operator / (matrix p) 
+{
+    matrix result(this -> rows , p.columns);
+    divide_matrix((*this),  p , result);
+
+    return result;
+
+}
+
+matrix matrix :: operator / (double p) //C=A/p
+{
+    matrix result(this->rows , this-> columns);
+    multiply_num(*this,(1/p),result);
+    return result;
+}
+
+//it will crash if the number of rows != num of colums
+matrix operator / (double a, matrix p) // C = a / p
+{
+    matrix result(p.rows , p.columns);
+    divide_num_over_matrix(p,a,result);
+    return result;
+}
+
+
 
 
 
@@ -418,28 +667,48 @@ string space_trimer(string text)
 
 }
 
-matrix matrix::operator * (matrix& m){
-    if (this->columns!=m.rows)
-      //Or whatever the doctor says
-        cout << "error columns of first is not equal rows of the second" << endl;
-    matrix r(this->rows,m.columns);
 
-    //initializing elements of matrix r=0
-    for (int i=0;i<this->rows;i++){
-        for (int j=0;j<m.columns;j++){
-            r.elements[rows][columns]=0;
-        }
-    }
+/*matrix matrix :: sum_matrix(matrix &A)
+{
+     matrix result(this->rows , this -> columns);
+	 if (A.rows != this ->rows  || A.columns != this ->columns)cout << "error sizing" << endl;
 
-
-    // Multiplying and store in r
-     for (int i=0;i<this->rows;i++){
-        for (int j=0;j<m.columns;j++){
-            for (int k=0;k<this->columns;k++){
-                r.elements[rows][columns] += this->elements[rows][k]*m.elements[k][columns];
-            }
-        }
-    }
-    return r;
+	 else {
+			 for (int i = 0; i < A.rows; i++)
+			 {
+				 for (int j = 0; j < A.columns; j++)
+					result.elements[i][j] =  this ->elements[i][j] + A.elements[i][j];
+			 }
+	      }
+	 return result;
+}
+void matrix:: operator += (matrix& A)
+{
+ sum_matrix(A);
 }
 
+
+
+//   sub_num operator
+  matrix matrix:: operator - (int p) // A - number = C
+  {
+	  return sub_num(*this, p);
+  }
+
+  matrix operator - (int a, matrix &p) // number - A = C
+  {
+	  return sub_num(p, a);
+  }
+
+// sum_num operator
+  matrix matrix:: operator + (int p) // A + B = C
+  {
+  return sum_num(*this, p);
+  }
+
+  matrix operator + (int a , matrix &p) // A + B = C
+  {
+	  return sum_num(p,a);
+  }
+
+*/
