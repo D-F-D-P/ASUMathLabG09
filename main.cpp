@@ -1,61 +1,50 @@
-#include "matrix.h"
+
 #include <iostream>
 #include <string>
-
-
-
+#include <fstream>
+#include "math_lab.h"
+#include "matrix.h"
+#include "dynamic_array_matrix.h"
+#define MATRIX array_matrix.get_matrix()
 using namespace std;
+
+
+
 
 int main()
 {
-   //Test code
-
-   string testString = " A = [2 3 1;3 7 10;4 9 5];";
-   string test2 = "B = [1 7 21; 4.4 5 10; 1 5 1]";
-
-   matrix m;
-   m.fill_matrix(testString);
-  // m.print_matrix();
-
-   matrix m2;
-   m2.fill_matrix(test2);
+    math_lab our_math_lab;
+    our_math_lab.load_file("D:\\projects\\nadertest\\bin\\Debug\\matrix_file.txt");
 
 
-    matrix m3;
 
-    m3 = m*m2; //A
+	getchar();
 
-   m3.print_matrix();
-   cout<<endl<<"determinant : "<<m3.determinant()<<endl;
-
-   matrix m4 = m3.inverse();//B = 1/A
-
-   m4 = m3 * m4; // A*B = A/A
-
-   m4.print_matrix();
-
-   matrix m5 = m3 / m3 /2;// A/A/2
-
-   m5.print_matrix();
-
-   m4 = m3.inverse();// B = 1/A
-
-   m4 = 2*m4;
-
-   m4.print_matrix();
-
-   m4 = 2 / m3;// B = 2/A
-
-   m4.print_matrix();
-
-   // m3.inverse().print_matrix();
-
-   
-   // m3.new_sub_matrix(0).print_matrix();
-   // cout<<m3.new_sub_matrix(0).determinant()<<endl;
-   // m3.new_sub_matrix(1).print_matrix();
-   // cout<<m3.new_sub_matrix(1).determinant()<<endl;
-   // m3.new_sub_matrix(2).print_matrix();
-   // cout<<m3.new_sub_matrix(2).determinant()<<endl;
-return 0;
+	return 0;
 }
+ /* //Test code
+   dynamic_array_matrix array_matrix;
+   int index=0;
+  std::ifstream infile;
+	string input_string;
+	string* operations;
+	infile.open("D:\\projects\\nadertest\\bin\\Debug\\matrix_file.txt");
+	while(!infile.eof())
+	{
+	getline(infile,input_string);
+
+
+    if(input_string.find('[') != -1)
+    {
+       MATRIX[index].fill_matrix(input_string);
+        index++;
+    }
+
+    else
+        {
+         //   operations = decode(input_string);
+
+        }
+	}
+	MATRIX[2]=MATRIX[0]+MATRIX[1];
+	 array_matrix.print();*/
