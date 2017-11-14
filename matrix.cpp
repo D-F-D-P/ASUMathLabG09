@@ -136,13 +136,13 @@ void matrix::destroy_matrix()
  {
 
 
+
         for (int i = 0; i < rows; i++)
         {
             delete[] elements [i]; //deletes an inner array of integer;
         }
         delete[] elements; //delete pointer holding array of pointers;
-
-
+   
     elements =NULL;
     rows = 0;
     columns =0;
@@ -302,11 +302,14 @@ void matrix::print_matrix()
 }
 
 // generate a sub matrix, it won't crash
+
 matrix matrix::new_sub_matrix(int row, int column)
+
 {
   matrix *temp = new matrix((this->rows)-1,(this->columns)-1);
   for(int i=0;i<(temp->rows);i++)
   {
+
     int flagRows = 0;
     if(i >= row){
       flagRows = 1;
@@ -318,6 +321,7 @@ matrix matrix::new_sub_matrix(int row, int column)
         flagColumns = 1;
       }
       temp->elements[i][k] = this->elements[i+flagRows][k+flagColumns];
+
     }
   }
   return *temp;
