@@ -1,12 +1,12 @@
 # ASU Math Lab
 
 
-+##Overview
-+Implement mathematical library software. Similar
++## Overview
++ Implement mathematical library software. Similar
 to Matlab, Octave and similar tools.
 
 
-+##Project Specifications
++## Project Specifications
 
  +- Using C/C++
  +- Development under linux
@@ -53,11 +53,11 @@ to Matlab, Octave and similar tools.
 
 
 
-+##TEAM
-+Youmna Ebrahim
-+Youmna Jehad
-+Youmna Mahmoud
-+Younan Nagy
-+Youssef Mohamed
-+Youssef Ahmed
-+Nader Yasser
++## TEAM
++ Youmna Ebrahim
++ Youmna Jehad
++ Youmna Mahmoud
++ Younan Nagy
++ Youssef Mohamed
++ Youssef Ahmed
++ Nader Yasser
