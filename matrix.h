@@ -28,7 +28,6 @@ public:
     int get_columns();
     std::string get_name();
 
-
     //sets
     void set_name(std::string name);
     void resize_matrix(int rows, int columns);//updates num of rows and columns and updates the elements array
@@ -39,10 +38,8 @@ public:
     void empty_matrix(); // make all the elements of the array = 0;
     void destroy_matrix();
     void print_matrix();
-
     void reset_matrix(int rows, int columns); //reset dimentions
     void copy_matrix(matrix &p);
-
     matrix new_sub_matrix(int row, int column); // generate a sub matrix, it won't crash
     double determinant(); // measure the determinant of the matrix, it will crash if the number of rows != num of colums
     void flip_matrix(); //flips the rows and columns , it won't crash
@@ -73,6 +70,7 @@ public:
     matrix operator / (matrix p); //C=A/B it will crash if the number of rows != num of colums or if the 2 matrix don't match
     matrix operator / (double p); //C=A/p
     friend matrix operator / (double a, matrix p); //it will crash if the number of rows != num of colums
+
 
 
 };

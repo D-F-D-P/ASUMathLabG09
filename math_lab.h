@@ -17,4 +17,5 @@ class math_lab
 
 };
  string trim_spaces(string right_string);
+ string trim_r(string right_string);
 #endif
