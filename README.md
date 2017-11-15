@@ -1,4 +1,4 @@
-                        #ASU Math Lab
+                        ##ASU Math Lab
 
 
  ## Overview
@@ -17,7 +17,7 @@ to Matlab, Octave and similar tools.
 
 
 
- ##Phases
+##Phases
 + 1. Core operations 
 + 2. Advanced Operations and Tuning 
 + 3. Advanced system operations
@@ -27,7 +27,7 @@ to Matlab, Octave and similar tools.
 
 
 
-+
+
  ##Phase 1: Core Operations
 + > A = [1.4 2.2 3.2; 4.4 5.4 6.4; 3.3 4.2 2.2];
 + > B = [1.5 4.1 5.4; 3.1 4.2 1.2; 3.2 4.3 2.2];
