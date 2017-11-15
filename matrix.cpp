@@ -2,6 +2,10 @@
 #include <iostream>
 #include <cstdlib>
 #include <math.h>
+<<<<<<< HEAD
+=======
+#include <iomanip>
+>>>>>>> d30dcece09b1dacf0b02def69c19411fececf368
 
 using namespace std;
 /*attach your libraries here*/
@@ -166,13 +170,20 @@ void matrix::fill_matrix_cl()
 
 void matrix::fill_matrix(string inputString)
 {
-string newString = space_trimer(inputString); // remove beginning spaces
+//cout << inputString << "no" << endl;
+string newString = space_trimer(inputString); // remove spaces
+//cout << newString << "no"<< endl;
+
 // getting the name of the matrix
 string name = newString.substr(0,1);
 
 // to remove brackets
 int bracketFinder = newString.find("[",0);
-string newString2 = newString.substr(bracketFinder+1, newString.length()-bracketFinder-3);
+string newString2;
+if( newString[newString.length()-1] != ';' )
+newString2 = newString.substr(bracketFinder+1, newString.length()-bracketFinder-2);
+else
+newString2 = newString.substr(bracketFinder+1, newString.length()-bracketFinder-3);
 
 
 int rows;
@@ -218,9 +229,7 @@ for(int i = 0 ; i < rows ; i ++)
 
 
    //To print or not
-
-
- if( inputString[inputString.length()-1] != ';' )
+ if( newString[newString.length()-1] != ';' )
     print_matrix();
 
 }
@@ -265,7 +274,6 @@ void matrix::copy_matrix(matrix & p)
 
 }
 
-
 void matrix::reset_matrix(int rows, int columns)
 {
     destroy_matrix();
@@ -294,8 +302,9 @@ void matrix::print_matrix()
     else
     cout << this->name << " = " << endl;
 	for(int i=0;i<rows;i++){
+        cout << "\t";
 		for(int j=0;j<columns;j++){
-			cout<<elements[i][j]<<"\t";
+			std::cout << std::fixed << std::setprecision(4) << elements[i][j] <<"\t  "; //4 digits like matlab :D
 		}
 		cout<<endl;
 	}
@@ -350,7 +359,7 @@ void matrix::flip_matrix()
     for(int k=0;k< temp.columns;k++)
     {
       temp.elements[i][k] = this->elements[k][i];
-    }   
+    }
   }
   std::string name = this->name;
   this->copy_matrix(temp);
@@ -366,7 +375,7 @@ matrix matrix::inverse()
   int flag = 1;
   for (int i = 0; i < temp->columns; i++)
   {
-    flag = pow(-1,i);
+      flag = pow(-1,i);
     for (int k = 0; k < temp->rows; k++)
     {
       temp->elements[k][i] = (this->new_sub_matrix(k,i)).determinant() * flag;
@@ -398,8 +407,8 @@ void divide_matrix(matrix &A, matrix &B , matrix &C)
 	 if (A.rows != B.rows ||  A.columns != B.columns)cout << "error sizing" << endl;
 
 	 else {
-            matrix result(A.rows,A.columns);
-            C = result;
+           // matrix result(A.rows,A.columns);
+           // C = result;
 			 for (int i = 0; i < A.rows; i++)
 			 {
 				 for (int j = 0; j < A.columns; j++)
@@ -410,47 +419,35 @@ void divide_matrix(matrix &A, matrix &B , matrix &C)
  }
 
 
-
 // sub of two matrix
 void sub_matrix(matrix &A, matrix &B , matrix &C)
  {
-
-	 if (A.rows != B.rows  ||  A.columns != B.columns)cout << "error sizing" << endl;
+	 if ( (A.rows != B.rows  ||  A.columns != B.columns ) )
+        cout << "error sizing" << endl;
 
 	 else {
 
-             matrix result(A.rows,A.columns);
-             C = result;
 			 for (int i = 0; i < A.rows; i++)
 			 {
 				 for (int j = 0; j < A.columns; j++)
 					 C.elements[i][j] = A.elements[i][j] - B.elements[i][j];
 			 }
 	      }
-
  }
-
-
-
- // matrix matrix:: operator - (matrix & p) // A - B = C
-  //{
-  //return sub_matrix(*this, p);
-  //}
 
 
 
   //sum of matrix and number
   void sum_num(matrix &A, double B, matrix &C)
   {
-	  matrix result(A.rows, A.columns);
 
-	  C = result;
 
 	  for (int i = 0; i < A.rows; i++)
 	  {
 		  for (int j = 0; j < A.columns; j++)
 			  C.elements[i][j] = A.elements[i][j] + B;
 	  }
+
 
   }
 
@@ -459,14 +456,13 @@ void sub_matrix(matrix &A, matrix &B , matrix &C)
   //multiply of matrix and number
   void multiply_num(matrix &A, double B, matrix &C)
 {
-	  matrix result(A.rows, A.columns);
 
 	  for (int i = 0; i < A.rows; i++)
 	  {
 		  for (int j = 0; j < A.columns; j++)
-			  result.elements[i][j] = A.elements[i][j] * B;
+			  C.elements[i][j] = A.elements[i][j] * B;
 	  }
-    C = result;
+
 
 }
 
@@ -474,9 +470,7 @@ void sub_matrix(matrix &A, matrix &B , matrix &C)
   //sub of matrix and number
   void sub_num(matrix &A, double B, matrix &C)
   {
-	  matrix result(A.rows, A.columns);
 
-	  C = result;
 
 	  for (int i = 0; i < A.rows; i++)
 	  {
@@ -497,9 +491,6 @@ void multiply_matrix(matrix &A, matrix &B , matrix &C)
 
      else
      {
-
-     matrix result(A.rows,B.columns);
-     C = result;
 
     // Multiplying and store in r
      for (int i=0;i<A.rows;i++){
@@ -526,7 +517,7 @@ void multiply_matrix(matrix &A, matrix &B , matrix &C)
 
 
 // sum_matrix
-  matrix matrix:: operator + (matrix p) // A + B = C
+  matrix matrix:: operator + (matrix p) //C = A + C
   {
      matrix result(this->rows,this -> columns);
      sum_matrix((*this),p , result);
@@ -554,9 +545,8 @@ matrix matrix :: operator + (double p)// A + number = C
 matrix matrix :: operator - (double p)// A + number = C
 {
      matrix result(this->rows,this -> columns);
-     sub_num((*this),p , result);
+     sub_num((*this), p , result);
 	 return result;
-
 }
 
 
@@ -617,7 +607,7 @@ matrix operator * (double a, matrix p) // A = double * A
 }
 
 //C=A/B it will crash if the number of rows != num of colums or if the 2 matrix don't match
-matrix matrix :: operator / (matrix p) 
+matrix matrix :: operator / (matrix p)
 {
     matrix result(this -> rows , p.columns);
     divide_matrix((*this),  p , result);
@@ -646,6 +636,8 @@ matrix operator / (double a, matrix p) // C = a / p
 
 
 // Global Functions
+
+//count number of chars in a string
 int number_of(int e, string s,string c)
 {
 int N=0;
@@ -660,29 +652,27 @@ for (int i=0;i<=e;i++)
 }
 
 
+
+
+//to trim spaces from the begin and end of a text
 string space_trimer(string text)
 {
-        int spaceCounter = 0;
+
+        // to trim extra start spaces
+        int spaceStarter = 0;
 
         while(1)
         {
-        if(text.substr(spaceCounter,1) == " ")
+        if(text.substr(spaceStarter,1) == " ")
         {
-            spaceCounter ++;
+            spaceStarter++;
         }
         else break;
         }
 
-   return text.substr(spaceCounter,text.length() - spaceCounter);
+        string start_trimed = text.substr(spaceStarter,text.length() - spaceStarter);
 
-}
-
-
-/*matrix matrix :: sum_matrix(matrix &A)
-{
-     matrix result(this->rows , this -> columns);
-	 if (A.rows != this ->rows  || A.columns != this ->columns)cout << "error sizing" << endl;
-
+<<<<<<< HEAD
 	 else {
 			 for (int i = 0; i < A.rows; i++)
 			 {
@@ -709,16 +699,27 @@ void matrix:: operator += (matrix& A)
   {
 	  return sub_num(p, a);
   }
+=======
+        // to trim extra ending spaces
+        spaceStarter = start_trimed.length()-1;
+        int counter = 0;
+        while(1)
+        {
+        if(start_trimed.substr(spaceStarter,1) == " ")
+        {
+            counter ++;
+            spaceStarter--;
+        }
+        else break;
+        }
+        string all_trimed = start_trimed.substr(0, start_trimed.length() - counter);
+>>>>>>> d30dcece09b1dacf0b02def69c19411fececf368
 
-// sum_num operator
-  matrix matrix:: operator + (int p) // A + B = C
-  {
-  return sum_num(*this, p);
-  }
+     return all_trimed ;
 
-  matrix operator + (int a , matrix &p) // A + B = C
-  {
-	  return sum_num(p,a);
-  }
+}
 
+<<<<<<< HEAD
 */
+=======
+>>>>>>> d30dcece09b1dacf0b02def69c19411fececf368
