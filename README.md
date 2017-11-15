@@ -1,5 +1,4 @@
-## ASU Math Lab
-
+![MATREX](https://lh3.googleusercontent.com/TCeafyUJirsmHL77LFwy7GcGxSQhbp4PdMy1oHbHQstN4yqYh4JVVFeoMixJ2QLp1T2F-WG0RiOLNI1QU9oI83rk7v8onQTF3smOkx-3vDkjJ2jvSqG_9Iac-6ROXnNKnu7tnNWsTgsJrZb3R3uxOCHF-aZ_wYLxzRmH5VC2ViGOWSWq5FlebDmkwXojswYAMW8yLmc6tOKmES_UHEguAVIgK_Eon1vi2zogbSbg1vQjgLNwMu5Y20omT4dRCNNsaRvg7K7u9P3BgyzQKhlGkd5cAAp4SjomlbbPOpWktSCOLo_7jvbqMT1jjp2IOtUaE0Jsy04WdJwxj847vx7mEpJbaT_RVVvPLxCWOi2yUHBgoxabM3IZpLZyesZBWv0ArZjGq4OOZkWkikL1fGO5oEIFg50cjc4rg9ILDq6zHDifNMnsr6ZrUbUygaCdNZKG9fmGEHtFWmNRP8P1UuNR_q7vHcUmsynoU16iNLQZ91dQTPpjUoWxnF0gOXePVWJWfc4FZmHqiKKHCubLdpA9xH0ymkHqv4pg4kYWKQOamWvZAOHsUUofQT3HNleFz6a9kIuh0kM4VwPDJhMRTbKw1GgdZVLC9hkOKvMSTEzaCBq1O7bQFZfKtp1rocaKlNWirpAnYsj3Z5UOO2sqzyRbFmdTWX_qvNS2miE=w900-h500-no)
 
  ## Overview
  Implement mathematical library software. Similar
@@ -37,7 +36,7 @@ to Matlab, Octave and similar tools.
 + > D = A - B
 + > E = A * B
 + > F = A / B
-+ > G = A’
++ > G = Aâ€™
 
 
 
