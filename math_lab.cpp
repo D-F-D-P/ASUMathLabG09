@@ -3,6 +3,40 @@
 #define MATRIX array_matrix.get_matrix()
 using namespace std;
 
+//---------------------------------------------------------------------------------------------//trim spaces & \r 
+string trim_r(string right_string)
+{
+      if(right_string.find('\r')==-1)//recursion base case
+        {
+           return right_string;
+        }
+
+    string left_string="";
+
+      int i=right_string.find('\r')+1;
+
+   left_string=right_string.substr(0,i-1);
+
+        return left_string+trim_spaces(right_string.substr(i,right_string.length()-1));
+
+}
+// --------------------------------------------------------------------------------------------------------------------------------- //
+string trim_n(string right_string)
+{
+      if(right_string.find('\n')==-1)//recursion base case
+        {
+           return right_string;
+        }
+
+    string left_string="";
+
+      int i=right_string.find('\n')+1;
+
+   left_string=right_string.substr(0,i-1);
+
+        return left_string+trim_spaces(right_string.substr(i,right_string.length()-1));
+
+}
 //----------------------------------------------------------------------------------------------//trim spaces fun->public fun
 string trim_spaces(string right_string)
 {
@@ -94,13 +128,13 @@ void math_lab::decode(string operation)
     }
      else if(operation[operator1]=='\'')
     {
-            MATRIX[st]=MATRIX[nd].inverse();
+            MATRIX[st]=MATRIX[nd];
+            MATRIX[st].flip_matrix();
           if(!print_)
         {
             MATRIX[st].print_matrix();
         }
     }
-    array_matrix.print();
     return;
 }
 //-----------------------------------------------------------------------------------------------//load_file
@@ -108,11 +142,13 @@ void math_lab:: load_file(string file_path)
   {
         array_matrix.set_size(10);
 
-        std::ifstream infile;
+       // std::ifstream infile;
         string data_string;
         string operation_string;
-        infile.open(file_path);
+        //infile.open(file_path);
+	std:: ifstream infile(file_path.c_str());
         while(!infile.eof())
+	//while(getline(infile,data_string))
         {
         getline(infile,data_string);
 
@@ -130,12 +166,19 @@ void math_lab:: load_file(string file_path)
         else
         {
             operation_string=trim_spaces(data_string);
+			operation_string=trim_r(operation_string);
+if(operation_string=="")
+continue;
+
+		//operation_string=trim_n(operation_string);
             //cout<<operation_string;
             decode(operation_string);
 
+
         }
 
         }
+        infile.close();
     return;
   }
 //----------------------------------------------------------------------------------------------------//open_commands
