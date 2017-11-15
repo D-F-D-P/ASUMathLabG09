@@ -8,19 +8,19 @@ to Matlab, Octave and similar tools.
 
  ## Project Specifications
 
- + - Using C/C++
- + - Development under linux
- + - Production to linux server (Centos 6.7)
- + - g++ compiler
+  - Using C/C++
+  - Development under linux
+  - Production to linux server (Centos 6.7)
+  - g++ compiler
 
 
 
 
 
 ##Phases
-+ 1. Core operations 
-+ 2. Advanced Operations and Tuning 
-+ 3. Advanced system operations
+ 1. Core operations 
+ 2. Advanced Operations and Tuning 
+ 3. Advanced system operations
 
 
 
