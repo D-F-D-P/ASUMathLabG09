@@ -137,13 +137,13 @@ void matrix::destroy_matrix()
  {
 
 
+
         for (int i = 0; i < rows; i++)
         {
             delete[] elements [i]; //deletes an inner array of integer;
         }
         delete[] elements; //delete pointer holding array of pointers;
-
-
+   
     elements =NULL;
     rows = 0;
     columns =0;
@@ -308,11 +308,21 @@ void matrix::print_matrix()
 }
 
 // generate a sub matrix, it won't crash
+<<<<<<< HEAD
 matrix matrix::new_sub_matrix(int row, int column)
+=======
+
+matrix matrix::new_sub_matrix(int row, int column)
+
+>>>>>>> ecddb00ec3e37d60e9a7c7871f1db1c6b09f586d
 {
   matrix *temp = new matrix((this->rows)-1,(this->columns)-1);
   for(int i=0;i<(temp->rows);i++)
   {
+<<<<<<< HEAD
+=======
+
+>>>>>>> ecddb00ec3e37d60e9a7c7871f1db1c6b09f586d
     int flagRows = 0;
     if(i >= row){
       flagRows = 1;
@@ -324,6 +334,10 @@ matrix matrix::new_sub_matrix(int row, int column)
         flagColumns = 1;
       }
       temp->elements[i][k] = this->elements[i+flagRows][k+flagColumns];
+<<<<<<< HEAD
+=======
+
+>>>>>>> ecddb00ec3e37d60e9a7c7871f1db1c6b09f586d
     }
   }
   return *temp;
@@ -372,7 +386,11 @@ matrix matrix::inverse()
   int flag = 1;
   for (int i = 0; i < temp->columns; i++)
   {
+<<<<<<< HEAD
       flag = pow(-1,i);
+=======
+    flag = pow(-1,i);
+>>>>>>> ecddb00ec3e37d60e9a7c7871f1db1c6b09f586d
     for (int k = 0; k < temp->rows; k++)
     {
       temp->elements[k][i] = (this->new_sub_matrix(k,i)).determinant() * flag;
