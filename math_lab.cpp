@@ -165,12 +165,12 @@ void math_lab:: load_file(string file_path)
         }
         else
         {
-            operation_string=trim_spaces(data_string);
+                        operation_string=trim_spaces(data_string);
 			operation_string=trim_r(operation_string);
 if(operation_string=="")
 continue;
 
-		//operation_string=trim_n(operation_string);
+	    //operation_string=trim_n(operation_string);
             //cout<<operation_string;
             decode(operation_string);
 
@@ -202,7 +202,11 @@ void math_lab::open_command()
         else
         {
             operation_string=trim_spaces(data_string);
+            operation_string=trim_r(operation_string);
+if(operation_string=="")
+continue;
             decode(operation_string);
+
         }
     }
     return;
