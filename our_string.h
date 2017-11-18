@@ -12,5 +12,5 @@ public:
 	string trim(string right_string,char c);
 	int find_str (string input ,char a,int& howmany,int start);
 	int find_2str(string input,char a,char b,int start);
-	bool is_number_2 (string c , double & number );
+	bool is_number (string c , double & number );
 };
