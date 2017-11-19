@@ -2,7 +2,7 @@
 using namespace std;
 
 
-our_string our_string:: trim(string right_string,char c)
+string our_string:: trim(string right_string,char c)
 {
 	if(right_string.find(c)==-1)
         {
