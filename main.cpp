@@ -1,4 +1,3 @@
-//Write your function here
 double** subtract_matrix(int** A, int** B, int rows, int columns)
 {
 	double** result = createEmptyMatrix(rows, columns);
