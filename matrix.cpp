@@ -3,9 +3,12 @@
 #include <cstdlib>
 #include <math.h>
 #include <iomanip>
+#include <string>
+#include <algorithm>
 
 using namespace std;
 /*attach your libraries here*/
+
 
 /*
 	attach your function here and make sure
@@ -43,7 +46,7 @@ matrix::matrix(int rows, int columns)
         elements[i] = new double[columns];
     }
 
-    empty_matrix();
+    //empty_matrix();
 
 }
 
@@ -53,6 +56,7 @@ matrix::matrix(const matrix& p)
 
    this -> rows = p.rows;
    this -> columns = p.columns;
+
 
 
  if ((rows*columns) == 0) { elements = NULL; return; }
@@ -167,9 +171,10 @@ void matrix::fill_matrix_cl()
 
 void matrix::fill_matrix(string inputString)
 {
-//cout << inputString << "no" << endl;
+
+
 string newString = space_trimer(inputString); // remove spaces
-//cout << newString << "no"<< endl;
+
 
 // getting the name of the matrix
 string name = newString.substr(0,1);
@@ -186,6 +191,12 @@ newString2 = newString.substr(bracketFinder+1, newString.length()-bracketFinder-
 int rows;
 int columns;
 rows = number_of(newString2.length(),newString2, ";") + 1;
+
+// new Edit ...
+if( newString[newString.length()-3] == ';' )
+    rows --;
+
+
 
 // substring the string into row
 int beginRow = 0 ; // position of a row starting
@@ -245,12 +256,13 @@ void matrix::empty_matrix()
 
 void matrix::copy_matrix(matrix & p)
 {
+    string name = this->name;
    destroy_matrix();
 
 
    this -> rows = p.rows;
    this -> columns = p.columns;
-
+    this -> name = name;
 
  if ((rows*columns) == 0) { elements = NULL; return; }
 
@@ -286,7 +298,7 @@ void matrix::reset_matrix(int rows, int columns)
         this -> elements[i] = new double[columns];
     }
 
-    empty_matrix();
+  //  empty_matrix();
 
 }
 
@@ -299,9 +311,31 @@ void matrix::print_matrix()
     else
     cout << this->name << " = " << endl;
 	for(int i=0;i<rows;i++){
-        cout << "\t";
 		for(int j=0;j<columns;j++){
-			std::cout << std::fixed << std::setprecision(4) << elements[i][j] <<"\t  "; //4 digits like matlab :D
+
+            switch(number_digits(elements[i][j]))
+           {
+
+            case 1:
+			std::cout <<"    \t" << std::fixed << std::setprecision(4) << elements[i][j] ; //4 digits like matlab :D
+			break;
+
+            case 2:
+		    std::cout <<"   \t" << std::fixed << std::setprecision(4) << elements[i][j] ;//4 digits like matlab :D
+			break;
+
+			case 3:
+		    std::cout <<"  \t" << std::fixed << std::setprecision(4) << elements[i][j]; //4 digits like matlab :D
+			break;
+
+			case 4:
+		    std::cout <<" \t" << std::fixed << std::setprecision(4) << elements[i][j]; //4 digits like matlab :D
+			break;
+
+			default:
+            std::cout <<"\t" << std::fixed << std::setprecision(4) << elements[i][j]; //4 digits like matlab :D
+           }
+
 		}
 		cout<<endl;
 	}
@@ -364,18 +398,22 @@ void matrix::flip_matrix()
 }
 
 // divide matrix A over B , it won't crash if the rows != columns so make sure you operate with the right data
+
+
+
 matrix matrix::inverse()
 {
   matrix *temp = new matrix;
   temp->copy_matrix(*this);
-  double det = temp->determinant();
+  double det = temp->get_determinant();
+  //determinant();
   int flag = 1;
   for (int i = 0; i < temp->columns; i++)
   {
       flag = pow(-1,i);
     for (int k = 0; k < temp->rows; k++)
     {
-      temp->elements[k][i] = (this->new_sub_matrix(k,i)).determinant() * flag;
+      temp->elements[k][i] = (this->new_sub_matrix(k,i)).get_determinant() * flag;
       flag *= -1;
     }
   }
@@ -384,12 +422,35 @@ matrix matrix::inverse()
   return *temp;
 }
 
-// divide number B over matrix A , it will crash if the number of rows != num of colums
-void divide_num_over_matrix(matrix &A, double B , matrix &C)
+void matrix:: unity_matrix()
 {
-  matrix a = A.inverse();
-  multiply_num(a, B , C);
+    if ( rows != columns || rows ==0 || columns==0 )
+        return;
+
+for(int i = 0 ; i < rows ; i++)
+        for(int j=0 ; j < columns ; j++)
+            if(i == j)
+            elements[i][j] = 1;
+        else
+            elements[i][j] = 0;
 }
+
+bool is_equal(matrix &A , matrix &B)
+{
+
+    if (A.rows != B.rows || A.columns!= B.columns)
+        return false;
+
+    for(int i = 0 ; i < A.rows ; i++ )
+        for(int j = 0 ; j < A.columns ; j++)
+        if(A.elements[i][j]!=B.elements[i][j])
+      return false;
+
+    return true;
+
+}
+
+
 
 // divide matrix A over B , it will crash if the number of rows != num of colums or if the 2 matrix don't match
 void divide_matrix(matrix &A, matrix &B , matrix &C)
@@ -404,8 +465,7 @@ void divide_matrix(matrix &A, matrix &B , matrix &C)
 	 if (A.rows != B.rows ||  A.columns != B.columns)cout << "error sizing" << endl;
 
 	 else {
-           // matrix result(A.rows,A.columns);
-           // C = result;
+
 			 for (int i = 0; i < A.rows; i++)
 			 {
 				 for (int j = 0; j < A.columns; j++)
@@ -431,6 +491,10 @@ void sub_matrix(matrix &A, matrix &B , matrix &C)
 			 }
 	      }
  }
+
+
+
+
 
 
 
@@ -502,74 +566,72 @@ void multiply_matrix(matrix &A, matrix &B , matrix &C)
 }
 
 
-
-
 // ************************ Operators ************************* //
-//Copy
- matrix matrix :: operator = (matrix  p)
+//Copy cant be reference
+ matrix matrix :: operator = (matrix m)
  {
-     copy_matrix(p);
+     copy_matrix(m);
      return *this; // this line calls the copy constructor
  }
 
 
 // sum_matrix
-  matrix matrix:: operator + (matrix p) //C = A + C
+  matrix matrix:: operator + (matrix &m) //C = A + B
   {
      matrix result(this->rows,this -> columns);
-     sum_matrix((*this),p , result);
+     sum_matrix((*this),m , result);
 	 return result;
   }
 
 
- matrix matrix:: operator - (matrix p) // A + B = C
+ matrix matrix:: operator - (matrix &m) // A - B = C
   {
      matrix result(this->rows,this -> columns);
-     sub_matrix((*this),p , result);
+     sub_matrix((*this),m , result);
 	 return result;
   }
 
-matrix matrix :: operator + (double p)// A + number = C
+matrix matrix :: operator + (double a)// C = m + a
 {
      matrix result(this->rows,this -> columns);
-     sum_num((*this),p , result);
+     sum_num((*this),a , result);
 	 return result;
 
 }
 
 
 
-matrix matrix :: operator - (double p)// A + number = C
+matrix matrix :: operator - (double a)// C = m -a
 {
      matrix result(this->rows,this -> columns);
-     sub_num((*this), p , result);
+     sub_num((*this), a , result);
 	 return result;
 }
 
 
 
-matrix operator + (double a, matrix p)
+matrix operator + (double a, matrix &m) //a+m
 {
 
-     matrix result(p.rows, p.columns);
-     sum_num(p,a , result);
+     matrix result(m.rows, m.columns);
+     sum_num(m,a , result);
 	 return result;
 
 
 }
 
 
-matrix operator - (double a, matrix p)
+matrix operator - (double a, matrix &m) // a-m
 {
 
-     matrix result(p.rows, p.columns);
-     p=-p;
-     sum_num(p,a , result);
+     matrix result(m.rows, m.columns);
+     m=-m;
+     sum_num(m,a , result);
 	 return result;
 
 }
 
-matrix operator - (matrix p)
+matrix operator - (matrix &p) // A = -A
 {
     matrix result(p.rows,p.columns);
 
@@ -578,56 +640,87 @@ matrix operator - (matrix p)
 }
 
 
-matrix matrix :: operator * (matrix p) //C=A*B
+matrix matrix :: operator * (matrix &m) //C=A*B
 {
-    matrix result(this -> rows , p.columns);
-    multiply_matrix((*this),  p , result);
-
+    matrix result(m.rows , m.columns);
+    multiply_matrix((*this),m, result);
     return result;
 
 }
 
-matrix matrix :: operator * (double p) //C=A*B
+matrix matrix :: operator * (double a) //C=m*a
 {
     matrix result(this->rows , this-> columns);
-    multiply_num(*this,p,result);
+    multiply_num(*this,a,result);
     return result;
 }
 
 
 
-matrix operator * (double a, matrix p) // A = double * A
+matrix operator * (double a, matrix &m) // C = a * m
 {
-    matrix result(p.rows , p.columns);
-    multiply_num(p,a,result);
+    matrix result(m.rows , m.columns);
+    multiply_num(m,a,result);
     return result;
 }
 
 //C=A/B it will crash if the number of rows != num of colums or if the 2 matrix don't match
-matrix matrix :: operator / (matrix p)
+matrix matrix :: operator / (matrix &m)
 {
-    matrix result(this -> rows , p.columns);
-    divide_matrix((*this),  p , result);
+
+
+    matrix result(m.rows , m.columns);
+    if(is_equal((*this) , m))
+    result.unity_matrix();
+    else
+    divide_matrix((*this), m , result);
 
     return result;
 
 }
 
-matrix matrix :: operator / (double p) //C=A/p
+matrix matrix :: operator / (double a) //C = m/a
 {
     matrix result(this->rows , this-> columns);
-    multiply_num(*this,(1/p),result);
+    multiply_num(*this,(1/a),result);
     return result;
 }
 
-//it will crash if the number of rows != num of colums
-matrix operator / (double a, matrix p) // C = a / p
+matrix operator / (double a, matrix &m) // C = a / m
 {
-    matrix result(p.rows , p.columns);
-    divide_num_over_matrix(p,a,result);
+    matrix result(m.rows,m.columns);
+    multiply_num(m,(1/a),result);
     return result;
 }
 
+//TEST WALEED ...
+matrix matrix::get_cofactor(int r,int c)
+{
+    if(rows<=1 && columns<=1);//throw("Invalid matrix dimension");
+    matrix m(rows-1, columns-1);
+    for(int iR=0;iR<m.rows;iR++)
+        for(int iC=0;iC<m.columns;iC++)
+          {
+            int sR = (iR<r)?iR:iR+1;
+            int sC = (iC<c)?iC:iC+1;
+            m.elements[iR][iC] = elements[sR][sC];
+          }
+    return m;
+
+}
+double matrix::get_determinant()
+{
+    if(rows!=columns);//throw("Invalid matrix dimension");
+    if(rows==1&&columns==1)return elements[0][0];
+    double value = 0, m = 1;
+    for(int iR=0;iR<rows;iR++)
+    {
+        value+= m * elements[0][iR] * get_cofactor(0, iR).get_determinant();
+        m *= -1;
+    }
+    return value;
+
+}
 
 
 
@@ -647,8 +740,6 @@ for (int i=0;i<=e;i++)
     return N;
 
 }
-
-
 
 
 //to trim spaces from the begin and end of a text
@@ -684,6 +775,18 @@ string space_trimer(string text)
         string all_trimed = start_trimed.substr(0, start_trimed.length() - counter);
 
      return all_trimed ;
+
+}
+
+//to find a number of digits in a float digits ( 1322.12 returns 4 ) max 6 digits
+int number_digits(float input)
+{
+if (input < 10) return 1;
+if (input < 100) return 2;
+if (input < 1000) return 3;
+if (input < 10000) return 4;
+if (input < 100000) return 5;
+if (input < 1000000) return 6;
 
 }
 
