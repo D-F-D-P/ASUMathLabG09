@@ -234,6 +234,8 @@ char* infix_to_reverse_polish(char *infix)
 		j++;
 	}
 
+	temp[j] = '\0';
+
 	return temp;
 }
 
@@ -462,6 +464,7 @@ Node* reverse_polish_to_float(char *reverse_polish)
 					j++;
 				}
 			}
+			word[j] = '\0';
 			//cout<<"size:"<<i-temp+1<<" "<<word<<endl;
 			Node *tempNode;
 			if(is_Matrix)
@@ -481,28 +484,19 @@ Node* reverse_polish_to_float(char *reverse_polish)
 
 int main()
 {
-	//char infix[] = "--(1800+515+1/(500*12/(1515-15232)+(21)+[500]))+(1800+515+1/(500*12/(1515-15232)+(21)+[500]))"; //or "5+152*./263[255]"
-	//char *temp = infix_to_reverse_polish(infix);
-	// for (int i = 0; temp[i] != '\0'; ++i)
-	// {
-	// 	cout<<endl<<temp[i]<<endl;
-	// }
-	//cout<<temp<<endl;
-	//cout<<reverse_polish_to_float(temp)<<endl;
 	string testString = "m = [1.4 2.2 3.2 1;4.4 5.4 6.4 2;3.3 4.2 2 3;1 2 3 4];";
-   	m.fill_matrix(testString);
-   	cout<<endl;
-   	m.print_matrix();
-   	cout<<endl<<"operation : "<<"-m-1-55-2+2*m/(5+7)/2/(-m-1-55-2+2*m/(5+7)/2)/2*-m-1-55-2+2*m/(5+7)/2"<<endl;
+    m.fill_matrix(testString);
+ 	m.print_matrix();
+    cout<<endl<<"operation : "<<"-m+50-m+50-m+50-m+50-m+50-m+50/122131+51+1619/(-m+50-m+50-m+50-m+50-m+50-m+50/122131+51+1619)"<<endl;
    	/*the first print*/
    	matrix r;
-   	r = -m-1-55-2+2*m/(5+7)/2/(-m-1-55-2+2*m/(5+7)/2)/2*-m-1-55-2+2*m/(5+7)/2;
+   	/*try to uncomment this*/
+   	//r = -m+50-m+50-m+50-m+50-m+50-m+50/122131+51+1619/(-m+50-m+50-m+50-m+50-m+50-m+50/122131+51+1619);
    	cout<<endl<<"compiler parsing output : ";
    	r.print_matrix();
    	/*the second print*/
-   	char infix[] = "-m-1-55-2+2*m/(5+7)/2/(-m-1-55-2+2*m/(5+7)/2)/2*-m-1-55-2+2*m/(5+7)/2";
+   	char infix[] = "-m+50-m+50-m+50-m+50-m+50-m+50/122131+51+1619/(-m+50-m+50-m+50-m+50-m+50-m+50/122131+51+1619)";
 	char *temp = infix_to_reverse_polish(infix);
-	//cout<<temp;
 	cout<<endl<<"myfunction parsing output : ";
 	if(reverse_polish_to_float(temp)->type() == 1)
 	{
