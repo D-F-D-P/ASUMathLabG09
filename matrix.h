@@ -39,11 +39,18 @@ public:
     void destroy_matrix();
     void print_matrix();
     void reset_matrix(int rows, int columns); //reset dimentions
+    void sum(matrix *A , matrix *B);
     void copy_matrix(matrix &p);
     matrix new_sub_matrix(int row, int column); // generate a sub matrix, it won't crash
     double determinant(); // measure the determinant of the matrix, it will crash if the number of rows != num of colums
     void flip_matrix(); //flips the rows and columns , it won't crash
     matrix inverse(); // divide matrix A over B , it won't crash if the rows != columns so make sure you operate on the right data
+    void unity_matrix();
+
+    //TEST WALEED ...
+    double get_determinant();
+    matrix get_cofactor(int r, int c);
+
 
 	//Friend functions
     friend void sum_matrix(matrix &A, matrix &B , matrix &C); // to sum two matrix C = A+B
@@ -53,24 +60,23 @@ public:
     friend void sum_num(matrix &A, double B , matrix &C); // to sum matrix and number
 	friend void sub_num(matrix &A, double B , matrix &C); // to sub matrix and number
 	friend void multiply_num(matrix &A, double B , matrix &C); // to sub matrix and number
-    friend void divide_num_over_matrix(matrix &A, double B , matrix &C); // divide number B over matrix A , it will crash if the number of rows != num of colums
+    friend bool is_equal(matrix &A , matrix &B);
 
     //Operators
-    matrix operator = (matrix  p); // A = B = C
-	matrix operator + (matrix  p);// A + B = C
-	matrix operator - (matrix  p);// A - B = C
-	matrix operator + (double p);// A + number = C
-	friend matrix operator + (double a, matrix p);// number + A = C
-	matrix operator - (double p);// A - number = C
-	friend matrix operator - (double a, matrix p);// number + A = C
-	matrix operator * (matrix p);
-	matrix operator * (double p); // C= A * number
-	friend matrix operator * (double a, matrix p); // A = number * A
-	friend matrix operator - (matrix p); // A = -A
-    matrix operator / (matrix p); //C=A/B it will crash if the number of rows != num of colums or if the 2 matrix don't match
-    matrix operator / (double p); //C=A/p
-    friend matrix operator / (double a, matrix p); //it will crash if the number of rows != num of colums
-
+    matrix operator = (matrix  m); // A = B = C
+    friend matrix operator - (matrix &m); // C = -A
+	matrix operator + (matrix  &m);// C = A + B
+	matrix operator + (double a);// C =  A + number
+	friend matrix operator + (double a, matrix &m);// C = number + A
+	matrix operator - (matrix  &m);// C = A - B
+	matrix operator - (double a);// C = A - number
+	friend matrix operator - (double a, matrix &m); // C = number - A
+	matrix operator * (matrix &m); // C = A + B
+	matrix operator * (double a); // C= A * number
+	friend matrix operator * (double a, matrix &m); // C = number * A
+    matrix operator / (matrix &m); //C= A/B it will crash if the number of rows != num of colums or if the 2 matrix don't match
+    matrix operator / (double a); //C= A/number
+    friend matrix operator / (double a, matrix &m); //C=number/A
 
 
 };
@@ -78,6 +84,6 @@ public:
 //global functions
 std::string space_trimer(std::string text); // remove extra spaces from beginning of a text
 int number_of(int e, std::string s,std::string c); // count the number of special char in a text
-
+int number_digits(float input); //count number of digits
 
 #endif // MATRIX_H
