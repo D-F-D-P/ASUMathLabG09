@@ -589,6 +589,15 @@ void sub_matrix(matrix &A, matrix &B , matrix &C)
   }
 
 
+void div_num(matrix &A, double B , matrix &C) // to divide matrix and number
+
+{
+    for (int i = 0; i < A.rows; i++)
+	  {
+		  for (int j = 0; j < A.columns; j++)
+			  C.elements[i][j] = B / A.elements[i][j];
+	  }
+}
 
 void multiply_matrix(matrix &A, matrix &B , matrix &C)
 {
@@ -711,7 +720,7 @@ matrix operator * (double a, matrix &m) // C = a * m
     return result;
 }
 
-//C=A/B it will crash if the number of rows != num of colums or if the 2 matrix don't match
+
 matrix matrix :: operator / (matrix &m)
 {
 
@@ -742,11 +751,11 @@ matrix matrix :: operator / (double a) //C = m/a
 matrix operator / (double a, matrix &m) // C = a / m
 {
     matrix result(m.rows,m.columns);
-    multiply_num(m,(1/a),result);
+    div_num(m,a,result);
     return result;
 }
 
-//TEST WALEED ...
+//WALEED ...
 matrix matrix::get_cofactor(int r,int c)
 {
     if(rows<=1 && columns<=1);//throw("Invalid matrix dimension");

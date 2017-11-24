@@ -1,5 +1,7 @@
-
+#include <limits>
 #include "math_lab.h"
+#include <cstdlib>
+#include <algorithm>
 #define MATRIX array_matrix.get_matrix()
 using namespace std;
 
@@ -21,7 +23,7 @@ string trim_r(string right_string)
 
 }
 // --------------------------------------------------------------------------------------------------------------------------------- //
-string trim_n(string right_string)
+/*string trim_n(string right_string)
 {
       if(right_string.find('\n')==-1)//recursion base case
         {
@@ -36,7 +38,7 @@ string trim_n(string right_string)
 
         return left_string+trim_spaces(right_string.substr(i,right_string.length()-1));
 
-}
+}*/
 //----------------------------------------------------------------------------------------------//trim spaces fun->public fun
 string trim_spaces(string right_string)
 {
@@ -93,7 +95,6 @@ void math_lab::decode(string operation)
     st= array_matrix.find_matrix(first_operand);
        nd=array_matrix.find_matrix(second_operand);
        th=array_matrix.find_matrix(third_operand);
-  // cout<<endl<<second_operand<<third_operand<<first_operand;
     if(operation[operator1]=='+')
     {
        MATRIX[st]=MATRIX[nd]+MATRIX[th];
@@ -118,7 +119,7 @@ void math_lab::decode(string operation)
             MATRIX[st].print_matrix();
         }
     }
-     else if( operation[operator1]=='/'  && operation[operator1-1]!='.')
+    else if( operation[operator1]=='/'  && operation[operator1-1]!='.')
     {
             MATRIX[st]=MATRIX[nd]/MATRIX[th];
           if(!print_)
@@ -136,17 +137,15 @@ void math_lab::decode(string operation)
         }
     }
 
-
-    else if(operation[operator1-1]=='.')
-	{   float number = strtof((second_operand).c_str(),0);
+	else if(operation[operator1-1]=='.')
+	{       float number = strtof((second_operand).c_str(),0);
 		MATRIX[st] = number / MATRIX[th];
 		if(!print_)
         {
             MATRIX[st].print_matrix();
         }
 	}
-
-    else
+	else
 	{
 		cout<<"invalid operator"<<endl;
 		  return;
@@ -159,18 +158,15 @@ void math_lab:: load_file(string file_path)
   {
         array_matrix.set_size(10);
 
-       // std::ifstream infile;
-        string data_string;
-        string operation_string;
-        //infile.open(file_path);
-	std:: ifstream infile(file_path.c_str());
+        string data_string="";
+        string operation_string="";
+	    std:: ifstream infile(file_path.c_str());
         while(!infile.eof())
-	//while(getline(infile,data_string))
         {
         getline(infile,data_string);
-
-
-        if(data_string.find('[') != -1)
+        data_string.erase(std::remove(data_string.begin(),data_string.end(), '\r'), data_string.end());
+       
+ if((data_string.find('[',0) != -1)&&(data_string.find(']') != -1))// op
         {
 
            MATRIX[array_matrix.valid_size].fill_matrix(data_string);
@@ -180,6 +176,28 @@ void math_lab:: load_file(string file_path)
                 array_matrix.set_size(array_matrix.valid_size+5);
             }
         }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		else if((data_string.find('[') != -1)&&(data_string.find(']') == -1))
+		{string temps;
+
+			while(temps.find(']') == -1)
+			{
+				getline(infile,temps);
+				data_string+=temps;/// <<<<
+			}
+data_string.erase(std::remove(data_string.begin(),data_string.end(), '\n'), data_string.end());
+data_string.erase(std::remove(data_string.begin(),data_string.end(), '\r'), data_string.end());
+
+		 MATRIX[array_matrix.valid_size].fill_matrix(data_string);
+			array_matrix.valid_size++;
+			 if (array_matrix.valid_size==array_matrix.get_size())
+            {
+                array_matrix.set_size(array_matrix.valid_size+5);
+            }
+		}
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+
+
         else
         {
                         operation_string=trim_spaces(data_string);
@@ -187,8 +205,6 @@ void math_lab:: load_file(string file_path)
 if(operation_string=="")
 continue;
 
-	    //operation_string=trim_n(operation_string);
-            //cout<<operation_string;
             decode(operation_string);
 
 

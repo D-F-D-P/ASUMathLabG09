@@ -60,7 +60,7 @@ public:
     friend void sum_num(matrix &A, double B , matrix &C); // to sum matrix and number
 	friend void sub_num(matrix &A, double B , matrix &C); // to sub matrix and number
 	friend void multiply_num(matrix &A, double B , matrix &C); // to multiply matrix and number
-    friend void div_num(matrix &A, double B , matrix &C); // to sub matrix and number
+    friend void div_num(matrix &A, double B , matrix &C); // to divide matrix and number
     friend bool is_equal(matrix &A , matrix &B);
 
     //Operators
