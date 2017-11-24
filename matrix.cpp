@@ -402,8 +402,9 @@ void matrix::flip_matrix()
 
 
 matrix matrix::inverse()
-
 {
+    matrix* temp = new matrix;
+    *temp = *this;
     matrix u(rows,columns);
     u.unity_matrix();
     int n = rows;
@@ -412,12 +413,12 @@ matrix matrix::inverse()
     for(i=n-1;i>0;i--)
     {
         //if(a[i-1][1]<=a[i][1])
-        if (elements[i-1][i-1]==0)
+        if (temp -> elements[i-1][i-1]==0)
         for(j=0;j<n;j++)
         {
-            d=elements[i][j];
-            elements[i][j]=elements[i-1][j];
-            elements[i-1][j]=d;
+            d=temp -> elements[i][j];
+            temp -> elements[i][j]=temp -> elements[i-1][j];
+            temp -> elements[i-1][j]=d;
             d=u.elements[i][j];
             u.elements[i][j]=u.elements[i-1][j];
             u.elements[i-1][j]=d;
@@ -428,24 +429,25 @@ matrix matrix::inverse()
         for(j=0;j<n;j++)
         if(j!=i)
         {
-            d=elements[j][i]/elements[i][i];
+            d=temp -> elements[j][i]/temp -> elements[i][i];
             for(k=0;k<n;k++)
             {
-                elements[j][k]-=elements[i][k]*d;
+                temp -> elements[j][k]-=temp -> elements[i][k]*d;
                 u.elements[j][k]-=u.elements[i][k]*d;
             }
         }
     }
     for(i=0;i<n;i++)
     {
-    d=elements[i][i];
+    d=temp -> elements[i][i];
         for(j=0;j<n;j++)
         {
-            elements[i][j]=elements[i][j]/d;
+            temp -> elements[i][j]=temp -> elements[i][j]/d;
             u.elements[i][j]=u.elements[i][j]/d;
         }
     }
     return u;
+
 
 
   /*matrix *temp = new matrix;
@@ -464,9 +466,7 @@ matrix matrix::inverse()
   }
   temp->flip_matrix();
   multiply_num(*temp, (1/det), *temp);
-
   return *temp;*/
-
 }
 
 void matrix:: unity_matrix()
@@ -612,15 +612,6 @@ void multiply_matrix(matrix &A, matrix &B , matrix &C)
      }
 }
 
-void div_num(matrix &A, double B , matrix &C) // to sub matrix and number
-{
-
-	  for (int i = 0; i < A.rows; i++)
-	  {
-		  for (int j = 0; j < A.columns; j++)
-			  C.elements[i][j] = B / A.elements[i][j] ;
-	  }
-}
 
 // ************************ Operators ************************* //
 //Copy cant be reference
@@ -751,7 +742,7 @@ matrix matrix :: operator / (double a) //C = m/a
 matrix operator / (double a, matrix &m) // C = a / m
 {
     matrix result(m.rows,m.columns);
-    div_num(m,a,result);
+    multiply_num(m,(1/a),result);
     return result;
 }
 
@@ -771,8 +762,10 @@ matrix matrix::get_cofactor(int r,int c)
 
 }
 double matrix::get_determinant()
-
 {
+    matrix *temp = new matrix;
+    *temp = *this;
+
     double result = 1;
     int n = rows;
     int i,j,k;
@@ -780,12 +773,12 @@ double matrix::get_determinant()
     for(i=n-1;i>0;i--)
     {
         //if(a[i-1][1]<=a[i][1])
-        if (elements[i-1][i-1]==0)
+        if (temp -> elements[i-1][i-1]==0)
         for(j=0;j<n;j++)
         {
-            d=elements[i][j];
-            elements[i][j]=elements[i-1][j];
-            elements[i-1][j]=d;
+            d=temp -> elements[i][j];
+            temp -> elements[i][j]=temp -> elements[i-1][j];
+            temp -> elements[i-1][j]=d;
         }
     }
     for(i=0;i<n;i++)
@@ -793,16 +786,16 @@ double matrix::get_determinant()
         for(j=0;j<n;j++)
         if(j!=i)
         {
-            d=elements[j][i]/elements[i][i];
+            d=temp -> elements[j][i]/temp -> elements[i][i];
             for(k=0;k<n;k++)
             {
-                elements[j][k]-=elements[i][k]*d;
+                temp -> elements[j][k]-=temp -> elements[i][k]*d;
             }
         }
     }
     for (i = 0 ; i < n ; i++)
     {
-        result *= elements[i][i];
+        result *= temp -> elements[i][i];
     }
     return result;
 
@@ -810,7 +803,6 @@ double matrix::get_determinant()
 
 
    /* if(rows!=columns);//throw("Invalid matrix dimension");
-
     if(rows==1&&columns==1)return elements[0][0];
     double value = 0, m = 1;
     for(int iR=0;iR<rows;iR++)
@@ -818,9 +810,7 @@ double matrix::get_determinant()
         value+= m * elements[0][iR] * get_cofactor(0, iR).get_determinant();
         m *= -1;
     }
-
     return value;*/
-
 
 }
 
@@ -889,8 +879,6 @@ if (input < 1000) return 3;
 if (input < 10000) return 4;
 if (input < 100000) return 5;
 if (input < 1000000) return 6;
-
-else return 0;
 
 }
 
