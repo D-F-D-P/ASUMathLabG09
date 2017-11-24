@@ -402,6 +402,7 @@ void matrix::flip_matrix()
 
 
 matrix matrix::inverse()
+
 {
     matrix u(rows,columns);
     u.unity_matrix();
@@ -463,7 +464,9 @@ matrix matrix::inverse()
   }
   temp->flip_matrix();
   multiply_num(*temp, (1/det), *temp);
+
   return *temp;*/
+
 }
 
 void matrix:: unity_matrix()
@@ -716,10 +719,12 @@ matrix matrix :: operator / (matrix &m)
     matrix result(m.rows , m.columns);
     if(is_equal((*this) , m))
     result.unity_matrix();
+
     else if (m.get_determinant() == 0 || isnan(m.get_determinant()))
     {
         cout << "Error determinant = 0" <<endl;
     }
+
     else
     divide_matrix((*this), m , result);
 
@@ -757,6 +762,7 @@ matrix matrix::get_cofactor(int r,int c)
 
 }
 double matrix::get_determinant()
+
 {
     double result = 1;
     int n = rows;
@@ -795,6 +801,7 @@ double matrix::get_determinant()
 
 
    /* if(rows!=columns);//throw("Invalid matrix dimension");
+
     if(rows==1&&columns==1)return elements[0][0];
     double value = 0, m = 1;
     for(int iR=0;iR<rows;iR++)
@@ -802,7 +809,9 @@ double matrix::get_determinant()
         value+= m * elements[0][iR] * get_cofactor(0, iR).get_determinant();
         m *= -1;
     }
+
     return value;*/
+
 
 }
 
