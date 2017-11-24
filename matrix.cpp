@@ -612,6 +612,15 @@ void multiply_matrix(matrix &A, matrix &B , matrix &C)
      }
 }
 
+void div_num(matrix &A, double B , matrix &C) // to sub matrix and number
+{
+
+	  for (int i = 0; i < A.rows; i++)
+	  {
+		  for (int j = 0; j < A.columns; j++)
+			  C.elements[i][j] = B / A.elements[i][j] ;
+	  }
+}
 
 // ************************ Operators ************************* //
 //Copy cant be reference
@@ -742,7 +751,7 @@ matrix matrix :: operator / (double a) //C = m/a
 matrix operator / (double a, matrix &m) // C = a / m
 {
     matrix result(m.rows,m.columns);
-    multiply_num(m,(1/a),result);
+    div_num(m,a,result);
     return result;
 }
 
@@ -880,6 +889,8 @@ if (input < 1000) return 3;
 if (input < 10000) return 4;
 if (input < 100000) return 5;
 if (input < 1000000) return 6;
+
+else return 0;
 
 }
 

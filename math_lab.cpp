@@ -3,7 +3,7 @@
 #define MATRIX array_matrix.get_matrix()
 using namespace std;
 
-//---------------------------------------------------------------------------------------------//trim spaces & \r 
+//---------------------------------------------------------------------------------------------//trim spaces & \r
 string trim_r(string right_string)
 {
       if(right_string.find('\r')==-1)//recursion base case
@@ -118,7 +118,7 @@ void math_lab::decode(string operation)
             MATRIX[st].print_matrix();
         }
     }
-    else if(operation[operator1]=='/')
+     else if( operation[operator1]=='/'  && operation[operator1-1]!='.')
     {
             MATRIX[st]=MATRIX[nd]/MATRIX[th];
           if(!print_)
@@ -135,6 +135,23 @@ void math_lab::decode(string operation)
             MATRIX[st].print_matrix();
         }
     }
+
+
+    else if(operation[operator1-1]=='.')
+	{   float number = strtof((second_operand).c_str(),0);
+		MATRIX[st] = number / MATRIX[th];
+		if(!print_)
+        {
+            MATRIX[st].print_matrix();
+        }
+	}
+
+    else
+	{
+		cout<<"invalid operator"<<endl;
+		  return;
+	}
+
     return;
 }
 //-----------------------------------------------------------------------------------------------//load_file
