@@ -403,7 +403,54 @@ void matrix::flip_matrix()
 
 matrix matrix::inverse()
 {
-  matrix *temp = new matrix;
+    matrix* temp = new matrix;
+    *temp = *this;
+    matrix u(rows,columns);
+    u.unity_matrix();
+    int n = rows;
+    int i,j,k;
+    float d;
+    for(i=n-1;i>0;i--)
+    {
+        //if(a[i-1][1]<=a[i][1])
+        if (temp -> elements[i-1][i-1]==0)
+        for(j=0;j<n;j++)
+        {
+            d=temp -> elements[i][j];
+            temp -> elements[i][j]=temp -> elements[i-1][j];
+            temp -> elements[i-1][j]=d;
+            d=u.elements[i][j];
+            u.elements[i][j]=u.elements[i-1][j];
+            u.elements[i-1][j]=d;
+        }
+    }
+    for(i=0;i<n;i++)
+    {
+        for(j=0;j<n;j++)
+        if(j!=i)
+        {
+            d=temp -> elements[j][i]/temp -> elements[i][i];
+            for(k=0;k<n;k++)
+            {
+                temp -> elements[j][k]-=temp -> elements[i][k]*d;
+                u.elements[j][k]-=u.elements[i][k]*d;
+            }
+        }
+    }
+    for(i=0;i<n;i++)
+    {
+    d=temp -> elements[i][i];
+        for(j=0;j<n;j++)
+        {
+            temp -> elements[i][j]=temp -> elements[i][j]/d;
+            u.elements[i][j]=u.elements[i][j]/d;
+        }
+    }
+    return u;
+
+
+
+  /*matrix *temp = new matrix;
   temp->copy_matrix(*this);
   double det = temp->get_determinant();
   //determinant();
@@ -419,7 +466,7 @@ matrix matrix::inverse()
   }
   temp->flip_matrix();
   multiply_num(*temp, (1/det), *temp);
-  return *temp;
+  return *temp;*/
 }
 
 void matrix:: unity_matrix()
@@ -672,6 +719,12 @@ matrix matrix :: operator / (matrix &m)
     matrix result(m.rows , m.columns);
     if(is_equal((*this) , m))
     result.unity_matrix();
+
+    else if (m.get_determinant() == 0 || isnan(m.get_determinant()))
+    {
+        cout << "Error determinant = 0" <<endl;
+    }
+
     else
     divide_matrix((*this), m , result);
 
@@ -710,7 +763,46 @@ matrix matrix::get_cofactor(int r,int c)
 }
 double matrix::get_determinant()
 {
-    if(rows!=columns);//throw("Invalid matrix dimension");
+    matrix *temp = new matrix;
+    *temp = *this;
+
+    double result = 1;
+    int n = rows;
+    int i,j,k;
+    float d;
+    for(i=n-1;i>0;i--)
+    {
+        //if(a[i-1][1]<=a[i][1])
+        if (temp -> elements[i-1][i-1]==0)
+        for(j=0;j<n;j++)
+        {
+            d=temp -> elements[i][j];
+            temp -> elements[i][j]=temp -> elements[i-1][j];
+            temp -> elements[i-1][j]=d;
+        }
+    }
+    for(i=0;i<n;i++)
+    {
+        for(j=0;j<n;j++)
+        if(j!=i)
+        {
+            d=temp -> elements[j][i]/temp -> elements[i][i];
+            for(k=0;k<n;k++)
+            {
+                temp -> elements[j][k]-=temp -> elements[i][k]*d;
+            }
+        }
+    }
+    for (i = 0 ; i < n ; i++)
+    {
+        result *= temp -> elements[i][i];
+    }
+    return result;
+
+
+
+
+   /* if(rows!=columns);//throw("Invalid matrix dimension");
     if(rows==1&&columns==1)return elements[0][0];
     double value = 0, m = 1;
     for(int iR=0;iR<rows;iR++)
@@ -718,7 +810,7 @@ double matrix::get_determinant()
         value+= m * elements[0][iR] * get_cofactor(0, iR).get_determinant();
         m *= -1;
     }
-    return value;
+    return value;*/
 
 }
 

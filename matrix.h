@@ -59,7 +59,8 @@ public:
 	friend void divide_matrix(matrix &A, matrix &B , matrix &C); // divide matrix A over B , it will crash if the number of rows != num of colums or if the 2 matrix don't match
     friend void sum_num(matrix &A, double B , matrix &C); // to sum matrix and number
 	friend void sub_num(matrix &A, double B , matrix &C); // to sub matrix and number
-	friend void multiply_num(matrix &A, double B , matrix &C); // to sub matrix and number
+	friend void multiply_num(matrix &A, double B , matrix &C); // to multiply matrix and number
+    friend void div_num(matrix &A, double B , matrix &C); // to sub matrix and number
     friend bool is_equal(matrix &A , matrix &B);
 
     //Operators
