@@ -1,17 +1,23 @@
-#include "matrix.h"
 #include <iostream>
 #include <string>
-
-
-
+#include <fstream>
+#include "math_lab.h"
+#include "matrix.h"
+#include "dynamic_array_matrix.h"
+#define MATRIX array_matrix.get_matrix()
 using namespace std;
-
-int main()
+int main(int argc, char* argv[])
 {
-   //Test code
-   string testString = "    A = [  1.4 2 333 2; 4.4 7 10 5; 9 45 21 7];";
-   matrix m;
-   m.fill_matrix(testString);
-   m.print_matrix();
-	 return 0;
+
+ math_lab our_math_lab;
+
+ if(argc>1)
+  our_math_lab.load_file(argv[1]);
+
+ else
+  our_math_lab.open_command();
+
+
+	return 0;
+
 }
