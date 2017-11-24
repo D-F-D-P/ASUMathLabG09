@@ -449,6 +449,7 @@ matrix matrix::inverse()
     return u;
 
 
+
   /*matrix *temp = new matrix;
   temp->copy_matrix(*this);
   double det = temp->get_determinant();
@@ -718,10 +719,12 @@ matrix matrix :: operator / (matrix &m)
     matrix result(m.rows , m.columns);
     if(is_equal((*this) , m))
     result.unity_matrix();
+
     else if (m.get_determinant() == 0 || isnan(m.get_determinant()))
     {
         cout << "Error determinant = 0" <<endl;
     }
+
     else
     divide_matrix((*this), m , result);
 
@@ -762,6 +765,7 @@ double matrix::get_determinant()
 {
     matrix *temp = new matrix;
     *temp = *this;
+
     double result = 1;
     int n = rows;
     int i,j,k;
