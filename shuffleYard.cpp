@@ -1,13 +1,14 @@
 #include <iostream>
 #include <stdio.h>
-#include <stdlib.h> 
+#include <stdlib.h>
 #include <math.h>
 #include "matrix.h"
 #include <string>
+#include "AVL.cpp"
 
 using namespace std;
 
-matrix m;
+AVL matrixTree;
 
 class Node
 {
@@ -49,6 +50,7 @@ class MatrixNode : public Node
 {
 	public:
 	matrix* value;
+	bool important;
 	int type()
 	{
 		return 2;
@@ -56,20 +58,27 @@ class MatrixNode : public Node
 	MatrixNode(matrix *value)
 	{
 		this->value = value;
+		this->important = false;
+	}
+	MatrixNode(matrix *value, bool important)
+	{
+		this->value = value;
+		this->important = important;
 	}
 	~MatrixNode()
 	{
-		delete value;
+		if(!important)delete value;
 	}
 };
 
 int get_operator_order(char cur)
 {
-	if(cur == '+' || cur == '-')return 1;
-	if(cur == '*' || cur == '/')return 2;
-	if(cur == '%')return 3;
-	if(cur == '^')return 4;
-	if(cur == '$')return 5;
+	if(cur == '=')return 1;
+	if(cur == '+' || cur == '-')return 2;
+	if(cur == '*' || cur == '/')return 3;
+	if(cur == '%')return 4;
+	if(cur == '^')return 5;
+	if(cur == '$')return 6;
 	if(cur == '(')return 0;
 	if(cur == ')')return 0;
 };
@@ -138,10 +147,20 @@ char* infix_to_reverse_polish(char *infix)
 	int countAll = 0, countVirtual = 0;
 	for (int i = 0; infix[i] != '\0'; ++i)
 	{
-		if(infix[i] != ' ')
+		if(infix[i] == '[')
+		{
+			while(infix[i] != ']')	
+			{
+				countAll++;
+				i++;
+			}
+			countVirtual+=2;
+			countAll++;	
+		}
+		else if(infix[i] != ' ')
 		{
 			countAll++;
-			if(infix[i] == '.' || infix[i] == '*' || infix[i] == '/' || infix[i] == '^' || infix[i] == '+' || infix[i] == '-' || infix[i] == '(' || infix[i] == ')' || infix[i] == ']' || infix[i] == '[')
+			if(infix[i] == '.' || infix[i] == '*' || infix[i] == '/' || infix[i] == '^' || infix[i] == '+' || infix[i] == '-' || infix[i] == '(' || infix[i] == ')' || infix[i] == ']' || infix[i] == '[' || infix[i] == '=')
 			{
 				countVirtual++;
 			}
@@ -159,16 +178,24 @@ char* infix_to_reverse_polish(char *infix)
 			{
 				while(infix[i] != ']')
 				{
-					if(infix[i] != ' ')
-					{
-						temp[j] = infix[i];
-						j++;
-					}
+					temp[j] = infix[i];
 					i++;
+					j++;
 				}
+				temp[j] = ']';
+				j++;
 				flagNegative = true;
 			}
-			if(infix[i] == '.' || infix[i] == '*' || infix[i] == '/' || infix[i] == '^' || infix[i] == '+' || infix[i] == '-' || infix[i] == '(' || infix[i] == ')' || infix[i] == '%')
+			else if(infix[i] == ';'){
+				while(temp_stack->top != NULL)
+				{
+					CharNode *x = (CharNode*)temp_stack->pop();
+					temp[j] = x->value;
+					j++;
+					delete x;
+				}
+			}
+			else if(infix[i] == '.' || infix[i] == '*' || infix[i] == '/' || infix[i] == '^' || infix[i] == '+' || infix[i] == '-' || infix[i] == '(' || infix[i] == ')' || infix[i] == '%' || infix[i] == '=')
 			{
 				flag = false;
 				if(infix[i] == '-' && !flagNegative)infix[i]= '%';
@@ -245,29 +272,38 @@ Node* reverse_polish_to_float(char *reverse_polish)
 	for (int i = 0; reverse_polish[i] != '\0'; ++i)
 	{
 		if(reverse_polish[i] == ';');
+		else if(reverse_polish[i] == '='){
+			MatrixNode *right = (MatrixNode*)temp_stack->pop();
+			MatrixNode *left = (MatrixNode*)temp_stack->pop();
+			*(left->value) = *(right->value);
+			//right->value->print_matrix();
+			delete right;
+		}
 		else if(reverse_polish[i] == '[')
 		{
 			int count = 0;
 			for (int k = i+1; reverse_polish[k] != ']'; ++k)
 			{
-				if(reverse_polish[k] != ' ')
-				{
-					count++;
-				}
+				count++;
 			}
-			char *temp_string = new char[count];
-			int j = 0;
+			char *temp_string = new char[count+4];
+			int j = 2;
+			temp_string[0]='=';
+			temp_string[1]='[';
 			i++;
 			while(reverse_polish[i] != ']')
 			{
-				if(reverse_polish[i] != ' ')
-				{
-					temp_string[j] = reverse_polish[i];
-					j++;
-				}
+				temp_string[j] = reverse_polish[i];
+				j++;
 				i++;
 			}
-			Node *tempNode = new FloatNode(atof(temp_string));
+			temp_string[count+2]=']';
+			temp_string[count+3]=';';
+			temp_string[count+4]='\0';
+			//cout<<temp_string<<endl;
+			matrix *tempMatrix = new matrix;
+			tempMatrix->fill_matrix(temp_string);
+			Node *tempNode = new MatrixNode(tempMatrix);
 			/*temp value*/
 			temp_stack->add(tempNode);
 			delete temp_string;
@@ -439,7 +475,7 @@ Node* reverse_polish_to_float(char *reverse_polish)
 				if(reverse_polish[i] != '\0')
 				{
 					if(reverse_polish[i] == ';' || reverse_polish[i] == '*' || reverse_polish[i] == '/' || reverse_polish[i] == '^' || reverse_polish[i] == '+' || reverse_polish[i] == '-' || reverse_polish[i] == '(' || reverse_polish[i] == ')' || reverse_polish[i] == '$' || reverse_polish[i] == '[' ||
-						reverse_polish[i] == '%')
+						reverse_polish[i] == '%' || reverse_polish[i] == '=')
 					{
 						i--;
 						break;	
@@ -469,43 +505,69 @@ Node* reverse_polish_to_float(char *reverse_polish)
 			Node *tempNode;
 			if(is_Matrix)
 			{
-				matrix*  tempMatrix= new matrix;
-				string testString = "A = [1.4 2.2 3.2 1;4.4 5.4 6.4 2;3.3 4.2 2 3;1 2 3 4];";
-				tempMatrix->fill_matrix(testString);
-				tempNode = new MatrixNode(tempMatrix);
+				matrix*  tempMatrix = matrixTree.find(word);
+				if(tempMatrix != NULL){
+					tempNode = new MatrixNode(tempMatrix, true);
+				}else{
+					matrix* tempMatrix = new matrix(4,4);
+					tempMatrix->unity_matrix();
+					tempMatrix->set_name(word);
+					matrixTree.insert(tempMatrix);
+					tempNode = new MatrixNode(tempMatrix, true);
+				}
 			}else{
 				tempNode = new FloatNode(atof(word));
 			}
 			temp_stack->add(tempNode);
 		}
 	}
-	return temp_stack->pop();
+	if(temp_stack->top != NULL)
+	{
+		return temp_stack->pop();
+	}else{
+		return NULL;
+	}
 }
 
 int main()
 {
-	string testString = "m = [1.4 2.2 3.2 1;4.4 5.4 6.4 2;3.3 4.2 2 3;1 2 3 4];";
-    m.fill_matrix(testString);
- 	m.print_matrix();
-    cout<<endl<<"operation : "<<"-m+50-m+50-m+50-m+50-m+50-m+50/122131+51+1619/(-m+50-m+50-m+50-m+50-m+50-m+50/122131+51+1619)"<<endl;
-   	/*the first print*/
-   	matrix r;
-   	/*try to uncomment this*/
-   	//r = -m+50-m+50-m+50-m+50-m+50-m+50/122131+51+1619/(-m+50-m+50-m+50-m+50-m+50-m+50/122131+51+1619);
-   	cout<<endl<<"compiler parsing output : ";
-   	r.print_matrix();
-   	/*the second print*/
-   	char infix[] = "-m+50-m+50-m+50-m+50-m+50-m+50/122131+51+1619/(-m+50-m+50-m+50-m+50-m+50-m+50/122131+51+1619)";
-	char *temp = infix_to_reverse_polish(infix);
-	cout<<endl<<"myfunction parsing output : ";
-	if(reverse_polish_to_float(temp)->type() == 1)
-	{
-		cout<<endl<<((FloatNode*)reverse_polish_to_float(temp))->value<<endl;
-		/*the third print if the output was float*/
-	}else{
-		/*the second print if the output was matrix*/
-		cout<<endl;
-		((MatrixNode*)reverse_polish_to_float(temp))->value->print_matrix();
-	}
-	cout<<endl;
+   	string str = " ";
+   	while(true)
+   	{
+   		cout<<"> ";
+   		getline(cin, str);
+   		if(str == "exit")break;
+   		if(str == "all")
+   		{
+   			cout<<endl<<"------------------------- Matrix Tree ---------------------------"<<endl;
+			matrixTree.print();
+			continue;
+   		}
+   		int length = str.size();
+	   	char *infix = new char[length+1];
+	   	int i = 0;
+	   	for (; i < length; ++i)
+	   	{
+	   		infix[i]=str[i];
+	   	}
+	   	infix[i] = '\0';
+	   	//cout<<infix;
+		char *temp = infix_to_reverse_polish(infix);
+		//cout<<temp<<endl;
+		Node *result = reverse_polish_to_float(temp);
+		if(result != NULL){
+			if(result->type() == 1)
+			{
+				//cout<<endl<<"myfunction parsing output : ";
+				cout<<((FloatNode*)reverse_polish_to_float(temp))->value;
+				/*the third print if the output was float*/
+			}else{
+				//cout<<endl<<"myfunction parsing output : ";
+				/*the second print if the output was matrix*/
+				((MatrixNode*)reverse_polish_to_float(temp))->value->print_matrix();
+			}
+			cout<<endl;
+		}
+		delete infix;
+   	}
 }
