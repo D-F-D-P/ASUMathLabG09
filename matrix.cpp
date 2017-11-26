@@ -824,7 +824,7 @@ double matrix::get_determinant()
 }
 
 //Function for filling the matrix with ones
-/*
+
 void matrix:: ones(){
 
 	for(int i=0; i<rows; i++){
@@ -833,7 +833,7 @@ void matrix:: ones(){
         }
 	}
 
-}*/
+}
 
 
 
