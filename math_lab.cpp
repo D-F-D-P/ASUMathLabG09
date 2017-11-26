@@ -2,6 +2,9 @@
 #include "math_lab.h"
 #include <cstdlib>
 #include <algorithm>
+
+#include <math.h>
+
 #define MATRIX array_matrix.get_matrix()
 using namespace std;
 
@@ -121,7 +124,12 @@ void math_lab::decode(string operation)
     }
     else if( operation[operator1]=='/'  && operation[operator1-1]!='.')
     {
+
+	  double DET = MATRIX[th].get_determinant();
+	  if (DET != 0 && !isnan(DET))
             MATRIX[st]=MATRIX[nd]/MATRIX[th];
+	  else { print_ =1; cout << "Determinant error (0 or inf)"<< endl;}
+
           if(!print_)
         {
             MATRIX[st].print_matrix();

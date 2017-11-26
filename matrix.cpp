@@ -46,7 +46,9 @@ matrix::matrix(int rows, int columns)
         elements[i] = new double[columns];
     }
 
-    //empty_matrix();
+
+    empty_matrix();
+
 
 }
 
@@ -298,7 +300,9 @@ void matrix::reset_matrix(int rows, int columns)
         this -> elements[i] = new double[columns];
     }
 
-  //  empty_matrix();
+
+    empty_matrix();
+
 
 }
 
@@ -729,10 +733,12 @@ matrix matrix :: operator / (matrix &m)
     if(is_equal((*this) , m))
     result.unity_matrix();
 
-    else if (m.get_determinant() == 0 || isnan(m.get_determinant()))
-    {
-        cout << "Error determinant = 0" <<endl;
-    }
+
+   // else if (m.get_determinant() == 0 || isnan(m.get_determinant()))
+    //{
+      //  cout << "Error determinant = 0" <<endl;
+    //}
+
 
     else
     divide_matrix((*this), m , result);
@@ -890,8 +896,6 @@ string space_trimer(string text)
      return all_trimed ;
 
 }
-
-
 
 //to find a number of digits in a float digits ( 1322.12 returns 4 ) max 6 digits
 int number_digits(float input)
