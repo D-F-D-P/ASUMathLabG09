@@ -80,11 +80,17 @@ public:
     friend matrix operator / (double a, matrix &m); //C=number/A
 
 
+//Phase two Functions
+    void ones(); //Function for filling the matrix with ones
+
+
+
 };
 
 //global functions
 std::string space_trimer(std::string text); // remove extra spaces from beginning of a text
 int number_of(int e, std::string s,std::string c); // count the number of special char in a text
 int number_digits(float input); //count number of digits
+
 
 #endif // MATRIX_H
