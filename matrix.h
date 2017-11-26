@@ -80,7 +80,7 @@ public:
     friend matrix operator / (double a, matrix &m); //C=number/A
 
 //Phase two Functions
-   // void ones(); //Function for filling the matrix with ones
+    void ones(); //Function for filling the matrix with ones
 
 
 };
