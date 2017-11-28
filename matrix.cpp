@@ -829,6 +829,30 @@ double matrix::get_determinant()
 
 }
 
+//Function for filling the matrix with zeros
+
+void matrix:: zeros(){
+
+	for(int i=0; i<rows; i++){
+		for(int j=0; j< columns; j++){
+			elements[i][j]=0;
+        }
+	}
+
+}
+//Function for filling the matrix with random no.
+
+void matrix:: rand(){
+
+	for(int i=0; i<rows; i++){
+		for(int j=0; j< columns; j++){
+			elements[i][j]=(rand()%10) / 10.0;
+        }
+	}
+
+}
+
+
 //Function for filling the matrix with ones
 
 void matrix:: ones(){
