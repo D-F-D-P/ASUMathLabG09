@@ -46,7 +46,9 @@ matrix::matrix(int rows, int columns)
         elements[i] = new double[columns];
     }
 
+
     empty_matrix();
+
 
 }
 
@@ -298,7 +300,9 @@ void matrix::reset_matrix(int rows, int columns)
         this -> elements[i] = new double[columns];
     }
 
+
     empty_matrix();
+
 
 }
 
@@ -729,10 +733,12 @@ matrix matrix :: operator / (matrix &m)
     if(is_equal((*this) , m))
     result.unity_matrix();
 
+
    // else if (m.get_determinant() == 0 || isnan(m.get_determinant()))
     //{
       //  cout << "Error determinant = 0" <<endl;
     //}
+
 
     else
     divide_matrix((*this), m , result);
@@ -822,6 +828,42 @@ double matrix::get_determinant()
         m *= -1;
     }
     return value;*/
+
+}
+
+//Function for filling the matrix with zeros
+
+void matrix:: zeros(){
+
+	for(int i=0; i<rows; i++){
+		for(int j=0; j< columns; j++){
+			elements[i][j]=0;
+        }
+	}
+
+}
+//Function for filling the matrix with random no.
+
+void matrix:: rand(){
+
+	for(int i=0; i<rows; i++){
+		for(int j=0; j< columns; j++){
+			elements[i][j]=(rand()%10) / 10.0;
+        }
+	}
+
+}
+
+
+//Function for filling the matrix with ones
+
+void matrix:: ones(){
+
+	for(int i=0; i<rows; i++){
+		for(int j=0; j< columns; j++){
+			elements[i][j]=1;
+        }
+	}
 
 }
 
