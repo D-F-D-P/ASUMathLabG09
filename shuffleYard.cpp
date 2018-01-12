@@ -8,6 +8,8 @@
 
 using namespace std;
 
+#define PI 3.14159265
+
 AVL matrixTree;
 
 class Node
@@ -80,18 +82,19 @@ int get_operator_order(char cur)
 	if(cur == '*' || cur == '/')return 3;
 	//minus operator
 	if(cur == '%')return 4;
-	if(cur == '^')return 5;
 	//sin operator
 	//cos operator
 	//tan operator
-	if(cur == '<' || cur == '!' || cur == '_')return 7;
+	if(cur == '<' || cur == '!' || cur == '_')return 5;
 	// rand(4,4)
 	// eye(4, 4)
 	// zeros(2, 3)
 	// ones(3, 6)
-	if(cur == '@' || cur == '#' || cur == '?' || cur == ':')return 8;
+	// sqrt()
+	if(cur == '@' || cur == '#' || cur == '?' || cur == ':' || cur == '`')return 6;
+	if(cur == '^')return 7;
 	//print operator
-	if(cur == '>')return 9;
+	if(cur == '>')return 8;
 	if(cur == '(')return 0;
 	if(cur == ')')return 0;
 };
@@ -207,6 +210,13 @@ char* infix_to_reverse_polish(char *infix)
 				i += 2;
 				flag = false;
 				CharNode *x = new CharNode('_');
+				temp_stack->add(x);
+			}
+			//sqrt operation
+			else if(infix[i] == 's' && infix[i+1] == 'q' && infix[i+2] == 'r' && infix[i+3] == 't' && infix[i+4] == '('){
+				i += 3;
+				flag = false;
+				CharNode *x = new CharNode('`');
 				temp_stack->add(x);
 			}
 			//rand operation
@@ -594,14 +604,6 @@ Node* reverse_polish_to_float(char *reverse_polish)
 			delete left;
 			delete right;
 		}
-		else if(reverse_polish[i] == '$')
-		{
-			Node *left = temp_stack->pop();
-			Node *tempNode = new FloatNode(((FloatNode*)(left))->value * -1);
-			/*temp value*/
-			temp_stack->add(tempNode);
-			delete left;
-		}
 		//sin operator
 		else if(reverse_polish[i] == '<')
 		{
@@ -609,7 +611,7 @@ Node* reverse_polish_to_float(char *reverse_polish)
 			Node *tempNode;
 			if(left->type() == 1)
 			{
-				tempNode = new FloatNode(((FloatNode*)(left))->value * -1);
+				tempNode = new FloatNode(sin ( ((FloatNode*)(left))->value * PI/180) );
 			}else{
 				matrix *tempMatrix = new matrix;
 				*tempMatrix = ( *(((MatrixNode*)left)->value) * -1);
@@ -626,7 +628,7 @@ Node* reverse_polish_to_float(char *reverse_polish)
 			Node *tempNode;
 			if(left->type() == 1)
 			{
-				tempNode = new FloatNode(((FloatNode*)(left))->value * -1);
+				tempNode = new FloatNode(cos ( ((FloatNode*)(left))->value * PI/180) );
 			}else{
 				matrix *tempMatrix = new matrix;
 				*tempMatrix = ( *(((MatrixNode*)left)->value) * -1);
@@ -643,7 +645,24 @@ Node* reverse_polish_to_float(char *reverse_polish)
 			Node *tempNode;
 			if(left->type() == 1)
 			{
-				tempNode = new FloatNode(((FloatNode*)(left))->value * -1);
+				tempNode = new FloatNode(tan ( ((FloatNode*)(left))->value * PI/180) );
+			}else{
+				matrix *tempMatrix = new matrix;
+				*tempMatrix = ( *(((MatrixNode*)left)->value) * -1);
+				tempNode = new MatrixNode(tempMatrix);
+			}
+			/*temp value*/
+			temp_stack->add(tempNode);
+			delete left;
+		}
+		//sqrt operator
+		else if(reverse_polish[i] == '`')
+		{
+			Node *left = temp_stack->pop();
+			Node *tempNode;
+			if(left->type() == 1)
+			{
+				tempNode = new FloatNode(sqrt ( ((FloatNode*)(left))->value ) );
 			}else{
 				matrix *tempMatrix = new matrix;
 				*tempMatrix = ( *(((MatrixNode*)left)->value) * -1);
@@ -804,8 +823,8 @@ Node* reverse_polish_to_float(char *reverse_polish)
 				i++;
 				if(reverse_polish[i] != '\0')
 				{
-					if(reverse_polish[i] == ';' || reverse_polish[i] == '*' || reverse_polish[i] == '/' || reverse_polish[i] == '^' || reverse_polish[i] == '+' || reverse_polish[i] == '-' || reverse_polish[i] == '(' || reverse_polish[i] == ')' || reverse_polish[i] == '$' || reverse_polish[i] == '[' ||
-						reverse_polish[i] == '%' || reverse_polish[i] == '=' || reverse_polish[i] == '<' || reverse_polish[i] == '!' || reverse_polish[i] == '_' || reverse_polish[i] == '@' || reverse_polish[i] == '#' || reverse_polish[i] == '?' || reverse_polish[i] == ':' || reverse_polish[i] == '>')
+					if(reverse_polish[i] == ';' || reverse_polish[i] == '*' || reverse_polish[i] == '/' || reverse_polish[i] == '^' || reverse_polish[i] == '+' || reverse_polish[i] == '-' || reverse_polish[i] == '(' || reverse_polish[i] == ')'  || reverse_polish[i] == '[' || reverse_polish[i] == '`'
+						|| reverse_polish[i] == '%' || reverse_polish[i] == '=' || reverse_polish[i] == '<' || reverse_polish[i] == '!' || reverse_polish[i] == '_' || reverse_polish[i] == '@' || reverse_polish[i] == '#' || reverse_polish[i] == '?' || reverse_polish[i] == ':' || reverse_polish[i] == '>')
 					{
 						i--;
 						break;	
