@@ -81,7 +81,6 @@ int get_operator_order(char cur)
 	//minus operator
 	if(cur == '%')return 4;
 	if(cur == '^')return 5;
-	if(cur == '$')return 6;
 	//sin operator
 	//cos operator
 	//tan operator
@@ -457,7 +456,6 @@ Node* reverse_polish_to_float(char *reverse_polish)
 				j++;
 				i++;
 			}
-			i++;
 			temp_string[count]='\0';
 			Node *right = do_operation(temp_string);
 			//calculations part
@@ -501,7 +499,6 @@ Node* reverse_polish_to_float(char *reverse_polish)
 				j++;
 				i++;
 			}
-			i++;
 			temp_string[count]='\0';
 			Node *right = do_operation(temp_string);
 			//calculations part
@@ -545,7 +542,6 @@ Node* reverse_polish_to_float(char *reverse_polish)
 				j++;
 				i++;
 			}
-			i++;
 			temp_string[count]='\0';
 			Node *right = do_operation(temp_string);
 			//calculations part
@@ -589,7 +585,6 @@ Node* reverse_polish_to_float(char *reverse_polish)
 				j++;
 				i++;
 			}
-			i++;
 			temp_string[count]='\0';
 			Node *right = do_operation(temp_string);
 			//calculations part
@@ -798,31 +793,6 @@ Node* reverse_polish_to_float(char *reverse_polish)
 					}
 					/*temp values*/
 					break;
-				// case '^':
-				// 	if(left->type() == 1)
-				// 	{
-				// 		if(right->type() == 1)
-				// 		{
-				// 			tempNode = new FloatNode(pow((((FloatNode*)left)->value),(((FloatNode*)right)->value) ));
-				// 		}else{
-				// 			matrix *tempMatrix = new matrix;
-				// 			*tempMatrix = ( (((FloatNode*)left)->value) ^ *(((MatrixNode*)right)->value) );
-				// 			tempNode = new MatrixNode(tempMatrix);
-				// 		}
-				// 	}else{
-				// 		if(right->type() == 1)
-				// 		{
-				// 			matrix *tempMatrix = new matrix;
-				// 			*tempMatrix = ( *(((MatrixNode*)left)->value) ^ (((FloatNode*)right)->value) );
-				// 			tempNode = new MatrixNode(tempMatrix);
-				// 		}else{
-				// 			matrix *tempMatrix = new matrix;
-				// 			*tempMatrix = ( *(((MatrixNode*)left)->value) ^ *(((MatrixNode*)right)->value) );
-				// 			tempNode = new MatrixNode(tempMatrix);
-				// 		}
-				// 	}
-				// 	/*temp values*/
-				// 	break;
 			}
 			temp_stack->add(tempNode);
 			delete right;
@@ -899,7 +869,7 @@ Node* do_operation(string str){
 	}
 	infix[i] = '\0';
 	char *temp = infix_to_reverse_polish(infix);
-	cout<<temp<<endl;
+	//cout<<temp<<endl;
 	Node *result = reverse_polish_to_float(temp);
 	return result;
 	delete infix;
