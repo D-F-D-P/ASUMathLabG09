@@ -867,6 +867,21 @@ matrix matrix:: ones(int rows,int columns){
 }
 
 
+//function for matrix power int
+void power (matrix& a,int n,matrix& result){
+    //this must be a square matrix
+    result=a;
+    for (int i=1;i<n;i++){
+        result=a*result;
+    }
+}
+
+matrix matrix:: operator ^ (int n){
+    matrix result (this->rows , this->columns);
+    power(*this,n,result);
+    return result;
+}
+
 
 // Global Functions
 
