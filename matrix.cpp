@@ -832,41 +832,39 @@ double matrix::get_determinant()
 }
 
 //Function for filling the matrix with zeros
-
-void matrix:: zeros(){
-
+matrix matrix:: zeros(int rows, int columns){
+	matrix result(rows,columns);
 	for(int i=0; i<rows; i++){
 		for(int j=0; j< columns; j++){
-			elements[i][j]=0;
+			result.elements[i][j]=0;
         }
 	}
-
+	return result;
 }
 //Function for filling the matrix with random no.
-
-void matrix:: rand(){
-
+matrix matrix:: random(int rows, int columns){
+    matrix result(rows,columns);
 	for(int i=0; i<rows; i++){
 		for(int j=0; j< columns; j++){
-			elements[i][j]=(rand()%10) / 10.0;
+			result.elements[i][j]=(rand()%10) / 10.0;
         }
 	}
+	return result;
 
 }
 
 
 //Function for filling the matrix with ones
 
-void matrix:: ones(){
-
+matrix matrix:: ones(int rows,int columns){
+    matrix result(rows,columns);
 	for(int i=0; i<rows; i++){
 		for(int j=0; j< columns; j++){
-			elements[i][j]=1;
+			result.elements[i][j]=1;
         }
 	}
-
+    return result;
 }
-
 
 
 

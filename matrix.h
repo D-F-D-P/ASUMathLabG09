@@ -81,11 +81,9 @@ public:
 
 
 //Phase two Functions
-    
-	void zeros();//func. to fill matrix with zeros
-	void rand();// func.to fill matrix with random no.
-	void ones(); //Function for filling the matrix with ones
-
+      matrix zeros(int rows, int columns);//func. to fill matrix with zeros
+	 matrix random(int rows, int columns);// func.to fill matrix with random no.
+	matrix ones(int rows, int columns); //Function for filling the matrix with ones
 
 
 };
