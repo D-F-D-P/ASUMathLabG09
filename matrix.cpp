@@ -846,7 +846,7 @@ matrix matrix:: random(int rows, int columns){
     matrix result(rows,columns);
 	for(int i=0; i<rows; i++){
 		for(int j=0; j< columns; j++){
-			result.elements[i][j]=(rand()%10) / 10.0;
+			result.elements[i][j]=(rand()%50);
         }
 	}
 	return result;
@@ -880,6 +880,36 @@ matrix matrix:: operator ^ (int n){
     matrix result (this->rows , this->columns);
     power(*this,n,result);
     return result;
+}
+
+//Function to calculate the power to each element this is for the operator ".^" and can have a fraction power
+
+void power_elements(matrix& a, double n, matrix& result){
+    for(int i=0; i<a.rows; i++){
+        for(int j=0; j<a.columns; j++){
+            result.elements[i][j]=pow(a.elements[i][j],n);
+        }
+
+    }
+}
+
+
+//function for to calculate every element square root
+void squareroot ( matrix& a, matrix& result){
+for(int i=0; i< a.rows; i++){
+
+    for(int j=0; j< a.columns; j++){
+      if(a.elements[i][j]>=0){
+        result.elements[i][j]=sqrt(a.elements[i][j]);
+      }
+      else {
+        cout<<"Complex Output";
+      }
+
+    }
+  }
+
+
 }
 
 
