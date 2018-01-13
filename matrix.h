@@ -63,6 +63,8 @@ public:
     friend void div_num(matrix &A, double B , matrix &C); // to divide matrix and number
     friend bool is_equal(matrix &A , matrix &B);
 
+
+
     //Operators
     matrix operator = (matrix  m); // A = B = C
     friend matrix operator - (matrix &m); // C = -A
@@ -81,9 +83,10 @@ public:
 
 
 //Phase two Functions
-    matrix zeros(int rows, int columns);//func. to fill matrix with zeros
-    matrix random(int rows, int columns);// func.to fill matrix with random no.
-    matrix ones(int rows, int columns); //Function for filling the matrix with ones
+    friend matrix zeros(int rows, int columns);//func. to fill matrix with zeros
+    friend matrix random(int rows, int columns);// func.to fill matrix with random no.
+    friend matrix ones(int rows, int columns); //Function for filling the matrix with ones
+//matrix kobry (int r, int c);
     friend void power(matrix& a,int n,matrix& result);//matrix power int/ shouldn't take 1x1 matrix power
     matrix operator ^ (int n);
 
