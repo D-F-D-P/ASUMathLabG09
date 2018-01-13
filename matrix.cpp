@@ -831,41 +831,8 @@ double matrix::get_determinant()
 
 }
 
-//Function for filling the matrix with zeros
-matrix matrix:: zeros(int rows, int columns){
-	matrix result(rows,columns);
-	for(int i=0; i<rows; i++){
-		for(int j=0; j< columns; j++){
-			result.elements[i][j]=0;
-        }
-	}
-	return result;
-}
-//Function for filling the matrix with random no.
-matrix matrix:: random(int rows, int columns){
-    matrix result(rows,columns);
-	for(int i=0; i<rows; i++){
-		for(int j=0; j< columns; j++){
-			result.elements[i][j]=(rand()%50);
-        }
-	}
-	return result;
 
-}
-
-
-//Function for filling the matrix with ones
-
-matrix matrix:: ones(int rows,int columns){
-    matrix result(rows,columns);
-	for(int i=0; i<rows; i++){
-		for(int j=0; j< columns; j++){
-			result.elements[i][j]=1;
-        }
-	}
-    return result;
-}
-
+//phase two functions
 
 //function for matrix power int
 void power (matrix& a,int n,matrix& result){
@@ -911,8 +878,44 @@ for(int i=0; i< a.rows; i++){
 
 
 }
+//Function for filling the matrix with zeros
+matrix zeros(int rows, int columns){
+	matrix result(rows,columns);
+	for(int i=0; i<rows; i++){
+		for(int j=0; j< columns; j++){
+			result.elements[i][j]=0;
+        }
+	}
+	return result;
+}
+//Function for filling the matrix with random no.
+matrix random(int rows, int columns){
+    matrix result(rows,columns);
+	for(int i=0; i<rows; i++){
+		for(int j=0; j< columns; j++){
+			result.elements[i][j]=(rand()%50);
+        }
+	}
+	return result;
 
+}
 
+//Function for filling the matrix with ones
+matrix ones(int rows,int columns){
+    matrix result(rows,columns);
+	for(int i=0; i<rows; i++){
+		for(int j=0; j< columns; j++){
+			result.elements[i][j]=1;
+        }
+	}
+    return result;
+}
+
+/*
+matrix matrix:: kobry (int r, int c){
+return ones(r,c);
+}
+*/
 // Global Functions
 
 //count number of chars in a string
@@ -977,4 +980,6 @@ if (input < 100000) return 5;
 if (input < 1000000) return 6;
 
 }
+
+
 

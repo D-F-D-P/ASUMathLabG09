@@ -5,7 +5,11 @@
 #include "matrix.h"
 #include "dynamic_array_matrix.h"
 #define MATRIX array_matrix.get_matrix()
+
+
 using namespace std;
+
+
 int main(int argc, char* argv[])
 {
 
