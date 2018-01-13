@@ -80,11 +80,25 @@ public:
     friend matrix operator / (double a, matrix &m); //C=number/A
 
 
+//Phase two Functions
+    matrix zeros(int rows, int columns);//func. to fill matrix with zeros
+    matrix random(int rows, int columns);// func.to fill matrix with random no.
+    matrix ones(int rows, int columns); //Function for filling the matrix with ones
+    friend void power(matrix& a,int n,matrix& result);//matrix power int/ shouldn't take 1x1 matrix power
+    matrix operator ^ (int n);
+
+    friend void power_elements(matrix& a, double n, matrix& result); //power raised to every element/ can be double
+
+    friend void squareroot ( matrix& a, matrix& result);// square root to each element
+
+
+
 };
 
 //global functions
 std::string space_trimer(std::string text); // remove extra spaces from beginning of a text
 int number_of(int e, std::string s,std::string c); // count the number of special char in a text
 int number_digits(float input); //count number of digits
+
 
 #endif // MATRIX_H

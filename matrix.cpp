@@ -46,7 +46,9 @@ matrix::matrix(int rows, int columns)
         elements[i] = new double[columns];
     }
 
-    //empty_matrix();
+
+    empty_matrix();
+
 
 }
 
@@ -298,7 +300,9 @@ void matrix::reset_matrix(int rows, int columns)
         this -> elements[i] = new double[columns];
     }
 
-  //  empty_matrix();
+
+    empty_matrix();
+
 
 }
 
@@ -729,10 +733,12 @@ matrix matrix :: operator / (matrix &m)
     if(is_equal((*this) , m))
     result.unity_matrix();
 
-    else if (m.get_determinant() == 0 || isnan(m.get_determinant()))
-    {
-        cout << "Error determinant = 0" <<endl;
-    }
+
+   // else if (m.get_determinant() == 0 || isnan(m.get_determinant()))
+    //{
+      //  cout << "Error determinant = 0" <<endl;
+    //}
+
 
     else
     divide_matrix((*this), m , result);
@@ -806,6 +812,8 @@ double matrix::get_determinant()
     {
         result *= temp -> elements[i][i];
     }
+
+    delete temp; // $$$$$$
     return result;
 
 
@@ -823,7 +831,86 @@ double matrix::get_determinant()
 
 }
 
+//Function for filling the matrix with zeros
+matrix matrix:: zeros(int rows, int columns){
+	matrix result(rows,columns);
+	for(int i=0; i<rows; i++){
+		for(int j=0; j< columns; j++){
+			result.elements[i][j]=0;
+        }
+	}
+	return result;
+}
+//Function for filling the matrix with random no.
+matrix matrix:: random(int rows, int columns){
+    matrix result(rows,columns);
+	for(int i=0; i<rows; i++){
+		for(int j=0; j< columns; j++){
+			result.elements[i][j]=(rand()%50);
+        }
+	}
+	return result;
 
+}
+
+
+//Function for filling the matrix with ones
+
+matrix matrix:: ones(int rows,int columns){
+    matrix result(rows,columns);
+	for(int i=0; i<rows; i++){
+		for(int j=0; j< columns; j++){
+			result.elements[i][j]=1;
+        }
+	}
+    return result;
+}
+
+
+//function for matrix power int
+void power (matrix& a,int n,matrix& result){
+    //this must be a square matrix
+    result=a;
+    for (int i=1;i<n;i++){
+        result=a*result;
+    }
+}
+
+matrix matrix:: operator ^ (int n){
+    matrix result (this->rows , this->columns);
+    power(*this,n,result);
+    return result;
+}
+
+//Function to calculate the power to each element this is for the operator ".^" and can have a fraction power
+
+void power_elements(matrix& a, double n, matrix& result){
+    for(int i=0; i<a.rows; i++){
+        for(int j=0; j<a.columns; j++){
+            result.elements[i][j]=pow(a.elements[i][j],n);
+        }
+
+    }
+}
+
+
+//function for to calculate every element square root
+void squareroot ( matrix& a, matrix& result){
+for(int i=0; i< a.rows; i++){
+
+    for(int j=0; j< a.columns; j++){
+      if(a.elements[i][j]>=0){
+        result.elements[i][j]=sqrt(a.elements[i][j]);
+      }
+      else {
+        cout<<"Complex Output";
+      }
+
+    }
+  }
+
+
+}
 
 
 // Global Functions
