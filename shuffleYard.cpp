@@ -6,9 +6,20 @@
 #include <string>
 #include "AVL.cpp"
 
+#include <sys/types.h>
+#include <unistd.h>
+#include <signal.h>
+
 using namespace std;
 
 #define PI 3.14159265
+
+void sighandler(int signum)
+{
+    //printf("Process %d got signal %d\n", getpid(), signum);
+    throw "----------------- INVALID NUMBER OF OPERATORS -------------------";
+}
+
 
 AVL matrixTree;
 
@@ -225,8 +236,12 @@ char* infix_to_reverse_polish(char *infix)
 				flag = false;
 				temp[j] = '@';
 				j++;
-				while(infix[i] != ')')
+				int bracketCount = 1;
+				while(true)
 				{
+					if(infix[i] == '(')bracketCount++;
+					if(infix[i] == ')')bracketCount--;
+					if(bracketCount == 0)break;
 					temp[j] = infix[i];
 					i++;
 					j++;
@@ -241,8 +256,12 @@ char* infix_to_reverse_polish(char *infix)
 				flag = false;
 				temp[j] = '#';
 				j++;
-				while(infix[i] != ')')
+				int bracketCount = 1;
+				while(true)
 				{
+					if(infix[i] == '(')bracketCount++;
+					if(infix[i] == ')')bracketCount--;
+					if(bracketCount == 0)break;
 					temp[j] = infix[i];
 					i++;
 					j++;
@@ -251,14 +270,19 @@ char* infix_to_reverse_polish(char *infix)
 				j++;
 				flagNegative = true;
 			}
-			//ones operation
-			else if(infix[i] == 'o' && infix[i+1] == 'n' && infix[i+2] == 'e' && infix[i+3] == 's' && infix[i+4] == '('){
-				i += 5;
+			//zeros operation
+			else if(infix[i] == 'z' && infix[i+1] == 'e' && infix[i+2] == 'r' && infix[i+3] == 'o' && infix[i+4] == 's' && infix[i+5] == '('){
+				i += 6;
 				flag = false;
 				temp[j] = '?';
 				j++;
-				while(infix[i] != ')')
+				j++;
+				int bracketCount = 1;
+				while(true)
 				{
+					if(infix[i] == '(')bracketCount++;
+					if(infix[i] == ')')bracketCount--;
+					if(bracketCount == 0)break;
 					temp[j] = infix[i];
 					i++;
 					j++;
@@ -267,14 +291,18 @@ char* infix_to_reverse_polish(char *infix)
 				j++;
 				flagNegative = true;
 			}
-			//zeros operation
-			else if(infix[i] == 'z' && infix[i+1] == 'e' && infix[i+2] == 'r' && infix[i+3] == 'o' && infix[i+4] == 's' && infix[i+5] == '('){
+			//ones operation
+			else if(infix[i] == 'o' && infix[i+1] == 'n' && infix[i+2] == 'e' && infix[i+3] == 's' && infix[i+4] == '('){
 				i += 5;
 				flag = false;
 				temp[j] = ':';
 				j++;
-				while(infix[i] != ')')
+				int bracketCount = 1;
+				while(true)
 				{
+					if(infix[i] == '(')bracketCount++;
+					if(infix[i] == ')')bracketCount--;
+					if(bracketCount == 0)break;
 					temp[j] = infix[i];
 					i++;
 					j++;
@@ -285,11 +313,6 @@ char* infix_to_reverse_polish(char *infix)
 			}
 			else if(infix[i] == '[')
 			{
-				if(flag){
-					CharNode *x = new CharNode('*');
-					flagNegative = false;
-					temp_stack->add(x);
-				}
 				flag = false;
 				while(infix[i] != ']')
 				{
@@ -330,10 +353,6 @@ char* infix_to_reverse_polish(char *infix)
 				{
 					//flagNegative = false;
 					if((infix[i] == '(' || is_higher_order_than(infix[i], (CharNode*)temp_stack->top))&& infix[i] != ')'){
-						if(infix[i] == '(' && flag){
-							CharNode *x = new CharNode('*');
-							temp_stack->add(x);
-						}
 						flag = false;
 						CharNode *x = new CharNode(infix[i]);
 						flagNegative = false;
@@ -351,10 +370,6 @@ char* infix_to_reverse_polish(char *infix)
 						delete x;
 					}
 				}else{
-					if(infix[i] == '(' && flag){
-						CharNode *x = new CharNode('*');
-						temp_stack->add(x);
-					}
 					flag = false;
 					CharNode *x = new CharNode(infix[i]);
 					flagNegative = false;
@@ -470,7 +485,12 @@ Node* reverse_polish_to_float(char *reverse_polish)
 			Node *right = do_operation(temp_string);
 			//calculations part
 			Node *tempNode;
-			tempNode = new FloatNode(( (((FloatNode*)left)->value) * (((FloatNode*)right)->value) ));
+			matrix* y = new matrix;
+			{
+				matrix x;
+				*y = x.random((int)(((FloatNode*)left)->value), (int)(((FloatNode*)right)->value));
+			}
+			tempNode = new MatrixNode(y);
 			temp_stack->add(tempNode);
 			delete left;
 			delete right;
@@ -513,7 +533,12 @@ Node* reverse_polish_to_float(char *reverse_polish)
 			Node *right = do_operation(temp_string);
 			//calculations part
 			Node *tempNode;
-			tempNode = new FloatNode(( (((FloatNode*)left)->value) * (((FloatNode*)right)->value) ));
+			matrix* y = new matrix;
+			{
+				matrix x;
+				*y = x.ones((int)(((FloatNode*)left)->value), (int)(((FloatNode*)right)->value));
+			}
+			tempNode = new MatrixNode(y);
 			temp_stack->add(tempNode);
 			delete left;
 			delete right;
@@ -556,7 +581,12 @@ Node* reverse_polish_to_float(char *reverse_polish)
 			Node *right = do_operation(temp_string);
 			//calculations part
 			Node *tempNode;
-			tempNode = new FloatNode(( (((FloatNode*)left)->value) * (((FloatNode*)right)->value) ));
+			matrix* y = new matrix;
+			{
+				matrix x;
+				*y = x.zeros((int)(((FloatNode*)left)->value), (int)(((FloatNode*)right)->value));
+			}
+			tempNode = new MatrixNode(y);
 			temp_stack->add(tempNode);
 			delete left;
 			delete right;
@@ -599,7 +629,12 @@ Node* reverse_polish_to_float(char *reverse_polish)
 			Node *right = do_operation(temp_string);
 			//calculations part
 			Node *tempNode;
-			tempNode = new FloatNode(( (((FloatNode*)left)->value) * (((FloatNode*)right)->value) ));
+			matrix* y = new matrix;
+			{
+				matrix x;
+				*y = x.ones((int)(((FloatNode*)left)->value), (int)(((FloatNode*)right)->value));
+			}
+			tempNode = new MatrixNode(y);
 			temp_stack->add(tempNode);
 			delete left;
 			delete right;
@@ -812,6 +847,27 @@ Node* reverse_polish_to_float(char *reverse_polish)
 					}
 					/*temp values*/
 					break;
+				case '^':
+					if(left->type() == 1)
+					{
+						if(right->type() == 1)
+						{
+							tempNode = new FloatNode( pow( (((FloatNode*)left)->value), (((FloatNode*)right)->value) ) );
+						}else{
+							//throw error
+						}
+					}else{
+						if(right->type() == 1)
+						{
+							matrix *tempMatrix = new matrix;
+							*tempMatrix = ( *(((MatrixNode*)left)->value) ^ (((FloatNode*)right)->value) );
+							tempNode = new MatrixNode(tempMatrix);
+						}else{
+							//throw error
+						}
+					}
+					/*temp values*/
+					break;
 			}
 			temp_stack->add(tempNode);
 			delete right;
@@ -879,6 +935,7 @@ Node* reverse_polish_to_float(char *reverse_polish)
 }
 
 Node* do_operation(string str){
+	signal(SIGSEGV, sighandler);
 	int length = str.size();
 	char *infix = new char[length+1];
 	int i = 0;
@@ -907,7 +964,11 @@ void open_cli(){
 			matrixTree.print();
 			continue;
    		}
-   		do_operation(str);
+   		try{
+   			do_operation(str);
+   		}catch(char const*message){
+   			cout<<message<<endl;
+   		}
    	}
 }
 
@@ -916,5 +977,5 @@ void open_cli(){
 
 int main()
 {
-   open_cli();
+   	open_cli();
 }

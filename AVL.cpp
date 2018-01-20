@@ -289,12 +289,18 @@ class AVL
 
 	void print()
 	{
-		AVLNode *current = this->min(this->root);
+		AVLNode *current = NULL;
+		if(this->root != NULL){
+			current = this->min(this->root);
+		}else{
+			cout<<endl<<"---------------------- THE TREE IS EMPTY ------------------------"<<endl;
+		}
 		while(current != NULL){
 			current->value->print_matrix();
 			//cout<<endl<<" at "<<current->height<<endl;
 			current = this->next_max(current);
 		}
+		cout<<endl;
 	}
 
 };
