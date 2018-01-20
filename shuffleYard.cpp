@@ -90,20 +90,21 @@ int get_operator_order(char cur)
 {
 	if(cur == '=')return 1;
 	if(cur == '+' || cur == '-')return 2;
-	if(cur == '*' || cur == '/')return 3;
+	// " for ./
+	if(cur == '*' || cur == '/' || cur == '"')return 3;
 	//minus operator
 	if(cur == '%')return 4;
+	if(cur == '^')return 5;
 	//sin operator
 	//cos operator
 	//tan operator
-	if(cur == '<' || cur == '!' || cur == '_')return 5;
+	if(cur == '<' || cur == '!' || cur == '_')return 6;
 	// rand(4,4)
 	// eye(4, 4)
 	// zeros(2, 3)
 	// ones(3, 6)
 	// sqrt()
-	if(cur == '@' || cur == '#' || cur == '?' || cur == ':' || cur == '`')return 6;
-	if(cur == '^')return 7;
+	if(cur == '@' || cur == '#' || cur == '?' || cur == ':' || cur == '`')return 7;
 	//print operator
 	if(cur == '>')return 8;
 	if(cur == '(')return 0;
@@ -202,8 +203,16 @@ char* infix_to_reverse_polish(char *infix)
 	{
 		if(infix[i] != ' ')
 		{
+			//./ operation
+			if(infix[i] == '.' && infix[i+1] == '/'){
+				i += 1;
+				flag = false;
+				CharNode *x = new CharNode('"');
+				temp_stack->add(x);
+				flagNegative = true;
+			}
 			//sin operation
-			if(infix[i] == 's' && infix[i+1] == 'i' && infix[i+2] == 'n' && infix[i+3] == '('){
+			else if(infix[i] == 's' && infix[i+1] == 'i' && infix[i+2] == 'n' && infix[i+3] == '('){
 				i += 2;
 				flag = false;
 				CharNode *x = new CharNode('<');
@@ -466,6 +475,10 @@ Node* reverse_polish_to_float(char *reverse_polish)
 			}
 			temp_string[count]='\0';
 			Node *left = do_operation(temp_string);
+			if(left->type() == 2)
+			{
+				throw "---- EXPECT 1ST ARG. OF RAND TO BE FLOAT BUT MATRIX WAS FOUND ----";
+			}
 			i++;
 			count = 0;
 			for (int k = i+1; reverse_polish[k] != '@'; ++k)
@@ -483,6 +496,10 @@ Node* reverse_polish_to_float(char *reverse_polish)
 			}
 			temp_string[count]='\0';
 			Node *right = do_operation(temp_string);
+			if(right->type() == 2)
+			{
+				throw "---- EXPECT 2ND ARG. OF RAND TO BE FLOAT BUT MATRIX WAS FOUND ----";
+			}
 			//calculations part
 			Node *tempNode;
 			matrix* y = new matrix;
@@ -514,6 +531,10 @@ Node* reverse_polish_to_float(char *reverse_polish)
 			}
 			temp_string[count]='\0';
 			Node *left = do_operation(temp_string);
+			if(left->type() == 2)
+			{
+				throw "---- EXPECT 1ST ARG. OF EYE TO BE FLOAT BUT MATRIX WAS FOUND -----";
+			}
 			i++;
 			count = 0;
 			for (int k = i+1; reverse_polish[k] != '#'; ++k)
@@ -531,6 +552,10 @@ Node* reverse_polish_to_float(char *reverse_polish)
 			}
 			temp_string[count]='\0';
 			Node *right = do_operation(temp_string);
+			if(right->type() == 2)
+			{
+				throw "---- EXPECT 2ND ARG. OF EYE TO BE FLOAT BUT MATRIX WAS FOUND -----";
+			}
 			//calculations part
 			Node *tempNode;
 			matrix* y = new matrix;
@@ -562,6 +587,10 @@ Node* reverse_polish_to_float(char *reverse_polish)
 			}
 			temp_string[count]='\0';
 			Node *left = do_operation(temp_string);
+			if(left->type() == 2)
+			{
+				throw "---- EXPECT 1ST ARG. OF ZEROS TO BE FLOAT BUT MATRIX WAS FOUND ---";
+			}
 			i++;
 			count = 0;
 			for (int k = i+1; reverse_polish[k] != '?'; ++k)
@@ -579,6 +608,10 @@ Node* reverse_polish_to_float(char *reverse_polish)
 			}
 			temp_string[count]='\0';
 			Node *right = do_operation(temp_string);
+			if(right->type() == 2)
+			{
+				throw "---- EXPECT 2ND ARG. OF ZEROS TO BE FLOAT BUT MATRIX WAS FOUND ---";
+			}
 			//calculations part
 			Node *tempNode;
 			matrix* y = new matrix;
@@ -610,6 +643,10 @@ Node* reverse_polish_to_float(char *reverse_polish)
 			}
 			temp_string[count]='\0';
 			Node *left = do_operation(temp_string);
+			if(left->type() == 2)
+			{
+				throw "---- EXPECT 1ST ARG. OF ONES TO BE FLOAT BUT MATRIX WAS FOUND ---";
+			}
 			i++;
 			count = 0;
 			for (int k = i+1; reverse_polish[k] != ':'; ++k)
@@ -627,6 +664,10 @@ Node* reverse_polish_to_float(char *reverse_polish)
 			}
 			temp_string[count]='\0';
 			Node *right = do_operation(temp_string);
+			if(right->type() == 2)
+			{
+				throw "---- EXPECT 2ND ARG. OF ONES TO BE FLOAT BUT MATRIX WAS FOUND ---";
+			}
 			//calculations part
 			Node *tempNode;
 			matrix* y = new matrix;
@@ -741,7 +782,7 @@ Node* reverse_polish_to_float(char *reverse_polish)
 			temp_stack->add(tempNode);
 			delete left;
 		}
-		else if(reverse_polish[i] == '*' || reverse_polish[i] == '/' || reverse_polish[i] == '^' || reverse_polish[i] == '+' || reverse_polish[i] == '-')
+		else if(reverse_polish[i] == '*' || reverse_polish[i] == '/' || reverse_polish[i] == '^' || reverse_polish[i] == '+' || reverse_polish[i] == '-' || reverse_polish[i] == '"')
 		{
 			Node *right = temp_stack->pop();
 			Node *left = temp_stack->pop();
@@ -829,6 +870,34 @@ Node* reverse_polish_to_float(char *reverse_polish)
 						{
 							tempNode = new FloatNode(( (((FloatNode*)left)->value) / (((FloatNode*)right)->value) ));
 						}else{
+							// matrix *tempMatrix = new matrix;
+							// *tempMatrix = ( (((FloatNode*)left)->value) / *(((MatrixNode*)right)->value) );
+							// tempNode = new MatrixNode(tempMatrix);
+							throw "---- EXPECT 2ND OPERAND OF / TO BE FLOAT BUT MATRIX WAS FOUND ----";
+						}
+					}else{
+						if(right->type() == 1)
+						{
+							// matrix *tempMatrix = new matrix;
+							// *tempMatrix = ( *(((MatrixNode*)left)->value) / (((FloatNode*)right)->value) );
+							// tempNode = new MatrixNode(tempMatrix);
+							throw "---- EXPECT 2ND OPERAND OF / TO BE MATRIX BUT FLOAT WAS FOUND ----";
+						}else{
+							matrix *tempMatrix = new matrix;
+							*tempMatrix = ( *(((MatrixNode*)left)->value) / *(((MatrixNode*)right)->value) );
+							tempNode = new MatrixNode(tempMatrix);
+						}
+					}
+					/*temp values*/
+					break;
+				case '"':
+					if(left->type() == 1)
+					{
+						if(right->type() == 1)
+						{
+							//tempNode = new FloatNode(( (((FloatNode*)left)->value) / (((FloatNode*)right)->value) ));
+							throw "---- EXPECT 2ND OPERAND OF ./ TO BE MATRIX BUT FLOAT WAS FOUND ---";
+						}else{
 							matrix *tempMatrix = new matrix;
 							*tempMatrix = ( (((FloatNode*)left)->value) / *(((MatrixNode*)right)->value) );
 							tempNode = new MatrixNode(tempMatrix);
@@ -840,9 +909,10 @@ Node* reverse_polish_to_float(char *reverse_polish)
 							*tempMatrix = ( *(((MatrixNode*)left)->value) / (((FloatNode*)right)->value) );
 							tempNode = new MatrixNode(tempMatrix);
 						}else{
-							matrix *tempMatrix = new matrix;
-							*tempMatrix = ( *(((MatrixNode*)left)->value) / *(((MatrixNode*)right)->value) );
-							tempNode = new MatrixNode(tempMatrix);
+							// matrix *tempMatrix = new matrix;
+							// *tempMatrix = ( *(((MatrixNode*)left)->value) / *(((MatrixNode*)right)->value) );
+							// tempNode = new MatrixNode(tempMatrix);
+							throw "---- EXPECT 2ND OPERAND OF ./ TO BE FLOAT BUT MATRIX WAS FOUND ----";
 						}
 					}
 					/*temp values*/
@@ -879,7 +949,7 @@ Node* reverse_polish_to_float(char *reverse_polish)
 				i++;
 				if(reverse_polish[i] != '\0')
 				{
-					if(reverse_polish[i] == ';' || reverse_polish[i] == '*' || reverse_polish[i] == '/' || reverse_polish[i] == '^' || reverse_polish[i] == '+' || reverse_polish[i] == '-' || reverse_polish[i] == '(' || reverse_polish[i] == ')'  || reverse_polish[i] == '[' || reverse_polish[i] == '`'
+					if(reverse_polish[i] == ';' || reverse_polish[i] == '*' || reverse_polish[i] == '/' || reverse_polish[i] == '^' || reverse_polish[i] == '+' || reverse_polish[i] == '-' || reverse_polish[i] == '(' || reverse_polish[i] == ')'  || reverse_polish[i] == '[' || reverse_polish[i] == '`' || reverse_polish[i] == '"'
 						|| reverse_polish[i] == '%' || reverse_polish[i] == '=' || reverse_polish[i] == '<' || reverse_polish[i] == '!' || reverse_polish[i] == '_' || reverse_polish[i] == '@' || reverse_polish[i] == '#' || reverse_polish[i] == '?' || reverse_polish[i] == ':' || reverse_polish[i] == '>')
 					{
 						i--;
@@ -914,7 +984,7 @@ Node* reverse_polish_to_float(char *reverse_polish)
 				if(tempMatrix != NULL){
 					tempNode = new MatrixNode(tempMatrix, true);
 				}else{
-					matrix* tempMatrix = new matrix(4,4);
+					tempMatrix = new matrix(4,4);
 					tempMatrix->unity_matrix();
 					tempMatrix->set_name(word);
 					matrixTree.insert(tempMatrix);
