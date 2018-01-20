@@ -84,6 +84,31 @@ class MatrixNode : public Node
 	}
 };
 
+class TempMatrixNode : public Node
+{
+	public:
+	matrix* value;
+	bool important;
+	int type()
+	{
+		return 3;
+	}
+	TempMatrixNode(matrix *value)
+	{
+		this->value = value;
+		this->important = false;
+	}
+	TempMatrixNode(matrix *value, bool important)
+	{
+		this->value = value;
+		this->important = important;
+	}
+	~TempMatrixNode()
+	{
+		if(!important)delete value;
+	}
+};
+
 Node* do_operation(string str);
 
 int get_operator_order(char cur)
@@ -416,15 +441,26 @@ Node* reverse_polish_to_float(char *reverse_polish)
 	{
 		if(reverse_polish[i] == ';');
 		else if(reverse_polish[i] == '='){
-			MatrixNode *right = (MatrixNode*)temp_stack->pop();
-			MatrixNode *left = (MatrixNode*)temp_stack->pop();
-			*(left->value) = *(right->value);
-			if(echo_flag){
-				left->value->print_matrix();
-				cout<<endl;
+			Node *right = temp_stack->pop();
+			Node *left = temp_stack->pop();
+			if(right->type() == 3){
+				throw "--------------- UNDEFINED VARIABLE \"" + (((TempMatrixNode*)right)->value)->name + "\" AFTER \"" + "=" + "\" ----------------";
+			}
+			if(right->type() == 1){
+				if(echo_flag){
+					cout<<(((FloatNode*)right)->value)<<endl;
+				}
+				((MatrixNode*)left)->important = false;
+			}else{
+				*(((MatrixNode*)left)->value) = *(((MatrixNode*)right)->value);
+				if(echo_flag){
+					(((MatrixNode*)right)->value)->print_matrix();
+					cout<<endl;
+				}
+				matrixTree.insert((((MatrixNode*)left)->value));
 			}
 			echo_flag = false;
-			//right->value->print_matrix();
+			delete left;
 			delete right;
 		}
 		else if(reverse_polish[i] == '[')
@@ -685,6 +721,9 @@ Node* reverse_polish_to_float(char *reverse_polish)
 		{
 			Node *left = temp_stack->pop();
 			Node *tempNode;
+			if(left->type() == 3){
+				throw "-------------- UNDEFINED VARIABLE \"" + (((TempMatrixNode*)left)->value)->name + "\" INSIDE \"" + "sin" + "\" --------------";
+			}
 			if(left->type() == 1)
 			{
 				tempNode = new FloatNode(sin ( ((FloatNode*)(left))->value * PI/180) );
@@ -702,6 +741,9 @@ Node* reverse_polish_to_float(char *reverse_polish)
 		{
 			Node *left = temp_stack->pop();
 			Node *tempNode;
+			if(left->type() == 3){
+				throw "-------------- UNDEFINED VARIABLE \"" + (((TempMatrixNode*)left)->value)->name + "\" INSIDE \"" + "cos" + "\" --------------";
+			}
 			if(left->type() == 1)
 			{
 				tempNode = new FloatNode(cos ( ((FloatNode*)(left))->value * PI/180) );
@@ -719,6 +761,9 @@ Node* reverse_polish_to_float(char *reverse_polish)
 		{
 			Node *left = temp_stack->pop();
 			Node *tempNode;
+			if(left->type() == 3){
+				throw "-------------- UNDEFINED VARIABLE \"" + (((TempMatrixNode*)left)->value)->name + "\" INSIDE \"" + "tan" + "\" --------------";
+			}
 			if(left->type() == 1)
 			{
 				tempNode = new FloatNode(tan ( ((FloatNode*)(left))->value * PI/180) );
@@ -736,6 +781,9 @@ Node* reverse_polish_to_float(char *reverse_polish)
 		{
 			Node *left = temp_stack->pop();
 			Node *tempNode;
+			if(left->type() == 3){
+				throw "-------------- UNDEFINED VARIABLE \"" + (((TempMatrixNode*)left)->value)->name + "\" INSIDE \"" + "sqrt" + "\" -------------";
+			}
 			if(left->type() == 1)
 			{
 				tempNode = new FloatNode(sqrt ( ((FloatNode*)(left))->value ) );
@@ -770,6 +818,9 @@ Node* reverse_polish_to_float(char *reverse_polish)
 		{
 			Node *left = temp_stack->pop();
 			Node *tempNode;
+			if(left->type() == 3){
+				throw "---------------- UNDEFINED VARIABLE \"" + (((TempMatrixNode*)left)->value)->name + "\" AFTER \"" + '-' + "\" ---------------";
+			}
 			if(left->type() == 1)
 			{
 				tempNode = new FloatNode(((FloatNode*)(left))->value * -1);
@@ -786,6 +837,11 @@ Node* reverse_polish_to_float(char *reverse_polish)
 		{
 			Node *right = temp_stack->pop();
 			Node *left = temp_stack->pop();
+			if(left->type() == 3){
+				throw "----------------- UNDEFINED VARIABLE \"" + (((TempMatrixNode*)left)->value)->name + "\" BEFORE " + reverse_polish[i] + " ---------------";
+			}else if(right->type() == 3){
+				throw "----------------- UNDEFINED VARIABLE \"" + (((TempMatrixNode*)right)->value)->name + "\" AFTER " + reverse_polish[i] + " ----------------";
+			}
 			Node *tempNode = NULL;
 			switch(reverse_polish[i]){
 				case '+':
@@ -987,8 +1043,8 @@ Node* reverse_polish_to_float(char *reverse_polish)
 					tempMatrix = new matrix(4,4);
 					tempMatrix->unity_matrix();
 					tempMatrix->set_name(word);
-					matrixTree.insert(tempMatrix);
-					tempNode = new MatrixNode(tempMatrix, true);
+					//matrixTree.insert(tempMatrix);
+					tempNode = new TempMatrixNode(tempMatrix, true);
 				}
 			}else{
 				tempNode = new FloatNode(atof(word));
@@ -1037,6 +1093,8 @@ void open_cli(){
    		try{
    			do_operation(str);
    		}catch(char const*message){
+   			cout<<message<<endl;
+   		}catch(string message){
    			cout<<message<<endl;
    		}
    	}
