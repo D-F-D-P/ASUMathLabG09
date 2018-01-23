@@ -5,7 +5,7 @@
 #include <iomanip>
 #include <string>
 #include <algorithm>
-
+#include <stdexcept>
 using namespace std;
 /*attach your libraries here*/
 
@@ -34,11 +34,15 @@ matrix::matrix()
 //constructor
 matrix::matrix(int rows, int columns)
 {
-
+    if(rows<0 || columns <0) throw(0);
     this->rows = rows;
     this->columns = columns;
 
-     if ((rows*columns) == 0) { elements = NULL; return; }
+     if ((rows*columns) == 0) {
+       elements = NULL;
+       cout<<"warning: rows or columns equal zero, NULL Matrix created."<<endl;
+       return;
+     }
 
     elements = new double*[rows];
     for(int i=0;i<rows;i++)
@@ -61,7 +65,11 @@ matrix::matrix(const matrix& p)
 
 
 
- if ((rows*columns) == 0) { elements = NULL; return; }
+ if ((rows*columns) == 0) {
+   elements = NULL;
+   cout<<"warning: input is a NULL matrix."<<endl;
+   return;
+  }
 
 
    //create the matrix
@@ -94,19 +102,27 @@ int matrix::get_columns()
 
 string matrix::get_name()
 {
+
  return name;
 }
 
 void matrix::set_name(string name)
 {
+  //Expected loop on all the created objects' names to handle this input.
     this -> name = name;
 }
 
 //resize matrix
 void matrix::resize_matrix(int rows, int columns)
 {
+    if(rows<0 || columns<0) throw(0);
 
-     if ((rows*columns) == 0) { rows = columns = 0; elements = NULL; return; }
+     if ((rows*columns) == 0) {
+       rows = columns = 0;
+       elements = NULL;
+       cout<<"warning: input rows or columns =0, NULL matrix created."<<endl;
+       return;
+      }
 
 	double** newElements = new double*[rows];
     for(int i=0;i<rows;i++){
@@ -166,6 +182,7 @@ void matrix::fill_matrix_cl()
 		for (int j = 0; j < columns; j++)
 		{
 			cin >> elements[i][j];
+      if(cin.fail()) throw(1);
 		}
 		cout << endl;
 	}
@@ -217,7 +234,10 @@ for(int i = 0 ; i < rows ; i ++)
     columns = number_of(newRow.length(),newRow," ") + 1;
     this -> reset_matrix(rows,columns);
     }
-
+    else{
+      int newcolumn=number_of(newRow.length(),newRow," ") + 1;
+      if(newcolumn!=columns) throw(2);
+    }
     // substring the row into elements
     int beginElement = 0;
     int endElement;
@@ -266,7 +286,7 @@ void matrix::copy_matrix(matrix & p)
    this -> columns = p.columns;
     this -> name = name;
 
- if ((rows*columns) == 0) { elements = NULL; return; }
+ if ((rows*columns) == 0) { elements = NULL;cout<<"warning: input rows or columns =0, NULL matrix created."<<endl; return; }
 
 
    //create the matrix
@@ -286,13 +306,13 @@ void matrix::copy_matrix(matrix & p)
 }
 
 void matrix::reset_matrix(int rows, int columns)
-{
+{  if(rows<0 || columns<0) throw(0);
     destroy_matrix();
 
     this -> rows = rows;
     this -> columns = columns;
 
-     if ((rows*columns) == 0) { elements = NULL; return; }
+     if ((rows*columns) == 0) { elements = NULL;cout<<"warning: input rows or columns =0, NULL matrix created."<<endl; return; }
 
     this -> elements = new double*[rows];
     for(int i=0;i<rows;i++)
@@ -347,7 +367,10 @@ void matrix::print_matrix()
 
 // generate a sub matrix, it won't crash
 matrix matrix::new_sub_matrix(int row, int column)
-{
+{    if(rows<0 || columns <0) throw(0);
+     if ((rows*columns) == 0) throw(3);
+     //if ((row*column)==0)throw(4);
+    if(row>(rows-1)||column>(columns-1)) throw (4);
   matrix *temp = new matrix((this->rows)-1,(this->columns)-1);
   for(int i=0;i<(temp->rows);i++)
   {
@@ -369,7 +392,7 @@ matrix matrix::new_sub_matrix(int row, int column)
 
 // measure the determinant of the matrix, it will crash if the number of rows != num of colums
 double matrix::determinant()
-{
+{ if (rows!=columns) throw(5);
   double result = 0.0;
   if(this->rows == 2)
   {
@@ -406,7 +429,7 @@ void matrix::flip_matrix()
 
 
 matrix matrix::inverse()
-{
+{ if (rows!=columns)throw(6);
     matrix* temp = new matrix;
     *temp = *this;
     matrix u(rows,columns);
@@ -444,6 +467,7 @@ matrix matrix::inverse()
     for(i=0;i<n;i++)
     {
     d=temp -> elements[i][i];
+    if (d==0)throw(7);
         for(j=0;j<n;j++)
         {
             temp -> elements[i][j]=temp -> elements[i][j]/d;
@@ -475,9 +499,10 @@ matrix matrix::inverse()
 
 void matrix:: unity_matrix()
 {
-    if ( rows != columns || rows ==0 || columns==0 )
-        return;
-
+   // if ( rows != columns || rows ==0 || columns==0 )
+     if(rows!=columns)throw(8);
+        //return;
+if (rows==0||columns==0)throw(9);
 for(int i = 0 ; i < rows ; i++)
         for(int j=0 ; j < columns ; j++)
             if(i == j)
@@ -980,6 +1005,5 @@ if (input < 100000) return 5;
 if (input < 1000000) return 6;
 
 }
-
 
 
