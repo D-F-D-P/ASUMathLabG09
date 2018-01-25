@@ -45,8 +45,11 @@ catch(int error){
   else if(error==19)cout<<"error: root square of a negative number, complex output not supported."<<endl;
   else if(error==20)cout<<"error: matrix element less than or equal zero, ln() can't be evaluated."<<endl;
   else if(error==21)cout<<"error: matrix element less than or equal zero, log() can't be evaluated."<<endl;
+
 }
 
 	return 0;
 
 }
+
+

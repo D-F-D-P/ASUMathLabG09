@@ -323,6 +323,7 @@ void matrix::reset_matrix(int rows, int columns)
         return;
        }
 
+
     this -> elements = new double*[rows];
     for(int i=0;i<rows;i++)
     {
@@ -404,6 +405,7 @@ matrix matrix::new_sub_matrix(int row, int column)
 double matrix::determinant()
 {
   if(rows!=columns) throw(5);
+
   double result = 0.0;
   if(this->rows == 2)
   {
@@ -444,6 +446,7 @@ matrix matrix::inverse()
 
 
   if(rows != columns) throw(6);
+
     matrix* temp = new matrix;
     *temp = *this;
     matrix u(rows,columns);
@@ -900,6 +903,7 @@ for(int i=0; i< a.rows; i++){
     }
   }
 }
+
 //Function for filling the matrix with zeros
 matrix zeros(int rows, int columns){
 	matrix result(rows,columns);
@@ -1069,3 +1073,4 @@ if (input < 100000) return 5;
 //if (input < 1000000) return 6;
 else return 6;
 }
+
