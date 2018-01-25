@@ -94,7 +94,14 @@ public:
 
     friend void squareroot ( matrix& a, matrix& result);// square root to each element
 
+//trigonometric and logarithmic functions
 
+	friend matrix sin_elements(matrix& a);
+	friend matrix cos_elements(matrix& a);
+	friend matrix tan_elements(matrix& a);
+
+	friend matrix log_elements(matrix& a);
+	friend matrix ln_elements(matrix& a);
 
 };
 

@@ -278,15 +278,19 @@ void matrix::empty_matrix()
 
 void matrix::copy_matrix(matrix & p)
 {
-    string name = this->name;
-   destroy_matrix();
+  string name = this->name;
+  destroy_matrix();
 
 
-   this -> rows = p.rows;
-   this -> columns = p.columns;
-    this -> name = name;
+  this -> rows = p.rows;
+  this -> columns = p.columns;
+  this -> name = name;
 
- if ((rows*columns) == 0) { elements = NULL;cout<<"warning: input rows or columns =0, NULL matrix created."<<endl; return; }
+ if ((rows*columns) == 0) {
+   elements = NULL;
+   cout<<"warning: input rows or columns =0, NULL matrix created."<<endl;
+  return;
+  }
 
 
    //create the matrix
@@ -306,13 +310,19 @@ void matrix::copy_matrix(matrix & p)
 }
 
 void matrix::reset_matrix(int rows, int columns)
-{  if(rows<0 || columns<0) throw(0);
+{
+    if(rows<0 || columns<0) throw(0);
     destroy_matrix();
 
     this -> rows = rows;
     this -> columns = columns;
 
-     if ((rows*columns) == 0) { elements = NULL;cout<<"warning: input rows or columns =0, NULL matrix created."<<endl; return; }
+     if ((rows*columns) == 0) {
+       elements = NULL;
+       cout<<"warning: input rows or columns =0, NULL matrix created."<<endl;
+        return;
+       }
+
 
     this -> elements = new double*[rows];
     for(int i=0;i<rows;i++)
@@ -331,7 +341,7 @@ void matrix::reset_matrix(int rows, int columns)
 void matrix::print_matrix()
 {
     if(this->elements == NULL) //to prevent crash
-        cout << "this matrix is not created" <<endl;
+        cout << "This matrix is not created." <<endl;
     else
     cout << this->name << " = " << endl;
 	for(int i=0;i<rows;i++){
@@ -367,10 +377,11 @@ void matrix::print_matrix()
 
 // generate a sub matrix, it won't crash
 matrix matrix::new_sub_matrix(int row, int column)
-{    if(rows<0 || columns <0) throw(0);
-     if ((rows*columns) == 0) throw(3);
-     //if ((row*column)==0)throw(4);
-    if(row>(rows-1)||column>(columns-1)) throw (4);
+{
+  if(row<0 || column<0) throw(0);
+  if(rows*columns==0) throw(3);
+  if(row>(rows-1) || column>(columns-1)) throw(4);
+
   matrix *temp = new matrix((this->rows)-1,(this->columns)-1);
   for(int i=0;i<(temp->rows);i++)
   {
@@ -392,7 +403,9 @@ matrix matrix::new_sub_matrix(int row, int column)
 
 // measure the determinant of the matrix, it will crash if the number of rows != num of colums
 double matrix::determinant()
-{ if (rows!=columns) throw(5);
+{
+  if(rows!=columns) throw(5);
+
   double result = 0.0;
   if(this->rows == 2)
   {
@@ -429,7 +442,11 @@ void matrix::flip_matrix()
 
 
 matrix matrix::inverse()
-{ if (rows!=columns)throw(6);
+{
+
+
+  if(rows != columns) throw(6);
+
     matrix* temp = new matrix;
     *temp = *this;
     matrix u(rows,columns);
@@ -467,7 +484,7 @@ matrix matrix::inverse()
     for(i=0;i<n;i++)
     {
     d=temp -> elements[i][i];
-    if (d==0)throw(7);
+    if(d==0) throw(7);
         for(j=0;j<n;j++)
         {
             temp -> elements[i][j]=temp -> elements[i][j]/d;
@@ -499,10 +516,10 @@ matrix matrix::inverse()
 
 void matrix:: unity_matrix()
 {
-   // if ( rows != columns || rows ==0 || columns==0 )
-     if(rows!=columns)throw(8);
-        //return;
-if (rows==0||columns==0)throw(9);
+  //  if ( rows != columns || rows ==0 || columns==0 )
+    //    return;
+if(rows != columns) throw(8);
+if(rows==0 || columns==0) throw(9);
 for(int i = 0 ; i < rows ; i++)
         for(int j=0 ; j < columns ; j++)
             if(i == j)
@@ -531,6 +548,9 @@ bool is_equal(matrix &A , matrix &B)
 // divide matrix A over B , it will crash if the number of rows != num of colums or if the 2 matrix don't match
 void divide_matrix(matrix &A, matrix &B , matrix &C)
 {
+  if(B.get_columns() != B.get_rows()) throw(10);
+  if(A.get_columns() != B.get_rows()) throw(11);
+
   matrix b = B.inverse();
   multiply_matrix(A, b , C);
 }
@@ -538,16 +558,14 @@ void divide_matrix(matrix &A, matrix &B , matrix &C)
  //sum of two matrix
   void sum_matrix(matrix &A, matrix &B , matrix &C)
  {
-	 if (A.rows != B.rows ||  A.columns != B.columns)cout << "error sizing" << endl;
-
-	 else {
-
+	 //if (A.rows != B.rows ||  A.columns != B.columns)cout << "error sizing" << endl;
+   if(A.rows !=B.rows || A.columns != B.columns) throw(12);
 			 for (int i = 0; i < A.rows; i++)
 			 {
 				 for (int j = 0; j < A.columns; j++)
 					 C.elements[i][j] = A.elements[i][j] + B.elements[i][j];
 			 }
-	      }
+
 
  }
 
@@ -555,22 +573,15 @@ void divide_matrix(matrix &A, matrix &B , matrix &C)
 // sub of two matrix
 void sub_matrix(matrix &A, matrix &B , matrix &C)
  {
-	 if ( (A.rows != B.rows  ||  A.columns != B.columns ) )
-        cout << "error sizing" << endl;
-
-	 else {
+   if(A.rows !=B.rows || A.columns != B.columns) throw(13);
 
 			 for (int i = 0; i < A.rows; i++)
 			 {
 				 for (int j = 0; j < A.columns; j++)
 					 C.elements[i][j] = A.elements[i][j] - B.elements[i][j];
 			 }
-	      }
+
  }
-
-
-
-
 
 
 
@@ -578,28 +589,22 @@ void sub_matrix(matrix &A, matrix &B , matrix &C)
   void sum_num(matrix &A, double B, matrix &C)
   {
 
-
 	  for (int i = 0; i < A.rows; i++)
 	  {
 		  for (int j = 0; j < A.columns; j++)
 			  C.elements[i][j] = A.elements[i][j] + B;
 	  }
 
-
   }
-
-
 
   //multiply of matrix and number
   void multiply_num(matrix &A, double B, matrix &C)
 {
-
 	  for (int i = 0; i < A.rows; i++)
 	  {
 		  for (int j = 0; j < A.columns; j++)
 			  C.elements[i][j] = A.elements[i][j] * B;
 	  }
-
 
 }
 
@@ -607,7 +612,6 @@ void sub_matrix(matrix &A, matrix &B , matrix &C)
   //sub of matrix and number
   void sub_num(matrix &A, double B, matrix &C)
   {
-
 
 	  for (int i = 0; i < A.rows; i++)
 	  {
@@ -623,20 +627,17 @@ void div_num(matrix &A, double B , matrix &C) // to divide matrix and number
 {
     for (int i = 0; i < A.rows; i++)
 	  {
-		  for (int j = 0; j < A.columns; j++)
+		  for (int j = 0; j < A.columns; j++){
+      if(A.elements[i][j]==0) throw(14);
 			  C.elements[i][j] = B / A.elements[i][j];
+      }
 	  }
 }
 
 void multiply_matrix(matrix &A, matrix &B , matrix &C)
 {
 
-    if (A.columns!=B.rows)
-        cout << "error columns of first is not equal rows of the second" << endl;
-        //Or whatever the doctor says
-
-     else
-     {
+    if (A.columns!=B.rows) throw(15);
 
     // Multiplying and store in r
      for (int i=0;i<A.rows;i++){
@@ -647,7 +648,6 @@ void multiply_matrix(matrix &A, matrix &B , matrix &C)
         }
     }
 
-     }
 }
 
 
@@ -727,7 +727,7 @@ matrix operator - (matrix &p) // A = -A
 
 matrix matrix :: operator * (matrix &m) //C=A*B
 {
-    matrix result(m.rows , m.columns);
+    matrix result(rows , m.columns);
     multiply_matrix((*this),m, result);
     return result;
 
@@ -754,7 +754,7 @@ matrix matrix :: operator / (matrix &m)
 {
 
 
-    matrix result(m.rows , m.columns);
+    matrix result(rows , m.columns);
     if(is_equal((*this) , m))
     result.unity_matrix();
 
@@ -789,7 +789,8 @@ matrix operator / (double a, matrix &m) // C = a / m
 //WALEED ...
 matrix matrix::get_cofactor(int r,int c)
 {
-    if(rows<=1 && columns<=1);//throw("Invalid matrix dimension");
+    if(rows<=1 || columns<=1) throw(16);
+    if(r>rows || c>columns) throw(17);
     matrix m(rows-1, columns-1);
     for(int iR=0;iR<m.rows;iR++)
         for(int iC=0;iC<m.columns;iC++)
@@ -803,6 +804,7 @@ matrix matrix::get_cofactor(int r,int c)
 }
 double matrix::get_determinant()
 {
+  if(rows != columns) throw(5);
     matrix *temp = new matrix;
     *temp = *this;
 
@@ -862,6 +864,7 @@ double matrix::get_determinant()
 //function for matrix power int
 void power (matrix& a,int n,matrix& result){
     //this must be a square matrix
+    if(a.get_rows() != a.get_columns()) throw(18);
     result=a;
     for (int i=1;i<n;i++){
         result=a*result;
@@ -895,14 +898,12 @@ for(int i=0; i< a.rows; i++){
         result.elements[i][j]=sqrt(a.elements[i][j]);
       }
       else {
-        cout<<"Complex Output";
+        throw(19);
       }
-
     }
   }
-
-
 }
+
 //Function for filling the matrix with zeros
 matrix zeros(int rows, int columns){
 	matrix result(rows,columns);
@@ -941,6 +942,73 @@ matrix matrix:: kobry (int r, int c){
 return ones(r,c);
 }
 */
+
+
+
+//trigonometric (MAKE SURE THE INPUT VALUES ARE MEANT TO BE RADIAN) and logarithmic functions
+
+	matrix sin_elements(matrix& a){
+    matrix result(a.get_rows(),a.get_columns());
+    for(int i=0; i< a.get_rows(); i++){
+      for(int j=0; j<a.get_rows(); j++){
+        result.elements[i][j]=sin(a.elements[i][j]);
+
+      }
+    }
+    return result;
+
+  }
+	matrix cos_elements(matrix& a){
+    matrix result(a.get_rows(),a.get_columns());
+    for(int i=0; i< a.get_rows(); i++){
+      for(int j=0; j<a.get_rows(); j++){
+        result.elements[i][j]=cos(a.elements[i][j]);
+
+      }
+    }
+    return result;
+
+
+  }
+	matrix tan_elements(matrix& a){
+    matrix result(a.get_rows(),a.get_columns());
+    for(int i=0; i< a.get_rows(); i++){
+      for(int j=0; j<a.get_rows(); j++){
+        result.elements[i][j]=tan(a.elements[i][j]);
+
+      }
+    }
+    return result;
+
+
+  }
+
+	matrix ln_elements(matrix& a){
+    matrix result(a.get_rows(),a.get_columns());
+    for(int i=0; i< a.get_rows(); i++){
+      for(int j=0; j<a.get_rows(); j++){
+        if(a.elements[i][j]<=0) throw(20);
+        result.elements[i][j]=log(a.elements[i][j]);
+
+      }
+    }
+    return result;
+
+  }
+	matrix log_elements(matrix& a){
+    matrix result(a.get_rows(),a.get_columns());
+    for(int i=0; i< a.get_rows(); i++){
+      for(int j=0; j<a.get_rows(); j++){
+        if(a.elements[i][j]<=0) throw(21);
+        result.elements[i][j]=log10(a.elements[i][j]);
+
+      }
+    }
+    return result;
+
+
+  }
+
 // Global Functions
 
 //count number of chars in a string
@@ -1002,8 +1070,7 @@ if (input < 100) return 2;
 if (input < 1000) return 3;
 if (input < 10000) return 4;
 if (input < 100000) return 5;
-if (input < 1000000) return 6;
-
+//if (input < 1000000) return 6;
+else return 6;
 }
-
 
