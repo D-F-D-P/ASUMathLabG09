@@ -1009,6 +1009,53 @@ return ones(r,c);
 
   }
 
+
+
+matrix *add_ver(matrix* input , int rows)
+{
+
+   int cols = input->columns;
+
+   matrix *newMatrix = new matrix(rows,cols);
+
+
+   for(int i = 0 ;i < rows ; i++)
+
+   for(int j = 0 ; j < cols ; j++ )
+   {
+       newMatrix -> elements[i][j] = input[i].elements[0][j];
+   }
+
+    return newMatrix;
+
+}
+
+
+matrix *add_horz(matrix* input , int cols)
+{
+
+   int rows = input->rows;
+
+   matrix *newMatrix = new matrix(rows,cols);
+   //(*newMatrix)->reset_matrix(rows , cols);
+
+   for(int i = 0 ;i < rows ; i++)
+
+   for(int j = 0 ; j < cols ; j++ )
+   {
+       newMatrix -> elements[i][j] = input[j].elements[i][0];
+   }
+
+    return newMatrix;
+
+}
+
+
+
+
+
+
+
 // Global Functions
 
 //count number of chars in a string

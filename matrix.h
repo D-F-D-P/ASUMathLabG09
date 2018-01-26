@@ -103,6 +103,12 @@ public:
 	friend matrix log_elements(matrix& a);
 	friend matrix ln_elements(matrix& a);
 
+
+    friend matrix * add_ver(matrix* input ,int rows);
+    friend matrix *add_horz(matrix* input , int cols);
+
+
+
 };
 
 //global functions
