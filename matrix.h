@@ -7,12 +7,12 @@ class matrix
 {
 	double** elements;
     int rows,columns;
-    std::string name;
     //  bool valid; to be added..
 
 	/*attach any further variables here*/
 
 public:
+    std::string name;
 
 	/*attach your header function here*/
 
