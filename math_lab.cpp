@@ -2,260 +2,70 @@
 #include "math_lab.h"
 #include <cstdlib>
 #include <algorithm>
-
+#include "shuffleYard.cpp"
 #include <math.h>
 
-#define MATRIX array_matrix.get_matrix()
 using namespace std;
 
-//---------------------------------------------------------------------------------------------//trim spaces & \r
-string trim_r(string right_string)
-{
-      if(right_string.find('\r')==-1)//recursion base case
-        {
-           return right_string;
-        }
 
-    string left_string="";
 
-      int i=right_string.find('\r')+1;
+bool braces_num(string s ) {
+    bool valid = 0, valid1 = 0, valid2 = 0, valid3 = 0;
+    int left1 = 0, right1 = 0, left2 = 0, right2 = 0, left3 = 0, right3 = 0, type1 = 0, type2 = 0, type3 = 0;
 
-   left_string=right_string.substr(0,i-1);
-
-        return left_string+trim_spaces(right_string.substr(i,right_string.length()-1));
-
-}
-// --------------------------------------------------------------------------------------------------------------------------------- //
-/*string trim_n(string right_string)
-{
-      if(right_string.find('\n')==-1)//recursion base case
-        {
-           return right_string;
-        }
-
-    string left_string="";
-
-      int i=right_string.find('\n')+1;
-
-   left_string=right_string.substr(0,i-1);
-
-        return left_string+trim_spaces(right_string.substr(i,right_string.length()-1));
-
-}*/
-//----------------------------------------------------------------------------------------------//trim spaces fun->public fun
-string trim_spaces(string right_string)
-{
-      if(right_string.find(' ')==-1)//recursion base case
-        {
-           return right_string;
-        }
-
-    string left_string="";
-
-      int i=right_string.find(' ')+1;
-
-   left_string=right_string.substr(0,i-1);
-
-        return left_string+trim_spaces(right_string.substr(i,right_string.length()-1));
-
-}
-//-----------------------------------------------------------------------------------------------// decode
-void math_lab::decode(string operation)
-{
-   bool print_=0;
-    if(operation[operation.length()-1]==';')
-    {
-        print_=1;
-    }
-
-    string first_operand,second_operand,third_operand;
-    int st,nd,th;
-    int operator1;
-    int x=0;
-    for(int i=0;i<operation.length();i++)
-    {char a=operation[i];
-        if(operation[i]=='=')
-        {
-            first_operand=operation.substr(0,i);
-            x=i+1;
-        }
-        if(operation[i]=='+'||operation[i]=='-'||operation[i]=='*'||operation[i]=='/'||operation[i]=='\'')
-        {
-            operator1=i;
-            second_operand=operation.substr(x,i-x);
-
-            if(print_==1)
+        for (int i = 0; i <= s.length(); i++)
             {
-                third_operand=operation.substr(i+1,operation.length()-(i+2));
+                if (s[i]=='(') left1++;
+                else if(s[i]==')') right1++;
+                else if(s[i]=='[') left2++;
+                else if(s[i]==']') right2++;
+                else if(s[i]=='{') left3++;
+                else if(s[i]=='}') right3++;
             }
-            else
-            {
-                third_operand=operation.substr(i+1,operation.length()-(i+1));
-            }
-            break;
-        }
-    }
-    st= array_matrix.find_matrix(first_operand);
-       nd=array_matrix.find_matrix(second_operand);
-       th=array_matrix.find_matrix(third_operand);
-    if(operation[operator1]=='+')
-    {
-       MATRIX[st]=MATRIX[nd]+MATRIX[th];
-        if(!print_)
-        {
-          MATRIX[st].print_matrix();
-        }
-    }
-   else if(operation[operator1]=='-')
-    {
-        MATRIX[st]=MATRIX[nd]-MATRIX[th];
-          if(!print_)
-        {
-            MATRIX[st].print_matrix();
-        }
-    }
-    else if(operation[operator1]=='*')
-    {
-        MATRIX[st]=MATRIX[nd]*MATRIX[th];
-          if(!print_)
-        {
-            MATRIX[st].print_matrix();
-        }
-    }
-    else if( operation[operator1]=='/'  && operation[operator1-1]!='.')
-    {
+        if( right1 == left1) valid1 = 1;
+        if( right2 == left2) valid2 = 1;
+        if( right3 == left3) valid3 = 1;
+        if(valid1 == valid2 == valid3) valid = 1;
 
-	  double DET = MATRIX[th].get_determinant();
-	  if (DET != 0 && !isnan(DET))
-            MATRIX[st]=MATRIX[nd]/MATRIX[th];
-	  else { print_ =1; cout << "Determinant error (0 or inf)"<< endl;}
-
-          if(!print_)
-        {
-            MATRIX[st].print_matrix();
-        }
-    }
-     else if(operation[operator1]=='\'')
-    {
-            MATRIX[st]=MATRIX[nd];
-            MATRIX[st].flip_matrix();
-          if(!print_)
-        {
-            MATRIX[st].print_matrix();
-        }
-    }
-
-	else if(operation[operator1-1]=='.')
-	{       float number = strtof((second_operand).c_str(),0);
-		MATRIX[st] = number / MATRIX[th];
-		if(!print_)
-        {
-            MATRIX[st].print_matrix();
-        }
-	}
-	else
-	{
-		cout<<"invalid operator"<<endl;
-		  return;
-	}
-
-    return;
+    return valid;
 }
+
+
+
 //-----------------------------------------------------------------------------------------------//load_file
 void math_lab:: load_file(string file_path)
   {
-        array_matrix.set_size(10);
-
-        string data_string="";
-        string operation_string="";
-	    std:: ifstream infile(file_path.c_str());
-        while(!infile.eof())
+        
+        
+    string operation_string="";
+    std:: ifstream infile(file_path.c_str());   
+    while(!infile.eof())
         {
-        getline(infile,data_string);
-        data_string.erase(std::remove(data_string.begin(),data_string.end(), '\r'), data_string.end());
-       
- if((data_string.find('[',0) != -1)&&(data_string.find(']') != -1))// op
+        getline(infile,operation_string);
+        operation_string.erase(std::remove(operation_string.begin(),operation_string.end(), '\r'), operation_string.end());
+         
+        if(operation_string.find('[') != -1)
         {
-
-           MATRIX[array_matrix.valid_size].fill_matrix(data_string);
-            array_matrix.valid_size++;
-            if (array_matrix.valid_size==array_matrix.get_size())
+            while(!(braces_num(operation_string))
             {
-                array_matrix.set_size(array_matrix.valid_size+5);
-            }
-        }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		else if((data_string.find('[') != -1)&&(data_string.find(']') == -1))
-		{string temps;
+                string temp;
+                getline(infile,temp);
+                operation_string+=temp;
 
-			while(temps.find(']') == -1)
-			{
-				getline(infile,temps);
-				data_string+=temps;/// <<<<
-			}
-data_string.erase(std::remove(data_string.begin(),data_string.end(), '\n'), data_string.end());
-data_string.erase(std::remove(data_string.begin(),data_string.end(), '\r'), data_string.end());
-
-		 MATRIX[array_matrix.valid_size].fill_matrix(data_string);
-			array_matrix.valid_size++;
-			 if (array_matrix.valid_size==array_matrix.get_size())
-            {
-                array_matrix.set_size(array_matrix.valid_size+5);
-            }
-		}
-		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
-
-
-        else
-        {
-                        operation_string=trim_spaces(data_string);
-			operation_string=trim_r(operation_string);
-if(operation_string=="")
-continue;
-
-            decode(operation_string);
-
-
-        }
-
-        }
-        infile.close();
+            }  
+       }
+       operation_string.erase(std::remove(operation_string.begin(),operation_string.end(), '\n'), operation_string.end());
+       do_operation(operation_string);
+ 
+    } 
+    infile.close();
     return;
   }
 //----------------------------------------------------------------------------------------------------//open_commands
 void math_lab::open_command()
 {
-    string data_string;
-    string operation_string;
-
-    while(1)
-    {
-        getline(cin,data_string);
-        if(data_string.find('[') != -1)
-        {
-            MATRIX[array_matrix.valid_size].fill_matrix(data_string);
-            array_matrix.valid_size++;
-             if (array_matrix.valid_size==array_matrix.get_size())
-            {
-                array_matrix.set_size(array_matrix.valid_size+5);
-            }
-        }
-        else
-        {
-            operation_string=trim_spaces(data_string);
-            operation_string=trim_r(operation_string);
-if(operation_string=="")
-continue;
-            decode(operation_string);
-
-        }
-    }
+    open_cli();
     return;
 }
-
-
-
-
-
 
 

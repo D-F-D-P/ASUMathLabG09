@@ -1011,32 +1011,19 @@ return ones(r,c);
 
 
 
-matrix *add_ver(matrix** input , int rows)
+matrix *add_ver(matrix* input , int rows)
 {
-    int actual_rows=0;
 
-   int cols = input[0]->columns;
+   int cols = input->columns;
 
-for(int i=0;i<rows;i++)
-{
-    actual_rows+= input[i]->rows;
-}
+   matrix *newMatrix = new matrix(rows,cols);
 
 
-   matrix *newMatrix = new matrix(actual_rows,cols);
-int k=0;
-   for(int i= 0 ;i < rows ; i++)
-   {
-   for(int actual_rows2=0; actual_rows2<input[i]->rows;actual_rows2++)
-   {
+   for(int i = 0 ;i < rows ; i++)
+
    for(int j = 0 ; j < cols ; j++ )
    {
-       newMatrix -> elements[k][j] = input[i]->elements[actual_rows2][j];
-
-   }
-
-   k++;
-   }
+       newMatrix -> elements[i][j] = input[i].elements[0][j];
    }
 
     return newMatrix;
@@ -1044,34 +1031,19 @@ int k=0;
 }
 
 
-
-
-
-matrix *add_horz(matrix** input , int cols)
+matrix *add_horz(matrix* input , int cols)
 {
-    int actual_cols=0;
 
-   int rows = input[0]->rows;
+   int rows = input->rows;
 
-for(int i=0;i<cols;i++)
-{
-    actual_cols+= input[i]->columns;
-}
+   matrix *newMatrix = new matrix(rows,cols);
+   //(*newMatrix)->reset_matrix(rows , cols);
 
-   matrix *newMatrix = new matrix(rows,actual_cols);
-int k=0;
-   for(int i= 0 ;i < cols ; i++)
+   for(int i = 0 ;i < rows ; i++)
+
+   for(int j = 0 ; j < cols ; j++ )
    {
-   for(int actual_cols2=0; actual_cols2<input[i]->columns;actual_cols2++)
-   {
-   for(int j = 0 ; j < rows ; j++ )
-   {
-       newMatrix -> elements[j][k] = input[i]->elements[j][actual_cols2];
-
-   }
-
-   k++;
-   }
+       newMatrix -> elements[i][j] = input[j].elements[i][0];
    }
 
     return newMatrix;
@@ -1148,5 +1120,4 @@ if (input < 100000) return 5;
 //if (input < 1000000) return 6;
 else return 6;
 }
-
 
