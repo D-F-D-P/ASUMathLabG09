@@ -3,10 +3,24 @@
 #include <cstdlib>
 #include <math.h>
 #include <iomanip>
+#include "shuffleYard.cpp"
 #include <string>
 #include <algorithm>
 #include <stdexcept>
 using namespace std;
+
+#define PI 3.14159265
+
+string trim(const string& str)
+{
+    size_t first = str.find_first_not_of(' ');
+    if (string::npos == first)
+    {
+        return str;
+    }
+    size_t last = str.find_last_not_of(' ');
+    return str.substr(first, (last - first + 1));
+}
 /*attach your libraries here*/
 
 
@@ -494,7 +508,6 @@ matrix matrix::inverse()
     return u;
 
 
-
   /*matrix *temp = new matrix;
   temp->copy_matrix(*this);
   double det = temp->get_determinant();
@@ -512,6 +525,20 @@ matrix matrix::inverse()
   temp->flip_matrix();
   multiply_num(*temp, (1/det), *temp);
   return *temp;*/
+}
+matrix* matrix_divide_elements(matrix &A, matrix &B)
+{
+    if((B.rows != A.rows) || (B.columns != A.columns))
+        throw (22);
+    matrix* result = new matrix (A.rows,A.columns);
+    for (int i = 0 ; i < A.rows ;i++)
+    {
+        for(int j = 0 ; j < A.columns ; j++)
+        {
+            result->elements[i][j] = A.elements[i][j]/B.elements[i][j];
+        }
+    }
+    return result;
 }
 
 void matrix:: unity_matrix()
@@ -787,6 +814,24 @@ matrix operator / (double a, matrix &m) // C = a / m
 }
 
 //WALEED ...
+matrix* mysquareroot(matrix* a)
+{
+    matrix* result = new matrix (a->rows,a->columns);
+    for(int i=0; i< a->rows; i++){
+        for(int j=0; j< a->columns; j++){
+            if(a->elements[i][j]>=0){
+            result->elements[i][j]=sqrt(a->elements[i][j]);
+            }
+            else {
+                throw(19);
+      }
+    }
+  }
+  return result;
+}
+
+
+
 matrix matrix::get_cofactor(int r,int c)
 {
     if(rows<=1 || columns<=1) throw(16);
@@ -888,6 +933,15 @@ void power_elements(matrix& a, double n, matrix& result){
     }
 }
 
+matrix* power_by_elements(float num, matrix* input){
+  matrix *output = new matrix(input->rows, input->columns);
+  for (int i = 0; i < input->rows; i++) {
+    for (int j = 0; j < input->columns; j++) {
+      output->elements[i][j] = pow(num, input->elements[i][j]);
+    }
+  }
+  return output;
+}
 
 //function for to calculate every element square root
 void squareroot ( matrix& a, matrix& result){
@@ -937,6 +991,41 @@ matrix ones(int rows,int columns){
     return result;
 }
 
+//Function for filling the matrix with zeros
+matrix matrix:: zeros(int rows, int columns){
+  matrix result(rows,columns);
+  for(int i=0; i<rows; i++){
+    for(int j=0; j< columns; j++){
+      result.elements[i][j]=0;
+        }
+  }
+    return result;
+}
+//Function for filling the matrix with random no.
+matrix matrix:: random(int rows, int columns){
+    matrix result(rows,columns);
+  for(int i=0; i<rows; i++){
+    for(int j=0; j< columns; j++){
+      result.elements[i][j]=(rand()%50);
+        }
+  }
+  return result;
+
+}
+
+
+//Function for filling the matrix with ones
+
+matrix matrix:: ones(int rows,int columns){
+    matrix result(rows,columns);
+  for(int i=0; i<rows; i++){
+    for(int j=0; j< columns; j++){
+      result.elements[i][j]=1;
+        }
+  }
+    return result;
+}
+
 /*
 matrix matrix:: kobry (int r, int c){
 return ones(r,c);
@@ -950,8 +1039,8 @@ return ones(r,c);
 	matrix sin_elements(matrix& a){
     matrix result(a.get_rows(),a.get_columns());
     for(int i=0; i< a.get_rows(); i++){
-      for(int j=0; j<a.get_rows(); j++){
-        result.elements[i][j]=sin(a.elements[i][j]);
+      for(int j=0; j<a.get_columns(); j++){
+        result.elements[i][j]=sin(a.elements[i][j] );
 
       }
     }
@@ -961,8 +1050,8 @@ return ones(r,c);
 	matrix cos_elements(matrix& a){
     matrix result(a.get_rows(),a.get_columns());
     for(int i=0; i< a.get_rows(); i++){
-      for(int j=0; j<a.get_rows(); j++){
-        result.elements[i][j]=cos(a.elements[i][j]);
+      for(int j=0; j<a.get_columns(); j++){
+        result.elements[i][j]=cos(a.elements[i][j] );
 
       }
     }
@@ -973,7 +1062,7 @@ return ones(r,c);
 	matrix tan_elements(matrix& a){
     matrix result(a.get_rows(),a.get_columns());
     for(int i=0; i< a.get_rows(); i++){
-      for(int j=0; j<a.get_rows(); j++){
+      for(int j=0; j<a.get_columns(); j++){
         result.elements[i][j]=tan(a.elements[i][j]);
 
       }
@@ -986,7 +1075,7 @@ return ones(r,c);
 	matrix ln_elements(matrix& a){
     matrix result(a.get_rows(),a.get_columns());
     for(int i=0; i< a.get_rows(); i++){
-      for(int j=0; j<a.get_rows(); j++){
+      for(int j=0; j<a.get_columns(); j++){
         if(a.elements[i][j]<=0) throw(20);
         result.elements[i][j]=log(a.elements[i][j]);
 
@@ -998,7 +1087,7 @@ return ones(r,c);
 	matrix log_elements(matrix& a){
     matrix result(a.get_rows(),a.get_columns());
     for(int i=0; i< a.get_rows(); i++){
-      for(int j=0; j<a.get_rows(); j++){
+      for(int j=0; j<a.get_columns(); j++){
         if(a.elements[i][j]<=0) throw(21);
         result.elements[i][j]=log10(a.elements[i][j]);
 
@@ -1008,53 +1097,6 @@ return ones(r,c);
 
 
   }
-
-
-
-matrix *add_ver(matrix* input , int rows)
-{
-
-   int cols = input->columns;
-
-   matrix *newMatrix = new matrix(rows,cols);
-
-
-   for(int i = 0 ;i < rows ; i++)
-
-   for(int j = 0 ; j < cols ; j++ )
-   {
-       newMatrix -> elements[i][j] = input[i].elements[0][j];
-   }
-
-    return newMatrix;
-
-}
-
-
-matrix *add_horz(matrix* input , int cols)
-{
-
-   int rows = input->rows;
-
-   matrix *newMatrix = new matrix(rows,cols);
-   //(*newMatrix)->reset_matrix(rows , cols);
-
-   for(int i = 0 ;i < rows ; i++)
-
-   for(int j = 0 ; j < cols ; j++ )
-   {
-       newMatrix -> elements[i][j] = input[j].elements[i][0];
-   }
-
-    return newMatrix;
-
-}
-
-
-
-
-
-
 
 // Global Functions
 
@@ -1121,3 +1163,149 @@ if (input < 100000) return 5;
 else return 6;
 }
 
+void matrix::set_value(float val){
+  for (int i = 0; i < this->get_rows(); i++) {
+    for (int k = 0; k < this->get_columns(); k++) {
+      this->elements[i][k] = val;
+    }
+  }
+}
+
+matrix *add_ver(matrix* input , int num)
+{
+  int columns = input[0].get_columns();
+  int rows = 0;
+  for (int i = 0; i < num; i++) {
+    rows += input[i].get_rows();
+  }
+  int indexRow = 0;
+  int indexColumn = 0;
+  matrix *output = new matrix(rows, columns);
+  for (int i = 0; i < num; i++) {
+    if(input[i].get_columns() != columns)throw(24);
+    output->setSubMatrx(indexRow, indexColumn, &input[i]);
+    indexRow += input[i].get_rows();
+  }
+  return output;
+}
+
+
+matrix *add_horz(matrix* input , int num)
+{
+  int rows = input[0].get_rows();
+  int columns = 0;
+  for (int i = 0; i < num; i++) {
+    columns += input[i].get_columns();
+  }
+  int indexRow = 0;
+  int indexColumn = 0;
+  matrix *output = new matrix(rows, columns);
+  for (int i = 0; i < num; i++) {
+    if(input[i].get_rows() != rows)throw(24);
+    output->setSubMatrx(indexRow, indexColumn, &input[i]);
+    indexColumn += input[i].get_columns();
+  }
+  return output;
+}
+
+
+void matrix::setSubMatrx(int indexRow, int indexColumn, matrix * input){
+  for (int i = 0; i < input->get_rows(); i++) {
+    for (int j = 0; j < input->get_columns(); j++) {
+      this->elements[i + indexRow][j + indexColumn] = input->elements[i][j];
+    }
+  }
+};
+
+
+ string replace(string right_string)
+{
+      if(right_string.find('\n')==-1)//recursion base case
+        {
+           return right_string;
+        }
+
+    string left_string="";
+
+      int i=right_string.find('\n')+1;
+
+   left_string=right_string.substr(0,i-1);
+
+        return left_string+";"+replace(right_string.substr(i,right_string.length() - 1));
+
+}
+
+bool braces_num(string s ) {
+    bool valid = 0, valid1 = 0, valid2 = 0, valid3 = 0;
+    int left1 = 0, right1 = 0, left2 = 0, right2 = 0, left3 = 0, right3 = 0, type1 = 0, type2 = 0, type3 = 0;
+
+        for (int i = 0; i <= s.length(); i++)
+            {
+                if (s[i]=='(') left1++;
+                else if(s[i]==')') right1++;
+                else if(s[i]=='[') left2++;
+                else if(s[i]==']') right2++;
+                else if(s[i]=='{') left3++;
+                else if(s[i]=='}') right3++;
+            }
+        if( right1 == left1) valid1 = 1;
+        if( right2 == left2) valid2 = 1;
+        if( right3 == left3) valid3 = 1;
+        if(valid1 == valid2 == valid3) valid = 1;
+
+    return valid;
+}
+
+
+
+//-----------------------------------------------------------------------------------------------//load_file
+void math_lab:: load_file(string file_path)
+  {
+
+
+    string operation_string="";
+    std:: ifstream infile(file_path.c_str());
+    if(infile.good() == 0){
+        cout << "error : Invalid file directory"<<endl;
+        return;
+    }
+    while(!infile.eof())
+        {
+        getline(infile,operation_string);
+        operation_string.erase(std::remove(operation_string.begin(),operation_string.end(), '\r'), operation_string.end());
+
+        if(operation_string.find('[') != -1)
+        {
+            while(!(braces_num(operation_string)))
+            {
+                string temp;
+                operation_string+=';';
+                getline(infile,temp);
+                operation_string+=temp;
+            }
+            int count = 0;
+            bool flag = false;
+            string result;
+            for (int i = 0; i < operation_string.length(); ++i)
+            {
+              if(operation_string[i] == '['){
+                count++;
+                flag = true;
+              }else if(operation_string[i] == ']')count--;
+              result += operation_string[i];
+              if(count == 0 && flag)break;
+            }
+            operation_string = result;
+       }
+       operation_string.erase(std::remove(operation_string.begin(),operation_string.end(), '\n'), operation_string.end());
+       do_operation(operation_string);
+    }
+    infile.close();
+    return;
+  }
+//----------------------------------------------------------------------------------------------------//open_commands
+void math_lab::open_command()
+{
+    open_cli();
+    return;
+}
