@@ -43,10 +43,10 @@ void math_lab:: load_file(string file_path)
         {
         getline(infile,operation_string);
         operation_string.erase(std::remove(operation_string.begin(),operation_string.end(), '\r'), operation_string.end());
-        bool valid=braces_num(operation_string);
+         
         if(operation_string.find('[') != -1)
         {
-            while(!valid)
+            while(!(braces_num(operation_string))
             {
                 string temp;
                 getline(infile,temp);
