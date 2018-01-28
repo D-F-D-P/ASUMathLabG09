@@ -1218,6 +1218,126 @@ void matrix::setSubMatrx(int indexRow, int indexColumn, matrix * input){
 };
 
 
+
+matrix * row_factory(string inputString){
+  string* vertically_arr;
+  inputString = trim(inputString);
+  int count = 0;
+  int vert_length = 0;
+  string temp;
+  for (int i = 0; i < inputString.length(); ++i)
+  {
+    if(inputString[i] == '[' || inputString[i] == '(')count++;
+    if(inputString[i] == ']' || inputString[i] == ')')count--;
+    if(( (inputString[i] == ' '  || inputString[i] == ',' ) && count == 0)){
+      if(i < (inputString.length() - 1)){
+        if(inputString[i + 1] == ' ' || inputString[i + 1] == ',' )continue;
+      }
+      vert_length += 1;
+      string* temp_vertically_arr = new string[vert_length];
+      for (int k = 0; k < (vert_length - 1); ++k)
+      {
+        temp_vertically_arr[k] = vertically_arr[k];
+      }
+      temp_vertically_arr[vert_length - 1] = temp;
+      vertically_arr = temp_vertically_arr;
+      temp = "";
+    }else{
+      temp += inputString[i];
+    }
+  }
+  vert_length += 1;
+  string* temp_vertically_arr = new string[vert_length];
+  for (int k = 0; k < (vert_length - 1); ++k)
+  {
+    temp_vertically_arr[k] = vertically_arr[k];
+  }
+  temp_vertically_arr[vert_length - 1] = temp;
+  string* tempDelete = vertically_arr;
+  vertically_arr = temp_vertically_arr;
+  //if (tempDelete)
+  //delete[] tempDelete;
+  matrix *vertically_arr_matrix = new matrix[vert_length];
+  for (int i = 0; i < vert_length; ++i)
+  {
+    Node* x = do_operation(vertically_arr[i] + ";");
+    if(x->type() == 1){
+      matrix y(1,1);
+      y.set_value( (((FloatNode*)x)->value) );
+      vertically_arr_matrix[i] = y;
+    }else{
+      vertically_arr_matrix[i] = *(((MatrixNode*)x)->value);
+      delete x;
+    }
+  }
+  matrix* x =  add_horz(vertically_arr_matrix, vert_length);
+  //matrix *x = new matrix();
+  for (int i = 0; i < vert_length; i++) {
+    //delete &vertically_arr_matrix[i];
+  }
+  return x;
+}
+
+// advanced fill matrix
+matrix * matrix:: new_fill_matrix(string inputString)
+{
+  string* vertically_arr;
+  int count = 0;
+  int vert_length = 0;
+  string temp;
+  for (int i = 1; i < inputString.length() - 1; ++i)
+  {
+    if(inputString[i] == '[')count++;
+    if(inputString[i] == ']')count--;
+    if((inputString[i] == ';' && count == 0)){
+      vert_length += 1;
+      string* temp_vertically_arr = new string[vert_length];
+      for (int k = 0; k < (vert_length - 1); ++k)
+      {
+        temp_vertically_arr[k] = vertically_arr[k];
+        //delete &vertically_arr[k];
+      }
+      temp_vertically_arr[vert_length - 1] = temp;
+      vertically_arr = temp_vertically_arr;
+      temp = "";
+    }else{
+      temp += inputString[i];
+    }
+  }
+  vert_length += 1;
+  string* temp_vertically_arr = new string[vert_length];
+  for (int k = 0; k < (vert_length - 1); ++k)
+  {
+    temp_vertically_arr[k] = vertically_arr[k];
+    //delete &vertically_arr[k];
+  }
+  temp_vertically_arr[vert_length - 1] = temp;
+  vertically_arr = temp_vertically_arr;
+  matrix *vertically_arr_matrix = new matrix[vert_length];
+  for (int i = 0; i < vert_length; ++i)
+  {
+    vertically_arr_matrix[i] = *row_factory(vertically_arr[i]);
+  }
+  matrix* x =  add_ver(vertically_arr_matrix, vert_length);
+  for (int i = 0; i < vert_length; i++) {
+    //delete &vertically_arr_matrix[i];
+  }
+  return x;
+}
+
+matrix matrix::eye(int rows, int columns){
+  matrix x(rows, columns);
+  if(rows != columns)throw(22);
+  for (int i = 0; i < rows; i++) {
+    for (int k = 0; k < columns; k++) {
+      if(i == k) x.elements[i][k] = 1;
+      else x.elements[i][k] = 0;
+    }
+  }
+  return x;
+}
+
+
  string replace(string right_string)
 {
       if(right_string.find('\n')==-1)//recursion base case
