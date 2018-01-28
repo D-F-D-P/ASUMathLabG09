@@ -1218,7 +1218,6 @@ void matrix::setSubMatrx(int indexRow, int indexColumn, matrix * input){
 };
 
 
-
 matrix * row_factory(string inputString){
   string* vertically_arr;
   inputString = trim(inputString);

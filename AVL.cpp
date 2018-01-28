@@ -1,6 +1,6 @@
 #include <iostream>
 #include <stdio.h>
-#include <stdlib.h> 
+#include <stdlib.h>
 #include <math.h>
 #include "matrix.h"
 #include <string>
@@ -197,7 +197,7 @@ class AVL
 					current = current->parent;
 					current = this->right_rotate(current->parent);
 					current = current->parent;
-					flag = true;	
+					flag = true;
 				}
 				/* case 2 : right right*/
 				if(!is_prev_left && !is_next_left)
@@ -293,7 +293,7 @@ class AVL
 		if(this->root != NULL){
 			current = this->min(this->root);
 		}else{
-			cout<<endl<<"---------------------- THE TREE IS EMPTY ------------------------"<<endl;
+			cout<<endl<<"---------------------- THE TREE IS EMPTY ------------------------";
 		}
 		while(current != NULL){
 			current->value->print_matrix();

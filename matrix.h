@@ -1,6 +1,7 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 #include<string>
+#include <fstream>
 
 
 class matrix
@@ -51,6 +52,10 @@ public:
     double get_determinant();
     matrix get_cofactor(int r, int c);
 
+    //WALEED ./ MATRIX
+    friend matrix* mysquareroot (matrix* A);
+    friend matrix* matrix_divide_elements(matrix &A ,matrix &B);
+
 
 	//Friend functions
     friend void sum_matrix(matrix &A, matrix &B , matrix &C); // to sum two matrix C = A+B
@@ -86,12 +91,24 @@ public:
     friend matrix zeros(int rows, int columns);//func. to fill matrix with zeros
     friend matrix random(int rows, int columns);// func.to fill matrix with random no.
     friend matrix ones(int rows, int columns); //Function for filling the matrix with ones
+    matrix zeros(int rows, int columns);//func. to fill matrix with zeros
+    matrix random(int rows, int columns);// func.to fill matrix with random no.
+    matrix ones(int rows, int columns); //Function for filling the matrix with ones
+		matrix eye(int rows, int columns);
+
+		void set_value(float value);
+		matrix * new_fill_matrix(std::string inputString);
+		friend matrix * row_factory(std::string inputString);
+		friend matrix *add_horz(matrix* input , int cols);
+		friend matrix *add_ver(matrix* input , int rows);
+		void setSubMatrx(int indexRow, int indexColumn, matrix * input);
+
 //matrix kobry (int r, int c);
     friend void power(matrix& a,int n,matrix& result);//matrix power int/ shouldn't take 1x1 matrix power
     matrix operator ^ (int n);
 
     friend void power_elements(matrix& a, double n, matrix& result); //power raised to every element/ can be double
-
+		friend matrix* power_by_elements(float num, matrix* input);
     friend void squareroot ( matrix& a, matrix& result);// square root to each element
 
 //trigonometric and logarithmic functions
@@ -103,12 +120,6 @@ public:
 	friend matrix log_elements(matrix& a);
 	friend matrix ln_elements(matrix& a);
 
-
-    friend matrix * add_ver(matrix* input ,int rows);
-    friend matrix *add_horz(matrix* input , int cols);
-
-
-
 };
 
 //global functions
@@ -116,5 +127,18 @@ std::string space_trimer(std::string text); // remove extra spaces from beginnin
 int number_of(int e, std::string s,std::string c); // count the number of special char in a text
 int number_digits(float input); //count number of digits
 
+
+using namespace std;
+class math_lab
+{
+
+
+    public:
+    void load_file(string file_path);
+    void open_command();
+
+};
+
+ bool braces_num(string s ) ;
 
 #endif // MATRIX_H
