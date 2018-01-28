@@ -17,4 +17,5 @@ class math_lab
 };
 
  bool braces_num(string s ) ;
+  string replace(string right_string);
 #endif

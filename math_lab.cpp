@@ -7,7 +7,22 @@
 
 using namespace std;
 
+ string replace(string right_string)
+{
+      if(right_string.find('\n')==-1)//recursion base case
+        {
+           return right_string;
+        }
 
+    string left_string="";
+
+      int i=right_string.find('\n')+1;
+
+   left_string=right_string.substr(0,i-1);
+
+        return left_string+";"+trim_spaces(right_string.substr(i,right_string.length()-1));
+
+}
 
 bool braces_num(string s ) {
     bool valid = 0, valid1 = 0, valid2 = 0, valid3 = 0;
@@ -52,7 +67,8 @@ void math_lab:: load_file(string file_path)
                 getline(infile,temp);
                 operation_string+=temp;
 
-            }  
+            } 
+        operation_string=replace(operation_string);			
        }
        operation_string.erase(std::remove(operation_string.begin(),operation_string.end(), '\n'), operation_string.end());
        do_operation(operation_string);
