@@ -309,11 +309,7 @@ char* infix_to_reverse_polish(char *infix)
 				flagNegative = true;
 			}
 			else if(infix[i] == '.' && infix[i+1] == '+'){
-				i += 1;
 				flag = false;
-				CharNode *x = new CharNode('+');
-				temp_stack->add(x);
-				flagNegative = true;
 			}
       //transpose operator
       else if(infix[i] == '\''){
@@ -1189,7 +1185,8 @@ Node* reverse_polish_to_float(char *reverse_polish)
 						if(right->type() == 1)
 						{
 							matrix *tempMatrix = new matrix;
-							*tempMatrix = ( *(((MatrixNode*)left)->value) ^ (((FloatNode*)right)->value) );
+              //power_elements(*(((MatrixNode*)left)->value), (((FloatNode*)right)->value), *tempMatrix);
+							*tempMatrix = ( *(((MatrixNode*)left)->value) & (((FloatNode*)right)->value) );
 							tempNode = new MatrixNode(tempMatrix);
 						}else{
 							// matrix *tempMatrix = new matrix;

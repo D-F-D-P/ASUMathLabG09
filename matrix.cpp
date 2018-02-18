@@ -924,13 +924,18 @@ matrix matrix:: operator ^ (int n){
 
 //Function to calculate the power to each element this is for the operator ".^" and can have a fraction power
 
-void power_elements(matrix& a, double n, matrix& result){
+void power_elements(matrix& a, float n, matrix& result){
     for(int i=0; i<a.rows; i++){
         for(int j=0; j<a.columns; j++){
             result.elements[i][j]=pow(a.elements[i][j],n);
         }
 
     }
+}
+matrix matrix:: operator &(float n){
+matrix result(rows,columns);
+power_elements(*this, n,result);
+return result;
 }
 
 matrix* power_by_elements(float num, matrix* input){
